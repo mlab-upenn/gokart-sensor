@@ -8,51 +8,9 @@ ser = serial.Serial(port='/dev/ttyUSB0', baudrate=460800)
 lat = lon = heading = -1.0
 gpgga_flag = False
 gphdt_flag = False
+lat_history = lon_history = heading_history = lon_orientation_history = lat_orientation_history = lat_orientation = lon_orientation = 0
+lat_raw_history = lon_raw_history = 0
 
-# while True:
-#     data = str(ser.readline())
-#     gpgga_idx = data.find("$GPGGA")
-#     gphdt_idx = data.find("$GPHDT")
-#     if (gpgga_idx != -1):  # gpgga data in this string
-#         gpgga_str = data.split("$GPGGA", maxsplit=1)[1]
-#         gpgga_data = gpgga_str.split(",")[1:]
-#         lat = gpgga_data[1]
-#         if (lat != ''):
-#             lat = float(lat)
-#             lat = lat // 100 + (lat % 100) / 60
-#         else:
-#             gpgga_flag = False
-#             continue
-#         if (gpgga_data[2] == 'S'):
-#             lat *= -1
-#         lon = gpgga_data[3]
-#         if (lon != ''):
-#             lon = float(lon)
-#             lon = lon // 100 + (lon % 100) / 60
-#         else:
-#             gpgga_flag = False
-#             continue
-#         if (gpgga_data[4] == 'W'):
-#             lon *= -1
-#         gpgga_flag = True
-#     print("Lat: ", lat)
-#     print("Lon: ", lon)
-#
-#     if (gphdt_idx != -1):  # gphdt data in this string
-#         gphdt_str = data.split("$GPHDT", maxsplit=1)[1]
-#         gphdt_data = gphdt_str.split(",")[1:]
-#         heading = gphdt_data[0]
-#         if (heading == ''):  # no heading data being received
-#             gphdt_flag = False
-#             # continue
-#         else:
-#             heading = 90 - float(heading)
-#             if (heading < -180):
-#                 heading += 360
-#             gphdt_flag = True
-#             print("Heading: " , heading)
-#
-#     print("_-" * 10)
 
 def GPS_publisher():
     lat = lon = heading = -1.0
@@ -64,30 +22,58 @@ def GPS_publisher():
     rate = rospy.Rate(10)
     while not rospy.is_shutdown():
         data = str(ser.readline())
+        print(data)
         gpgga_idx = data.find("$GPGGA")
         gphdt_idx = data.find("$GPHDT")
         if (gpgga_idx != -1):  # gpgga data in this string
             gpgga_str = data.split("$GPGGA", maxsplit=1)[1]
             gpgga_data = gpgga_str.split(",")[1:]
-            lat = gpgga_data[1]
+            try:
+                lat = gpgga_data[1]
+                lat_raw_history = lat
+            except IndexError:
+                lat = lat_raw_history
             if (lat != ''):
-                lat = float(lat)
-                lat = lat // 100 + (lat % 100) / 60
+                try:
+                    lat = float(lat)
+                    lat = lat // 100 + (lat % 100) / 60
+                    lat_history = lat
+                except ValueError:
+                    lat = lat_history
             else:
                 lat = 0.0
                 gpgga_flag = False
                 continue
-            if (gpgga_data[2] == 'S'):
+            try:
+                lat_orientation = gpgga_data[4]
+                lat_orientation_history = lat_orientation
+            except IndexError:
+                lat_orientation = lat_orientation_history
+            if (lat_orientation == 'S'):
                 lat *= -1
-            lon = gpgga_data[3]
+            try:
+                lon = gpgga_data[3]
+                lon_raw_history = lon
+            except IndexError:
+                lon = lon_raw_history
             if (lon != ''):
-                lon = float(lon)
-                lon = lon // 100 + (lon % 100) / 60
+                try:
+                    lon = float(lon)
+                    lon = lon // 100 + (lon % 100) / 60
+                    lon_history = lon
+                except ValueError:
+                    lon = lon_history
             else:
                 lon = 0.0
                 gpgga_flag = False
                 continue
-            if (gpgga_data[4] == 'W'):
+
+            try:
+                lon_orientation = gpgga_data[4]
+                lon_orientation_history = lon_orientation
+            except IndexError:
+                lon_orientation = lon_orientation_history
+            if (lon_orientation == 'W'):
                 lon *= -1
             gpgga_flag = True
         print("Lat: ", lat)
@@ -102,11 +88,16 @@ def GPS_publisher():
                 gphdt_flag = False
                 # continue
             else:
-                heading = 90 - float(heading)
-                if (heading < -180):
-                    heading += 360
-                gphdt_flag = True
-                print("Heading: ", heading)
+                try:
+                    heading = 90 - float(heading)
+                    if (heading < -180):
+                        heading += 360
+                    gphdt_flag = True
+                    print("Heading: ", heading)
+                    heading_history = heading
+                except ValueError:
+                    heading = heading_history
+
 
         print("_-" * 10)
         msg.latitude = lat
