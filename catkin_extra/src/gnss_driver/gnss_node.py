@@ -55,6 +55,7 @@ def GPS_publisher():
                     lat = lat_history
             else:
                 lat = 0.0
+                lat_history = lat
                 gpgga_flag = False
                 continue
             try:
@@ -78,6 +79,7 @@ def GPS_publisher():
                     lon = lon_history
             else:
                 lon = 0.0
+                lon_history = lon
                 gpgga_flag = False
                 continue
 
@@ -99,6 +101,7 @@ def GPS_publisher():
             if (heading == ''):  # no heading data being received
                 heading = 0.0
                 gphdt_flag = False
+                heading_history = heading
                 # continue
             else:
                 try:
