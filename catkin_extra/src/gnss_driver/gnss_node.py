@@ -2,8 +2,21 @@
 import serial
 import rospy
 from gnss_driver.msg import lat_long_heading
+import utm
 
+# set serial port for UART connector GNSS
 ser = serial.Serial(port='/dev/ttyUSB0', baudrate=460800)
+
+# look for inits here https://epsg.io/103516
+init_wgs = 'epsg:4326'
+init_bng = 'epsg:3855'
+
+# Set origin of xy coordinates
+
+lat_orig = 39.941766
+lon_orig = -75.198820
+
+x_orig, y_orig, zone_orig, ut_orig = utm.from_latlon(lat_orig, lon_orig)
 
 lat = lon = heading = -1.0
 gpgga_flag = False
@@ -98,11 +111,18 @@ def GPS_publisher():
                 except ValueError:
                     heading = heading_history
 
+        x, y, zone, ut = utm.from_latlon(lat,lon)
+
+        print("X: ", x - x_orig)
+        print("Y: ", y - y_orig)
 
         print("_-" * 10)
+
         msg.latitude = lat
         msg.longitude = lon
         msg.heading = heading
+        msg.x = (x - x_orig)
+        msg.y = (y - y_orig)
         rospy.loginfo(msg)
         pub.publish(msg)
         rate.sleep()
