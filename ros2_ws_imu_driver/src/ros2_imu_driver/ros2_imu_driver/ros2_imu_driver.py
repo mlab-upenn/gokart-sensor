@@ -31,20 +31,14 @@ class IMU_ROS_driver(Node):
                 # assign elements 1-2 and 5 to 9 to the ROS message
                 msg.accel_x = float(data[0])
                 msg.accel_y = float(data[1])
-                msg.gyro_y = float(data[3])
-                msg.gyro_z = float(data[4])
-                msg.mag_x = float(data[5])
-                msg.mag_y = float(data[6])
-                msg.mag_z = float(data[7])
-
-                # missing comma between elements 3 and 4 in the IMU data
-                # code is split up and combined back together for elements 3 and 4
-                data_missing_comma = data[2].split('.')
-                data[2] = data_missing_comma[0] + '.' + data_missing_comma[1][0:2]
-                data[3] = data_missing_comma[1][2:] + '.' + data_missing_comma[2]
-                # assign elements 3 and 4 to the ROS message
                 msg.accel_z = float(data[2])
                 msg.gyro_x = float(data[3])
+                msg.gyro_y = float(data[4])
+                msg.gyro_z = float(data[5])
+                msg.mag_x = float(data[6])
+                msg.mag_y = float(data[7])
+                msg.mag_z = float(data[8])
+
                 # ROS header
                 msg.header.stamp = self.get_clock().now().to_msg()
 
