@@ -47,16 +47,16 @@ def talker():
                 msg.linear_acceleration.z = msg_hist.linear_acceleration.z
 
             try:
-                msg.angular_velocity.x = float(data[3])*3.14/180
+                msg.angular_velocity.x = (float(data[3])*3.14)/(180*1000)
             except (ValueError, IndexError):
                 msg.angular_velocity.x = msg_hist.angular_velocity.x
 
             try:
-                msg.angular_velocity.y = float(data[4])*3.14/180
+                msg.angular_velocity.y = (float(data[4])*3.14)/(180*1000)
             except (ValueError, IndexError):
                 msg.angular_velocity.y = msg_hist.angular_velocity.y
             try:
-                msg.angular_velocity.z = float(data[5])*3.14/180
+                msg.angular_velocity.z = (float(data[5])*3.14)/(180*1000)
             except (ValueError, IndexError):
                 msg.angular_velocity.z = msg_hist.angular_velocity.z
 
