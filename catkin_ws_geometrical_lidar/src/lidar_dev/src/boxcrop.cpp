@@ -35,8 +35,8 @@ void cloud_cropbox_cb(const sensor_msgs::PointCloud2ConstPtr &cloud_msg)
 
     // parameters chosen for 2020-04-13-15-31-43.bag
 	double minX = -0.0;
-	double maxX = 12.0;
-	double minY = -0.0;
+	double maxX = 20.0;
+	double minY = -5.0;
 	double maxY = 5.0;
 	double minZ = -3.0;
 	double maxZ = 0.0;

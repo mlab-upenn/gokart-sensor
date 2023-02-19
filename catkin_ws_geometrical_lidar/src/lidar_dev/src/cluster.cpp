@@ -160,12 +160,12 @@ void cloud_cluster_cb(const sensor_msgs::PointCloud2ConstPtr &obstacles_msg, con
 
         // skip processing step if there is insufficient points
         int expected = num_expected_points(centre);
-        if (cloud_cluster->size() < 0.60 * expected) {
+        if (cloud_cluster->size() < 0.40 * expected) {
             continue;
         }
 
 
-        
+        // initialize new pointcloud for "shape" detection
         pcl::PointCloud<pcl::PointXYZ> testcloud2 = *cloud_cluster;
         std::vector<std::vector<double>> cpoints;
         std::vector<double> zvals;
@@ -177,6 +177,8 @@ void cloud_cluster_cb(const sensor_msgs::PointCloud2ConstPtr &obstacles_msg, con
         int perc_25_50 = 0;
         int perc_0_25 = 0;
 
+
+        // create array from pointcloud
         for (auto i: testcloud2.points)
         {
             zvals.push_back(i.z);
@@ -185,13 +187,17 @@ void cloud_cluster_cb(const sensor_msgs::PointCloud2ConstPtr &obstacles_msg, con
 
         }
 
+        // extract minimum and maximum z value from array
         double min_zvals = *std::min_element(zvals.begin(), zvals.end());
         double max_zvals = *std::max_element(zvals.begin(), zvals.end());
+
+        // calculate height
         double avg_z = max_zvals - min_zvals; 
 
+        // iterate over all points in pointcloud
         for (auto i: testcloud2.points)
         {
-            // std::cout << i << ' ' << std::endl;
+            // assert each point in pointcloud to its corresponding quarter
             double c_z = i.z;
             if(c_z > max_zvals - 0.25 * avg_z)
             {
@@ -211,26 +217,18 @@ void cloud_cluster_cb(const sensor_msgs::PointCloud2ConstPtr &obstacles_msg, con
             }
 
         }
-        std::cout << "X: " << centre.x << ",Y: " << centre.y << ",Z: " << centre.z << std::endl;;
-        std::cout << "Points in top 25:" << perc_75_100 << std::endl;
-        std::cout << "Points in bottom 25:" << perc_0_25 << std::endl;
 
-        cout << "Highest z value" << max_zvals << endl;
-        cout << "Lowest z value" << min_zvals << endl;
-        cout << avg_z << endl;
-
-        // old if clause if(perc_75_100 > perc_25_50 || perc_75_100 > perc_0_25 || perc_50_75 > perc_0_25)
+        // if there are more points in the top quarter compared to the lowest, the cluster is skipped
         if(perc_75_100 > perc_0_25)
         {
-            // std::cout << "cone upper points faulty SKIPPING by " << upcen_p - lowcen_p << std::endl;
             std::cout << "cone upper points faulty SKIPPING  " << (perc_75_100 > perc_25_50) << (perc_75_100 > perc_0_25) << (perc_50_75 > perc_0_25) << endl;
-            // continue;
+            continue;
         }
         std::cout << "[confirmed] num_expected_points = " << 0.60 * num_expected_points(centre) << std::endl;
         std::cout << "[confirmed] num actual points   = " << cloud_cluster->size() << std::endl;
         std::cout << "[confirmed] distance to cone    = " << d << std::endl;
 
-        int val = 0; //lowcen_p/upcen_p;
+        int val = 0;
         if(val>1) val = 1;
         conf.push_back(val);
         cout<< "val" <<endl;

@@ -1,5 +1,5 @@
 cluster_tol: 0.08       # cluster tolerance which affect resulting cluster size
-cluster_min: 30         # cluster minimum number of points
+cluster_min: 5         # cluster minimum number of points
 cluster_max: 800        # cluster maximum nubmer of points default:250
 reconst_radius: 0.17    # radius of the cluster reconstruction
 
