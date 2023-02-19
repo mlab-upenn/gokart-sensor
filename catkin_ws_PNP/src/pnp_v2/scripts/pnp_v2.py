@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+import rospy
+from darknet_ros_msgs.msg import BoundingBoxes
+from visualization_msgs.msg import Marker
+from sensor_msgs.msg import Image
+import numpy as np
+import cv2
+from cv_bridge import CvBridge
+import message_filters
+import imutils
+import time
+
+# crop image to bounding box +- 10%
+# read color from center or define color range
+# mask image and find real height
+
+pub_marker = rospy.Publisher('/marker', Marker, queue_size=10)
+pub_cropped_image = rospy.Publisher('/cropped_bb', Image, queue_size=10)
+
+# cone paramter
+height_meter = 0.7
+
+# calibration matrix from LiDAR to camera frame
+l_t_c = np.array([[0.0190983, -0.999815, 0.00232702, 0.0440449],
+                  [-0.193816, -0.0059855, -0.98102, 0.142687],
+                  [0.980852, 0.0182848, -0.193894, -0.0378563],
+                  [0, 0, 0, 1]])
+
+# intrinsic camera parameters
+fx = 1442.193090
+fy = 1440.905704
+cx = 943.936435
+cy = 542.578706
+
+def callback(image_message, bb_message):
+    time_start = time.time()
+    bb_arr = bb_message.bounding_boxes
+    i = 0
+
+    # deletes all previous markers
+    marker = Marker()
+    marker.header.frame_id = "os_sensor"
+    marker.action = 3
+    pub_marker.publish(marker)
+
+    # convert image from ROS image to OpenCV image
+    bridge = CvBridge()
+    cv_image = bridge.imgmsg_to_cv2(image_message, desired_encoding='passthrough')
+
+    for bs in bb_arr:
+
+        # crop image to bounding box +- 10%
+        x_min = int(bs.xmin * 0.9)
+        x_max = int(bs.xmax * 1.1)
+        y_min = int(bs.ymin * 0.9)
+        y_max = int(bs.ymax * 1.1)
+        crop_img_bgr = cv_image[y_min:y_max, x_min:x_max]
+
+        # convert cv image to hsv colorspace
+        crop_img_hsv = cv2.cvtColor(crop_img_bgr, cv2.COLOR_BGR2HSV)
+        h, s, v = cv2.split(crop_img_hsv)
+
+        h_threshold = cv2.inRange(h, 0, 60)
+
+        ret_h, thresh_h = cv2.threshold(h_threshold, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        cnts_h = cv2.findContours(thresh_h, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+        cnts_h = imutils.grab_contours(cnts_h)
+        try:
+            c_h = max(cnts_h, key=cv2.contourArea)
+            x_h, y_h, w_h, h_h = cv2.boundingRect(c_h)
+            bb_state = 1
+        except ValueError:
+            print("No contour found, bounding box skipped")
+            bb_state = 0
+
+        # if there is no orange in the image skip the rest of the loop
+        if bb_state == 1:
+            s_threshold = crop_img_hsv[:, :, 1]
+            ret_s, thresh_s = cv2.threshold(s_threshold, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+            cnts_s = cv2.findContours(thresh_s, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+            cnts_s = imutils.grab_contours(cnts_s)
+            try:
+                c_s = max(cnts_s, key=cv2.contourArea)
+                x_s, y_s, w_s, h_s = cv2.boundingRect(c_s)
+
+                # intersection of both rectangles
+                x = max(x_h, x_s)
+                y = max(y_h, y_s)
+                w = min(x_h + w_h, x_s + w_s) - x
+                h = min(y_h + h_h, y_s + h_s) - y
+            except ValueError:
+                x = x_h
+                y = y_h
+                w = w_h
+                h = h_h
+
+            cv2.rectangle(crop_img_bgr, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+            # convert image back to ROS image and publish
+            cropped_image_message = bridge.cv2_to_imgmsg(crop_img_bgr, encoding="passthrough")
+            pub_cropped_image.publish(cropped_image_message)
+
+            # calculate position of center and height of bounding box
+            x_center_pixel = (bs.xmax - bs.xmin) * 0.5 + bs.xmin
+            y_center_pixel = (bs.ymax - bs.ymin) * 0.5 + bs.ymin
+            height_pixel = (bs.ymax - bs.ymin)
+
+            # calculate x, y, and z position in camera frame
+            Z_meter_cam = (fx * height_meter) / height_pixel
+            X_meter_cam = ((x_center_pixel - cx) * Z_meter_cam) / fx
+            Y_meter_cam = ((y_center_pixel - cy) * Z_meter_cam) / fy
+
+            # convert cartesian coordinates in homogenous coordinates and transform to LiDAR frame
+            point_meter_cam = np.array([X_meter_cam, Y_meter_cam, Z_meter_cam, 1])
+            point_meter_lidar = np.linalg.inv(l_t_c) @ point_meter_cam
+
+            # publish detections as markers for RViZ
+            marker = Marker()
+            marker.header.frame_id = "os_sensor"
+            marker.header.stamp = bb_message.header.stamp
+            marker.ns = "detections"
+            marker.id = i
+            marker.type = 3
+            marker.action = 0
+            marker.scale.x = 0.32
+            marker.scale.y = 0.32
+            marker.scale.z = 0.7
+            marker.pose.orientation.x = 0
+            marker.pose.orientation.y = 0
+            marker.pose.orientation.z = 0
+            marker.pose.orientation.w = 1
+            marker.pose.position.x = point_meter_lidar[0]
+            marker.pose.position.y = point_meter_lidar[1]
+            marker.pose.position.z = point_meter_lidar[2]
+            marker.color.a = 0.4
+            marker.color.r = 0
+            marker.color.g = 0
+            marker.color.b = 1
+            i += 1
+            pub_marker.publish(marker)
+
+    print("Time elapsed: ", time.time() - time_start, " seconds")
+
+
+
+def listener():
+
+    rospy.init_node('pnp_v2', anonymous=True)
+    image_sub = message_filters.Subscriber('/rgb_publisher/color/image', Image)
+    bb_sub = message_filters.Subscriber('/darknet_ros/bounding_boxes', BoundingBoxes)
+    ts = message_filters.ApproximateTimeSynchronizer([image_sub, bb_sub], 5, 1)
+    ts.registerCallback(callback)
+
+    rospy.spin()
+
+if __name__ == '__main__':
+    listener()
+
