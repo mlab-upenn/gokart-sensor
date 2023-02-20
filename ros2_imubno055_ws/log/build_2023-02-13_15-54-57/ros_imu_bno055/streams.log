@@ -1,0 +1,24 @@
+[0.510s] Invoking command in '/home/ros/ros2Drivers/imu_ws/src/ros_imu_bno055': PYTHONPATH=/home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/ros_imu_bno055 build --build-base /home/ros/ros2Drivers/imu_ws/build/ros_imu_bno055/build install --prefix /home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055 --record /home/ros/ros2Drivers/imu_ws/build/ros_imu_bno055/install.log --single-version-externally-managed
+[0.659s] running egg_info
+[0.660s] writing ../../build/ros_imu_bno055/ros_imu_bno055.egg-info/PKG-INFO
+[0.660s] writing dependency_links to ../../build/ros_imu_bno055/ros_imu_bno055.egg-info/dependency_links.txt
+[0.660s] writing entry points to ../../build/ros_imu_bno055/ros_imu_bno055.egg-info/entry_points.txt
+[0.661s] writing requirements to ../../build/ros_imu_bno055/ros_imu_bno055.egg-info/requires.txt
+[0.661s] writing top-level names to ../../build/ros_imu_bno055/ros_imu_bno055.egg-info/top_level.txt
+[0.683s] reading manifest file '../../build/ros_imu_bno055/ros_imu_bno055.egg-info/SOURCES.txt'
+[0.684s] writing manifest file '../../build/ros_imu_bno055/ros_imu_bno055.egg-info/SOURCES.txt'
+[0.684s] running build
+[0.684s] running build_py
+[0.684s] copying ros_imu_bno055/imu_ros.py -> /home/ros/ros2Drivers/imu_ws/build/ros_imu_bno055/build/lib/ros_imu_bno055
+[0.684s] running install
+[0.685s] running install_lib
+[0.685s] copying /home/ros/ros2Drivers/imu_ws/build/ros_imu_bno055/build/lib/ros_imu_bno055/imu_ros.py -> /home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055/lib/python3.8/site-packages/ros_imu_bno055
+[0.686s] byte-compiling /home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055/lib/python3.8/site-packages/ros_imu_bno055/imu_ros.py to imu_ros.cpython-38.pyc
+[0.687s] running install_data
+[0.688s] running install_egg_info
+[0.689s] removing '/home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055/lib/python3.8/site-packages/ros_imu_bno055-0.0.0-py3.8.egg-info' (and everything under it)
+[0.689s] Copying ../../build/ros_imu_bno055/ros_imu_bno055.egg-info to /home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055/lib/python3.8/site-packages/ros_imu_bno055-0.0.0-py3.8.egg-info
+[0.690s] running install_scripts
+[0.700s] Installing imu_ros script to /home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055/lib/ros_imu_bno055
+[0.700s] writing list of installed files to '/home/ros/ros2Drivers/imu_ws/build/ros_imu_bno055/install.log'
+[0.713s] Invoked command in '/home/ros/ros2Drivers/imu_ws/src/ros_imu_bno055' returned '0': PYTHONPATH=/home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/ros_imu_bno055 build --build-base /home/ros/ros2Drivers/imu_ws/build/ros_imu_bno055/build install --prefix /home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055 --record /home/ros/ros2Drivers/imu_ws/build/ros_imu_bno055/install.log --single-version-externally-managed

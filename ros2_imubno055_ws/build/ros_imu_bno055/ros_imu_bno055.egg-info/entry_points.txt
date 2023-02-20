@@ -1,0 +1,3 @@
+[console_scripts]
+imu_ros = ros_imu_bno055.imu_ros:main
+

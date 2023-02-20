@@ -1,0 +1,10 @@
+Metadata-Version: 1.2
+Name: ros-imu-bno055
+Version: 0.0.0
+Summary: ros_imu_bno055 driver in ROS2
+Home-page: UNKNOWN
+Maintainer: Zhijun Zhuang
+Maintainer-email: zhijunz@seas.upenn.edu
+License: MIT
+Description: UNKNOWN
+Platform: UNKNOWN
