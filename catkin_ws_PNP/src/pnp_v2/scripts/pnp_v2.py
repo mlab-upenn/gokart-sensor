@@ -10,23 +10,27 @@ import message_filters
 import imutils
 import time
 
-# crop image to bounding box +- 10%
-# read color from center or define color range
-# mask image and find real height
 
+# define publishers
 pub_marker = rospy.Publisher('/marker', Marker, queue_size=10)
-pub_cropped_image = rospy.Publisher('/cropped_bb', Image, queue_size=10)
+pub_cropped_image = rospy.Publisher('/Image_cropped_bb', Image, queue_size=10)
+pub_bb_image = rospy.Publisher('/Image_bb', Image, queue_size=10)
 
-# cone paramter
-height_meter = 0.7
+# TODO: cone parameter and LiDAR height over ground
+cone_height_meter = 0.7
+cone_diameter_meter = 0.32
+lidar_height_over_ground = 1.26
 
-# calibration matrix from LiDAR to camera frame
+# correction of marker to ground plane
+marker_correction = - (lidar_height_over_ground - (cone_height_meter / 2))
+
+# TODO: input calibration matrix from LiDAR to camera frame
 l_t_c = np.array([[0.0190983, -0.999815, 0.00232702, 0.0440449],
                   [-0.193816, -0.0059855, -0.98102, 0.142687],
                   [0.980852, 0.0182848, -0.193894, -0.0378563],
                   [0, 0, 0, 1]])
 
-# intrinsic camera parameters
+# TODO: input intrinsic camera parameters from camera calibration matrix
 fx = 1442.193090
 fy = 1440.905704
 cx = 943.936435
@@ -48,6 +52,17 @@ def callback(image_message, bb_message):
     cv_image = bridge.imgmsg_to_cv2(image_message, desired_encoding='passthrough')
 
     for bs in bb_arr:
+
+        # crop image to original bounding box
+        x_min_orig = int(bs.xmin)
+        x_max_orig = int(bs.xmax)
+        y_min_orig = int(bs.ymin)
+        y_max_orig = int(bs.ymax)
+        bb_img_bgr = cv_image[y_min_orig:y_max_orig, x_min_orig:x_max_orig]
+
+        # convert image back to ROS image and publish
+        bb_image_message = bridge.cv2_to_imgmsg(bb_img_bgr, encoding="passthrough")
+        pub_bb_image.publish(bb_image_message)
 
         # crop image to bounding box +- 10%
         x_min = int(bs.xmin * 0.9)
@@ -106,7 +121,7 @@ def callback(image_message, bb_message):
             height_pixel = (bs.ymax - bs.ymin)
 
             # calculate x, y, and z position in camera frame
-            Z_meter_cam = (fx * height_meter) / height_pixel
+            Z_meter_cam = (fx * cone_height_meter) / height_pixel
             X_meter_cam = ((x_center_pixel - cx) * Z_meter_cam) / fx
             Y_meter_cam = ((y_center_pixel - cy) * Z_meter_cam) / fy
 
@@ -122,16 +137,18 @@ def callback(image_message, bb_message):
             marker.id = i
             marker.type = 3
             marker.action = 0
-            marker.scale.x = 0.32
-            marker.scale.y = 0.32
-            marker.scale.z = 0.7
+            marker.scale.x = cone_diameter_meter
+            marker.scale.y = cone_diameter_meter
+            marker.scale.z = cone_height_meter
             marker.pose.orientation.x = 0
             marker.pose.orientation.y = 0
             marker.pose.orientation.z = 0
             marker.pose.orientation.w = 1
             marker.pose.position.x = point_meter_lidar[0]
             marker.pose.position.y = point_meter_lidar[1]
-            marker.pose.position.z = point_meter_lidar[2]
+            # if z position required, uncomment next line
+            # marker.pose.position.z = point_meter_lidar[2]
+            marker.pose.position.z = marker_correction
             marker.color.a = 0.4
             marker.color.r = 0
             marker.color.g = 0
@@ -139,13 +156,15 @@ def callback(image_message, bb_message):
             i += 1
             pub_marker.publish(marker)
 
-    print("Time elapsed: ", time.time() - time_start, " seconds")
+    # to print time per iteration, uncomment next line
+    # print("Time elapsed: ", time.time() - time_start, " seconds")
 
 
 
 def listener():
 
     rospy.init_node('pnp_v2', anonymous=True)
+    # TODO: change topic name to correct camera topic
     image_sub = message_filters.Subscriber('/rgb_publisher/color/image', Image)
     bb_sub = message_filters.Subscriber('/darknet_ros/bounding_boxes', BoundingBoxes)
     ts = message_filters.ApproximateTimeSynchronizer([image_sub, bb_sub], 5, 1)

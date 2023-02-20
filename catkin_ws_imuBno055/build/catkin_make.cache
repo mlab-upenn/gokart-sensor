@@ -1,2 +1,0 @@
-ros_imu_bno055
--DCATKIN_DEVEL_PREFIX=/home/ros/testimu/devel -DCMAKE_INSTALL_PREFIX=/home/ros/testimu/install -DCATKIN_WHITELIST_PACKAGES=ros_imu_bno055 -G Unix Makefiles

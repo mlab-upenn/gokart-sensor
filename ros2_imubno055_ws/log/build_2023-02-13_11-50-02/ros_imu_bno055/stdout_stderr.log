@@ -1,0 +1,20 @@
+running egg_info
+writing ../../build/ros_imu_bno055/ros_imu_bno055.egg-info/PKG-INFO
+writing dependency_links to ../../build/ros_imu_bno055/ros_imu_bno055.egg-info/dependency_links.txt
+writing entry points to ../../build/ros_imu_bno055/ros_imu_bno055.egg-info/entry_points.txt
+writing requirements to ../../build/ros_imu_bno055/ros_imu_bno055.egg-info/requires.txt
+writing top-level names to ../../build/ros_imu_bno055/ros_imu_bno055.egg-info/top_level.txt
+reading manifest file '../../build/ros_imu_bno055/ros_imu_bno055.egg-info/SOURCES.txt'
+writing manifest file '../../build/ros_imu_bno055/ros_imu_bno055.egg-info/SOURCES.txt'
+running build
+running build_py
+running install
+running install_lib
+running install_data
+copying launch/view_imu_launch.py -> /home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055/share/ros_imu_bno055/launch
+running install_egg_info
+removing '/home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055/lib/python3.8/site-packages/ros_imu_bno055-0.0.0-py3.8.egg-info' (and everything under it)
+Copying ../../build/ros_imu_bno055/ros_imu_bno055.egg-info to /home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055/lib/python3.8/site-packages/ros_imu_bno055-0.0.0-py3.8.egg-info
+running install_scripts
+Installing imu_ros script to /home/ros/ros2Drivers/imu_ws/install/ros_imu_bno055/lib/ros_imu_bno055
+writing list of installed files to '/home/ros/ros2Drivers/imu_ws/build/ros_imu_bno055/install.log'
