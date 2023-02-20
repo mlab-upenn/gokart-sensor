@@ -1,0 +1,8 @@
+prefix=/home/ros/testimu/devel
+
+Name: ros_imu_bno055
+Description: Description of ros_imu_bno055
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: rospy sensor_msgs

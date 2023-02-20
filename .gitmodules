@@ -1,0 +1,3 @@
+[submodule "catkin_ws_imuBno055/src/ros_imu_bno055"]
+	path = catkin_ws_imuBno055/src/ros_imu_bno055
+	url = https://github.com/RoboticArts/ros_imu_bno055
