@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   visualization_msgs
   ros_numpy
 )
+find_package(PCL 1.3 REQUIRED COMPONENTS common io)
 
 catkin_package(
   INCLUDE_DIRS scripts
@@ -19,5 +20,8 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
 
 catkin_install_python(PROGRAMS scripts/lidar_labelling.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
