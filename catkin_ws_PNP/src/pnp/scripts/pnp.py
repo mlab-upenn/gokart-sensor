@@ -40,7 +40,7 @@ def callback(msg):
         cy = 542.578706
 
         # calculate x, y, and z position in camera frame
-        Z_meter_cam = (fx * height_meter) / height_pixel
+        Z_meter_cam = (fy * height_meter) / height_pixel
         X_meter_cam = ((x_center_pixel - cx) * Z_meter_cam) / fx
         Y_meter_cam = ((y_center_pixel - cy) * Z_meter_cam) / fy
 

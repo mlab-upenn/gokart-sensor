@@ -121,7 +121,7 @@ def callback(image_message, bb_message):
             height_pixel = (bs.ymax - bs.ymin)
 
             # calculate x, y, and z position in camera frame
-            Z_meter_cam = (fx * cone_height_meter) / height_pixel
+            Z_meter_cam = (fy * cone_height_meter) / height_pixel
             X_meter_cam = ((x_center_pixel - cx) * Z_meter_cam) / fx
             Y_meter_cam = ((y_center_pixel - cy) * Z_meter_cam) / fy
 
