@@ -10,10 +10,7 @@ find_package(catkin REQUIRED COMPONENTS rospy std_msgs message_filters )
 find_package(darknet_ros_msgs REQUIRED)
 
 catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES lidar_rings
   CATKIN_DEPENDS rospy std_msgs message_filters darknet_ros_msgs opencv
-  DEPENDS system_lib
 )
 
 include_directories(${PCL_INCLUDE_DIRS})

@@ -17,11 +17,6 @@ pub = rospy.Publisher("/lidar_0/m1600/pcl2_XYZIR", pc2, queue_size=10)
 pub2 = rospy.Publisher("/res_img", Image, queue_size=10)
 bridge = CvBridge()
 def project_points(projection_matrix, points):
-    """
-    projection_matrix: The projection matrix based on the intrinsic camera calibration.
-    points: Nx[x,y,z,1.0] np.array of the points that need to be projected to the camera image.
-    return: Nx[u,v] rounded coordinates of the points in the camera image as np.int data type.
-    """
     assert points.shape[-1] == 4
     points = points[points[:,2] > 0.0]
     uvs = np.matmul(projection_matrix,points.T)
@@ -91,7 +86,7 @@ def add_ring_value():
     
     
     # rospy.Subscriber('/lidar_0/m1600/pcl2', PointCloud2, test_cb)
-    image_sub = message_filters.Subscriber('/usb_cam/image_raw', Image)
+    image_sub = message_filters.Subscriber('/rgb_publisher/color/image', Image)
     pcl_sub = message_filters.Subscriber('/lidar_0/m1600/pcl2', pc2)
     bboxes = message_filters.Subscriber('/darknet_ros/bounding_boxes', BoundingBoxes)
     ts = message_filters.ApproximateTimeSynchronizer([image_sub, pcl_sub, bboxes], 5, 0.1)
