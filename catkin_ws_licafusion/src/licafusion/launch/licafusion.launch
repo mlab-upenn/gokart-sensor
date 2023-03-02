@@ -1,0 +1,4 @@
+<launch>
+  <node name="licafusion" pkg="lidar_rings" type="src/licafusion.py" />
+  <param name="use_sim_time" value="true"/>
+</launch>
