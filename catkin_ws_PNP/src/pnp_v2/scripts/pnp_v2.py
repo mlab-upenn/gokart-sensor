@@ -108,29 +108,24 @@ def callback(image_message, bb_message):
 
         # if there is no orange in the image skip the rest of the loop
         if bb_state == 1:
-            # s_threshold = crop_img_hsv[:, :, 1]
-            # ret_s, thresh_s = cv2.threshold(s_threshold, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-            # cnts_s = cv2.findContours(thresh_s, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-            # cnts_s = imutils.grab_contours(cnts_s)
-            # try:
-            #     c_s = max(cnts_s, key=cv2.contourArea)
-            #     x_s, y_s, w_s, h_s = cv2.boundingRect(c_s)
-            #
-            #     # intersection of both rectangles
-            #     x = max(x_h, x_s)
-            #     y = max(y_h, y_s)
-            #     w = min(x_h + w_h, x_s + w_s) - x
-            #     h = min(y_h + h_h, y_s + h_s) - y
-            # except ValueError:
-            #     x = x_h
-            #     y = y_h
-            #     w = w_h
-            #     h = h_h
+            s_threshold = crop_img_hsv[:, :, 1]
+            ret_s, thresh_s = cv2.threshold(s_threshold, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+            cnts_s = cv2.findContours(thresh_s, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+            cnts_s = imutils.grab_contours(cnts_s)
+            try:
+                c_s = max(cnts_s, key=cv2.contourArea)
+                x_s, y_s, w_s, h_s = cv2.boundingRect(c_s)
 
-            x = x_h
-            y = y_h
-            w = w_h
-            h = h_h
+                # intersection of both rectangles
+                x = max(x_h, x_s)
+                y = max(y_h, y_s)
+                w = min(x_h + w_h, x_s + w_s) - x
+                h = min(y_h + h_h, y_s + h_s) - y
+            except ValueError:
+                x = x_h
+                y = y_h
+                w = w_h
+                h = h_h
 
             cv2.rectangle(crop_img_bgr, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
