@@ -1,21 +1,34 @@
 #!/usr/bin/env python3
 import rospy
 from darknet_ros_msgs.msg import BoundingBoxes
-from visualization_msgs.msg import Marker
+from visualization_msgs.msg import Marker, MarkerArray
 import numpy as np
 import cv2
+import time
 
-pub = rospy.Publisher('/marker', Marker, queue_size=10)
+pub = rospy.Publisher('/marker', MarkerArray, queue_size=10)
 
 def callback(msg):
     bb_arr = msg.bounding_boxes
     i = 0
 
+    global average_time
+    global average_time_counter
+    time_start = time.time()
+    average_time_counter += 1
+
+    marker_array = MarkerArray()
+
     # deletes all previous markers
     marker = Marker()
     marker.header.frame_id = "os_sensor"
-    marker.action = 3
-    pub.publish(marker)
+    marker.id = 0
+    marker.ns = "detections"
+    marker.action = Marker.DELETEALL
+    marker_array.markers.append(marker)
+    pub.publish(marker_array)
+
+    marker_array = MarkerArray()
 
     for bs in bb_arr:
 
@@ -70,11 +83,21 @@ def callback(msg):
         marker.pose.position.y = point_meter_lidar[1]
         marker.pose.position.z = point_meter_lidar[2] + 0.7
         i += 1
-        pub.publish(marker)
+        marker_array.markers.append(marker)
+
+    # to print time per iteration, uncomment next line
+    print("Time elapsed: ", time.time() - time_start, " seconds")
+    average_time += time.time() - time_start
+    print("Average time elapsed: ", average_time / average_time_counter, " seconds")
+    pub.publish(marker_array)
 
 
 
 def listener():
+    global average_time
+    global average_time_counter
+    average_time = 0
+    average_time_counter = 0
 
     rospy.init_node('pnp', anonymous=True)
 

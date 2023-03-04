@@ -21,6 +21,19 @@ int num_expected_points(const pcl::PointXYZ &centre) {
     return (int)E;
 }
 
+// compute the number of expected points for cone object
+int num_expected_points_adjusted(const pcl::PointXYZ &centre, double h) {
+    double d = sqrt(centre.x * centre.x + centre.y * centre.y + centre.z * centre.z);
+    static double hc = h;               // cone height
+    static double wc = 0.27;               // cone width
+    static double rv = 0.00698;  // angular resolution vertical
+    static double rh = 0.00349;    // angular resolution horizontal
+
+    // compute and return number of expected points
+    double E = 0.5 * hc / (2 * d * tan(rv / 2)) * wc / (2 * d * tan(rh / 2));
+    return (int)E;
+}
+
 
  std::vector<float> extract_column(const std::vector<std::vector<float>>& matrix, int col_idx) {
       std::vector<float> result;
@@ -65,7 +78,7 @@ void set_marker_properties(
     marker->color.g = 1.0;
     marker->color.b = params.marker_b;
 
-    marker->lifetime = ros::Duration(0.1);
+    marker->lifetime = ros::Duration();
 }
 
 // perform euclidean clustering
@@ -136,6 +149,13 @@ void cloud_cluster_cb(const sensor_msgs::PointCloud2ConstPtr &obstacles_msg, con
     std::vector<pcl::PointXYZ> marker_points;
     std::vector<double> conf;
 
+    visualization_msgs::Marker marker;
+    marker.header.frame_id = ground->header.frame_id;
+    marker.header.stamp = ros::Time();
+    marker.ns = "my_namespace";
+    marker.action = visualization_msgs::Marker::DELETEALL;
+    markers_pub.publish(marker);
+
 
     // outer loop goes through all the clusters we found
     for (auto it = cluster_indices.begin(); it != cluster_indices.end(); ++it)
@@ -157,13 +177,6 @@ void cloud_cluster_cb(const sensor_msgs::PointCloud2ConstPtr &obstacles_msg, con
         pcl::computeCentroid(*cloud_cluster, centre);
 
         double d = sqrt(centre.x * centre.x + centre.y * centre.y + centre.z * centre.z);
-
-        // skip processing step if there is insufficient points
-        int expected = num_expected_points(centre);
-        if (cloud_cluster->size() < 0.40 * expected) {
-            continue;
-        }
-
 
         // initialize new pointcloud for "shape" detection
         pcl::PointCloud<pcl::PointXYZ> testcloud2 = *cloud_cluster;
@@ -192,22 +205,40 @@ void cloud_cluster_cb(const sensor_msgs::PointCloud2ConstPtr &obstacles_msg, con
         double max_zvals = *std::max_element(zvals.begin(), zvals.end());
 
         // calculate height
-        double avg_z = max_zvals - min_zvals; 
+        double height_cluster = max_zvals - min_zvals; 
+
+        // initialize expected number of point in cloud
+        int expected;
+
+        // skip processing step if there is insufficient points
+        if (height_cluster < 0.7)
+        {
+            expected = num_expected_points_adjusted(centre, height_cluster);
+            //expected = num_expected_points(centre);
+        }
+        else
+        {
+            expected = num_expected_points(centre);
+        }
+        
+        if (cloud_cluster->size() < 0.60 * expected) {
+            continue;
+        }
 
         // iterate over all points in pointcloud
         for (auto i: testcloud2.points)
         {
             // assert each point in pointcloud to its corresponding quarter
             double c_z = i.z;
-            if(c_z > max_zvals - 0.25 * avg_z)
+            if(c_z > max_zvals - 0.25 * height_cluster)
             {
                 perc_75_100 += 1;
             }
-            else if (c_z <= max_zvals - 0.25 * avg_z && c_z > max_zvals - 0.5 * avg_z)
+            else if (c_z <= max_zvals - 0.25 * height_cluster && c_z > max_zvals - 0.5 * height_cluster)
             {
                 perc_50_75 += 1;
             }
-            else if (c_z <= max_zvals - 0.5 * avg_z && c_z > max_zvals - 0.75 * avg_z)
+            else if (c_z <= max_zvals - 0.5 * height_cluster && c_z > max_zvals - 0.75 * height_cluster)
             {
                 perc_25_50 += 1;
             }
@@ -219,9 +250,15 @@ void cloud_cluster_cb(const sensor_msgs::PointCloud2ConstPtr &obstacles_msg, con
         }
 
         // if there are more points in the top quarter compared to the lowest, the cluster is skipped
-        if(perc_75_100 > perc_0_25)
+        if(perc_75_100 > 0.9 * perc_0_25)
         {
             std::cout << "cone upper points faulty SKIPPING  " << (perc_75_100 > perc_25_50) << (perc_75_100 > perc_0_25) << (perc_50_75 > perc_0_25) << endl;
+            continue;
+        }
+
+        // if the top and bottom quarter are empty, skipp the cluster
+        if(perc_75_100 == 0 && perc_0_25 == 0 || height_cluster < 0.1)
+        {
             continue;
         }
         std::cout << "[confirmed] num_expected_points = " << 0.60 * num_expected_points(centre) << std::endl;

@@ -12,7 +12,7 @@
     <node name="ground_segmentation" pkg="linefit_ground_segmentation_ros" type="ground_segmentation_node">
         <rosparam command="load" file="$(find linefit_ground_segmentation_ros)/launch/segmentation_params.yaml"/>
         <!-- <param name="input_topic" value="/ouster/points" /> -->
-        <param name="input_topic" value="/boxcrop_output" />
+        <param name="input_topic" value="/lidar_0/m1600/pcl2_XYZIR" />
         <param name="ground_output_topic" value="ground_cloud" />
         <param name="obstacle_output_topic" value="obstacle_cloud" />
     </node>

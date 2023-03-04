@@ -42,6 +42,11 @@ def callback(image, pcl, bb):
     point_arr = np.ones((xyz_arr.shape[0]))
     h_array = np.column_stack((xyz_arr, point_arr))
 
+    h_array = h_array[h_array[:,2] < 0.0]
+    # for i in range(0,h_array.shape[0]-1):
+    #     if (h_array[i,2] > 0.0):
+    #         h_array = np.delete(h_array, (i), axis=0)
+
     c_t_l = np.array([[-0.00423105 , -0.99987 ,-0.0155724,0.09296],
                     [0.0117262,0.0155218,-0.999811,-0.0837121],
                     [0.999922,-0.00441285,0.011659,-0.0289284],
