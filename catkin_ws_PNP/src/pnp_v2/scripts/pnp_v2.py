@@ -139,6 +139,7 @@ def callback(image_message, bb_message):
             height_pixel = (bs.ymax - bs.ymin)
 
             # calculate x, y, and z position in camera frame
+            # all values are a bit short and therefore need to be scaled
             Z_meter_cam = (fy * cone_height_meter) / height_pixel
             X_meter_cam = ((x_center_pixel - cx) * Z_meter_cam) / fx
             Y_meter_cam = ((y_center_pixel - cy) * Z_meter_cam) / fy
@@ -147,10 +148,14 @@ def callback(image_message, bb_message):
             point_meter_cam = np.array([X_meter_cam, Y_meter_cam, Z_meter_cam, 1])
             point_meter_lidar = np.linalg.inv(l_t_c) @ point_meter_cam
 
+            alpha = np.arctan2(point_meter_lidar[1], point_meter_lidar[0])
+
             # publish detections as markers for RViZ
             marker = Marker()
             marker.header.frame_id = "os_sensor"
-            marker.header.stamp = bb_message.header.stamp
+            # substract inference time from current time to get correct timestamp
+            inference_time = time.time() - time_start
+            marker.header.stamp = rospy.Time.now() - rospy.Duration(inference_time)
             marker.ns = "detections"
             marker.id = i
             marker.type = 3
@@ -162,8 +167,8 @@ def callback(image_message, bb_message):
             marker.pose.orientation.y = 0
             marker.pose.orientation.z = 0
             marker.pose.orientation.w = 1
-            marker.pose.position.x = point_meter_lidar[0]
-            marker.pose.position.y = point_meter_lidar[1]
+            marker.pose.position.x = point_meter_lidar[0] + np.cos(alpha)
+            marker.pose.position.y = point_meter_lidar[1] + np.sin(alpha)
             # if z position required, uncomment next line
             # marker.pose.position.z = point_meter_lidar[2]
             marker.pose.position.z = marker_correction

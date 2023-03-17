@@ -1,0 +1,15 @@
+# which go to the model you want to use
+cfg_root: "/home/felix/OpenPCDet/tools/cfgs/custom_models/centerpoint.yaml"
+
+# which go to the .pth
+model_path: "/home/felix/OpenPCDet/tools/centerpoint_checkpoint_epoch_6000.pth"
+
+# pointcloud_topic in the bag if you are not sure
+# rosbag info xxx.bag check the topic name
+pointcloud_topic: "/lidar_0/m1600/pcl2" # default is from kitti2bag: /velodyne_points
+
+# only the predict probablity over this threshold will be draw a box
+threshold: 0.2
+
+move_lidar_center: 20
+viz_rate: 1.0

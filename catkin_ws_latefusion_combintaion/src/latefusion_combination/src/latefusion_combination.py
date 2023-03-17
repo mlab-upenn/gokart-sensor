@@ -50,7 +50,14 @@ def callback(pnp_marker, det_marker):
     for marker_single_pnp in pnp_marker.markers:
         pnp_list.append([marker_single_pnp.pose.position.x, marker_single_pnp.pose.position.y])
     pnp_array = np.array(pnp_list)
-    print(pnp_array)
+
+    # det_list = []
+    # for marker_single_geometric in det_marker.markers:
+    #     det_list.append([marker_single_geometric.pose.position.x, marker_single_geometric.pose.position.y, marker_single_geometric.pose.position.z])
+    # det_array = np.array(det_list)
+
+
+
 
     det_list = []
     for marker_single_openpc in det_marker.markers:
@@ -60,11 +67,10 @@ def callback(pnp_marker, det_marker):
         temp_str = temp_str.replace("]", "")
         temp_list = temp_str.split(" ")
         temp_list = list(filter(None, temp_list))
-        print(temp_list)
         det_list.append([float(temp_list[0]), float(temp_list[1]), float(temp_list[2]), float(temp_list[3]), float(temp_list[4]), float(temp_list[6])])
 
     det_array = np.array(det_list)
-    print(det_array)
+
 
     # Potential improvement when more trust in PnP
     # if pnp_array.shape[0] <= det_array.shape[0]:
@@ -75,20 +81,21 @@ def callback(pnp_marker, det_marker):
     #     longer_array = pnp_array
 
     for i in range(det_array.shape[0]):
-        print(det_array[i][:2])
-        print(det_array[i])
         # centerpoint OpenPCDet correction
-        det_array[i][0] = det_array[i][0] + math.cos(det_array[i][5]) * det_array[i][3] / 2
-        det_array[i][1] = det_array[i][1] + math.sin(det_array[i][5]) * det_array[i][3] / 2
-        closest_point_indx = distance.cdist(det_array[i][:2].reshape(1, -1),pnp_array).argmin()
+        det_array[i][0] = det_array[i][0] #+ math.cos(det_array[i][5]) * det_array[i][3] / 2
+        det_array[i][1] = det_array[i][1] #+ math.sin(det_array[i][5]) * det_array[i][3] / 2
+        if pnp_array.shape[0] != 0:
+            closest_point_indx = distance.cdist(det_array[i][:2].reshape(1, -1),pnp_array).argmin()
+        else:
+            break
         closest_point_pnp = pnp_array[closest_point_indx]
 
         d = math.sqrt(pow((det_array[i][0]-closest_point_pnp[0]),2) + pow((det_array[i][1]-closest_point_pnp[1]),2))
-        if d < 1.0:
+        if d < 0.5:
 
             # #combine x and y coordinates
-            pos_x = det_array[i][0] + 0.5 * (closest_point_pnp[0] - det_array[i][0])
-            pos_y = det_array[i][1] + 0.5 * (closest_point_pnp[1] - det_array[i][1])
+            #pos_x = det_array[i][0] + 0.5 * (closest_point_pnp[0] - det_array[i][0])
+            #pos_y = det_array[i][1] + 0.5 * (closest_point_pnp[1] - det_array[i][1])
 
             # # x and y coordinates solely from OpenPCDet
             pos_x = det_array[i][0]
@@ -100,7 +107,7 @@ def callback(pnp_marker, det_marker):
 
             marker = Marker()
             marker.header.frame_id = "os_sensor"
-            marker.header.stamp = rospy.Time.now() - rospy.Duration(end_time - start_time) #.1 besster Wert (30 False Positives)
+            marker.header.stamp = rospy.Time.now() - rospy.Duration(end_time - start_time)
             marker.id = i
             marker.action = Marker.ADD
             marker.lifetime = rospy.Duration(0.1)
@@ -112,8 +119,8 @@ def callback(pnp_marker, det_marker):
             marker.pose.orientation.y = 0
             marker.pose.orientation.z = 0
             marker.pose.orientation.w = 1
-            marker.pose.position.x = pos_x #det_array[i][0]
-            marker.pose.position.y = pos_y #det_array[i][1]
+            marker.pose.position.x = pos_x# det_array[i][0]
+            marker.pose.position.y = pos_y# det_array[i][1]
             marker.pose.position.z = det_array[i][2]
             marker.color.a = 0.4
             marker.color.r = 0.0
@@ -141,8 +148,8 @@ def late_fusion_validation():
     average_time_counter = 0
 
     # approximate time synchroniser for MarkerArray and BoundingBoxes
-    # TODO: change det_marker_sub topic to /detect_3dbox for OpenPCDet and /cluster_markers for Geometric LiDAR Detection
-    pnp_marker_sub = message_filters.Subscriber('/marker', MarkerArray)
+    # TODO: change det_marker_sub topic to /detect_3dbox for OpenPCDet and /cluster_markers for Geometric LiDAR Detection /marker PnP
+    pnp_marker_sub = message_filters.Subscriber('/cluster_markers', MarkerArray)
     det_marker_sub = message_filters.Subscriber('/detect_3dbox', MarkerArray)
     ts = message_filters.ApproximateTimeSynchronizer([pnp_marker_sub, det_marker_sub], 5, 0.05, allow_headerless=True)
     ts.registerCallback(callback)

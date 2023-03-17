@@ -13,12 +13,13 @@ from cv_bridge import CvBridge
 from sensor_msgs import point_cloud2
 from scipy.spatial import distance
 from visualization_msgs.msg import Marker, MarkerArray
+import time
 
 
 rospy.init_node('licafusion', anonymous=True)
 pub = rospy.Publisher("/lidar_0/m1600/pcl2_XYZIR", pc2, queue_size=10)
 pub2 = rospy.Publisher("/res_img", Image, queue_size=10)
-pubmarker = rospy.Publisher("/visualization_marker", MarkerArray, queue_size=10)
+pubmarker = rospy.Publisher("/cluster_markers", MarkerArray, queue_size=10)
 bridge = CvBridge()
 def project_points(projection_matrix, points):
     """
@@ -37,6 +38,13 @@ def project_points(projection_matrix, points):
     return uvs.T
 
 def callback(image, pcl, bb):
+    # start time
+    start_time = time.time()
+
+    global counter
+    global average_time
+    counter += 1
+
     xyz_arr = ros_numpy.point_cloud2.pointcloud2_to_xyz_array(pcl)
     print(1)
     point_arr = np.ones((xyz_arr.shape[0]))
@@ -96,7 +104,7 @@ def callback(image, pcl, bb):
         else:
             depth_bb_coll = np.vstack((depth_bb_coll, depth_bb))
         header = Header()
-        header.stamp = rospy.Time.now()
+        header.stamp = rospy.Time.now() - rospy.Duration(0.026)
         header.frame_id = "os_sensor"
         for uv in uvs_bb:
             cv2.circle(cv_img, tuple(uv), 3, color_red, -1)
@@ -112,7 +120,8 @@ def callback(image, pcl, bb):
             # detection marker
             marker = Marker()
             marker.header.frame_id = "os_sensor"
-            marker.header.stamp = rospy.Time.now()
+            # remove inference time from header stamp
+            marker.header.stamp = rospy.Time.now() - rospy.Duration(time.time() - start_time)
             marker.id = i
             marker.action = Marker.ADD
             marker.lifetime = rospy.Duration(0.1)
@@ -141,15 +150,24 @@ def callback(image, pcl, bb):
     pubmarker.publish(marker_array)
 
     pc = point_cloud2.create_cloud(header, fields, depth_bb_coll[:,:3])
+
     pub.publish(pc)
-    #
+    # inference time
+    inference_time = time.time() - start_time
+    average_time += inference_time
+    print("Average inference time: ", average_time / (counter))
+
+
     cv_img = bridge.cv2_to_imgmsg(cv_img, "rgb8")
     pub2.publish(cv_img)
 
 
 
 def add_ring_value():
-    
+    global counter
+    counter = 0
+    global average_time
+    average_time = 0
     
     # rospy.Subscriber('/lidar_0/m1600/pcl2', PointCloud2, test_cb)
     image_sub = message_filters.Subscriber('/rgb_publisher/color/image', Image)

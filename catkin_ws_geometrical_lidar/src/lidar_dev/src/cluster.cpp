@@ -8,6 +8,9 @@ ros::Publisher markers_pub; // publisher for cylinder markers
 ClusterParams params;
 using namespace std;
 
+int counter = 0;
+double avg_inference_time = 0;
+
 // compute the number of expected points for cone object
 int num_expected_points(const pcl::PointXYZ &centre) {
     double d = sqrt(centre.x * centre.x + centre.y * centre.y + centre.z * centre.z);
@@ -49,10 +52,13 @@ void set_marker_properties(
     visualization_msgs::Marker *marker, 
     pcl::PointXYZ centre, 
     int n, 
-    std::string frame_id, double confidence)
+    std::string frame_id,
+    double time_head_sec,
+    double time_head_nsec)
 {
     marker->header.frame_id = frame_id;
-    marker->header.stamp = ros::Time();
+    marker->header.stamp.sec = time_head_sec;
+    marker->header.stamp.nsec = time_head_nsec;
     marker->ns = "my_namespace";
     marker->id = n;
     marker->type = visualization_msgs::Marker::CYLINDER;
@@ -87,6 +93,12 @@ void cloud_cluster_cb(const sensor_msgs::PointCloud2ConstPtr &obstacles_msg, con
     // time callback run time as performance measure
     ros::WallTime start_, end_;
     start_ = ros::WallTime::now();
+
+    counter += 1;
+
+    double time_header_sec = obstacles_msg->header.stamp.sec;
+    double time_header_nsec = obstacles_msg->header.stamp.nsec;
+    std::cout << "---------------------------------" << time_header_sec << std::endl;
     
     // container for ground data
     pcl::PCLPointCloud2 *ground = new pcl::PCLPointCloud2;
@@ -311,7 +323,7 @@ void cloud_cluster_cb(const sensor_msgs::PointCloud2ConstPtr &obstacles_msg, con
     visualization_msgs::MarkerArray marker_array_msg;
     marker_array_msg.markers.resize(marker_points.size());
     for (int i = 0; i < marker_points.size(); ++i) {
-        set_marker_properties(&marker_array_msg.markers[i], marker_points[i], i, ground->header.frame_id, conf[i]);
+        set_marker_properties(&marker_array_msg.markers[i], marker_points[i], i, ground->header.frame_id, time_header_sec, time_header_sec);
     }
 
     // std::cout << "NUM OF MARKERS = " << marker_points.size() << std::endl;
@@ -332,7 +344,9 @@ void cloud_cluster_cb(const sensor_msgs::PointCloud2ConstPtr &obstacles_msg, con
     // measure and print runtime performance
     end_ = ros::WallTime::now();
     double execution_time = (end_ - start_).toNSec() * 1e-6;
+    avg_inference_time += execution_time;
     ROS_INFO_STREAM("Exectution time (ms): " << execution_time);
+    ROS_INFO_STREAM("Average Exectution time (ms): " << avg_inference_time / counter);
 }
 
 

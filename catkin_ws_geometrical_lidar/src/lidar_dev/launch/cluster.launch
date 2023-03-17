@@ -4,7 +4,7 @@
 
   <!-- Ground segmentation -->
   <node name="cluster" pkg="lidar_dev" type="cluster_node" output="screen">
-    <remap from="input" to="/ground_segmentation/obstacle_cloud"/>
+    <remap from="input" to="/lidar_0/m1600/pcl2_XYZIR"/>
   </node>
 
 </launch>

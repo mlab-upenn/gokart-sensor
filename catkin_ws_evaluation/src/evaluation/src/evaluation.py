@@ -16,7 +16,7 @@ import math
 
 
 # TODO: define path to folder with txt files
-path = "/home/felix/gokart-sensor/catkin_ws_evaluation/src/evaluation/src/support/2023-02-01-17-34-48"
+path = "/home/felix/gokart-sensor/catkin_ws_evaluation/src/evaluation/src/support/evaluation_dataset"
 filelist = sorted(os.listdir(path))
 print(filelist)
 
@@ -48,22 +48,22 @@ def callback(marker_array):
                     f_txt = open(path + "/" + filelist[i], "r+")
 
                     # # uncomment following 5 lines for normal MarkerArray
-                    marker_list = []
-                    for marker_single in marker_array.markers:
-                        marker_list.append([marker_single.pose.position.x, marker_single.pose.position.y])
-                    marker_array = np.array(marker_list)
-                    print(marker_array)
-
-                    # uncomment following 10 lines for OpenPCDet MarkerArray
                     # marker_list = []
                     # for marker_single in marker_array.markers:
-                    #     # converts string back to a list, removes the blank spaces and appends it
-                    #     temp_str = marker_single.text
-                    #     temp_str = temp_str.replace("[", "")
-                    #     temp_list = temp_str.split(" ")
-                    #     temp_list = list(filter(None, temp_list))
-                    #     marker_list.append([float(temp_list[0]), float(temp_list[1])])
+                    #     marker_list.append([marker_single.pose.position.x, marker_single.pose.position.y])
                     # marker_array = np.array(marker_list)
+                    # print(marker_array)
+
+                    # uncomment following 10 lines for OpenPCDet MarkerArray
+                    marker_list = []
+                    for marker_single in marker_array.markers:
+                        # converts string back to a list, removes the blank spaces and appends it
+                        temp_str = marker_single.text
+                        temp_str = temp_str.replace("[", "")
+                        temp_list = temp_str.split(" ")
+                        temp_list = list(filter(None, temp_list))
+                        marker_list.append([float(temp_list[0]), float(temp_list[1])])
+                    marker_array = np.array(marker_list)
 
 
                     annotation_list = []
@@ -71,21 +71,20 @@ def callback(marker_array):
                         temp_line = line.split(" ")
                         annotation_list.append([float(temp_line[0]) + math.cos(float(temp_line[6])) * 0.5 * float(temp_line[3]), float(temp_line[1])+ math.sin(float(temp_line[6])) * 0.5 * float(temp_line[3])])
                     annotation_array = np.array(annotation_list)
-                    print(annotation_array)
 
                     accuracy = 0
                     counter_accuracy = 0
                     accuracy_positives = 0
 
                     for j in range(annotation_array.shape[0]):
-                        print(annotation_array[j])
                         min_distance = 1000
                         found_positive = False
                         for k in range(marker_array.shape[0]):
                             dist = np.linalg.norm(annotation_array[j] - marker_array[k])
                             if dist < min_distance:
                                 min_distance = dist
-                            if dist < 0.66:
+                            if dist < 0.33:
+                                print("Annotation: " + str(annotation_array[j]) + " Marker: " + str(marker_array[k]) + " Distance: " + str(dist))
                                 num_true_positives += 1
                                 accuracy_positives += dist
                                 found_positive = True
@@ -123,7 +122,7 @@ def callback(marker_array):
                     f1 = 2 * num_true_positives / (2 * num_true_positives + num_false_positives + num_false_negatives)
                     print("F1-Score: " + str(f1))
                     print("Accuracy: " + str(accuracy))
-                    print("Accuracy for True Positives: " + str(abs_accuracy_positives))
+                    print("Accuracy for True Positives: " + str(accuracy_positives))
                     print("")
 
                     abs_num_true_positives += num_true_positives
@@ -140,7 +139,7 @@ def callback(marker_array):
         print("Absolute Recall: " + str(abs_num_true_positives / (abs_num_true_positives + abs_num_false_negatives)))
         print("Absolute F1-Score: " + str(2 * abs_num_true_positives / (2 * abs_num_true_positives + abs_num_false_positives + abs_num_false_negatives)))
         print("Absolute Accuracy: " + str(abs_accuracy / counter_accuracy_global))
-        print("Absolute Accuracy for True Positives: " + str(abs_accuracy_positives / len(filelist)))
+        print("Absolute Accuracy for True Positives: " + str(abs_accuracy_positives / abs_num_true_positives))
         print("Absolute True Positives: " + str(abs_num_true_positives))
         print("Absolute False Positives: " + str(abs_num_false_positives))
         print("Absolute False Negatives: " + str(abs_num_false_negatives))
@@ -180,7 +179,7 @@ def evaluation():
     abs_accuracy_positives = 0
     counter_accuracy_global = 0
 
-    rospy.Subscriber("/marker", MarkerArray, callback)
+    rospy.Subscriber("/detect_3dbox", MarkerArray, callback)
     rospy.spin()
 
 if __name__ == '__main__':

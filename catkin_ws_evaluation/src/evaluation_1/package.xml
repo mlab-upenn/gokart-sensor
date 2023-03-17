@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>evaluation_1</name>
+  <version>0.0.0</version>
+  <description>Implementation of Late Fusion validation</description>
+
+  <maintainer email="felix.jahncke@tum.de">ubuntu</maintainer>
+
+
+  <license>TODO</license>
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>PCL</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>message_filters</build_depend>
+  <build_depend>darknet_ros_msgs</build_depend>
+  <build_depend>visualization_msgs</build_depend>
+  <build_export_depend>PCL</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>message_filters</build_export_depend>
+  <build_export_depend>darknet_ros_msgs</build_export_depend>
+  <build_export_depend>visualization_msgs</build_export_depend>
+  <exec_depend>PCL</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>message_filters</exec_depend>
+  <exec_depend>darknet_ros_msgs</exec_depend>
+  <exec_depend>visualization_msgs</exec_depend>
+
+
+  <export>
+
+  </export>
+</package>
