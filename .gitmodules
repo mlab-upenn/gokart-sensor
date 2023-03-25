@@ -1,0 +1,3 @@
+[submodule "Thirdparty/libtins"]
+	path = Thirdparty/libtins
+	url = https://github.com/mfontanini/libtins.git
