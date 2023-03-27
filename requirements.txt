@@ -10,7 +10,7 @@ pip install ultralytics
 sudo apt install ros-foxy-depthai-ros
 
 # for GNSS drivers:
-sudo apt install ros-foxy-nmea-msgs ros-foxy-gps-common
+sudo apt install ros-foxy-nmea-msgs ros-foxy-gps-msgs
 sudo apt install libgeographic-dev
 
 # for Ouster driver:
