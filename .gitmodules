@@ -1,3 +1,3 @@
-[submodule "Thirdparty/libtins"]
-	path = Thirdparty/libtins
-	url = https://github.com/mfontanini/libtins.git
+[submodule "ouster-sdk"]
+	path = /Sensor_drivers/ouster-ros/ouster-ros/ouster-sdk
+	url = https://github.com/ouster-lidar/ouster_example.git
