@@ -108,7 +108,7 @@ cd Sensor_drivers/ros2_velodyne, then do as the README said.
 mkdir -p gokart_ws/src
 cd gokart_ws/src
 # clone the repo, make sure to use --recursive to fetch the submodules
-git clone -b ros2_dev --recursive git@github.com:mlab-upenn/gokart-sensor.git
+git clone -b ros2_foxy --recursive git@github.com:mlab-upenn/gokart-sensor.git
 # go back to the workspace dir
 cd ..
 # use rosdep to install all the dependency needed by the ros2 packages
