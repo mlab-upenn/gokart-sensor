@@ -1,0 +1,31 @@
+Before colcon build, you need to execute the following commands to install all the dependencies.
+
+# common libs
+sudo apt install camke libboost-all-dev libpcap-dev libssl-dev
+
+# for yolov8(ultralytics)
+pip install ultralytics
+
+# for OAK-D camera:
+sudo apt install ros-foxy-depthai-ros
+
+# for GNSS drivers:
+sudo apt install ros-foxy-nmea-msgs ros-foxy-gps-msgs
+sudo apt install libgeographic-dev
+
+# for Ouster driver:
+cd Thirdparty/libtins
+mkdir build
+cd build
+cmake ../
+make
+sudo make install
+sudo ldconfig
+
+# for Velodyne driver:
+cd Sensor_drivers/ros2_velodyne, then do as the README said.
+
+
+
+
+

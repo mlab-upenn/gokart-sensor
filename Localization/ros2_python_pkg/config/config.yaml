@@ -1,0 +1,3 @@
+python_node:
+  ros__parameters:
+    image_topic: /color/image
