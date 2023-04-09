@@ -12,15 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// If permission denined, run sudo chmod 666 /dev/ttyUSB0
-
-#include "serial_driver/serial_bridge_node.hpp"
-
 #include "math.h"
-
 #include <memory>
 #include <string>
 #include <vector>
+
+#include "serial_driver/serial_bridge_node.hpp"
 
 namespace lc = rclcpp_lifecycle;
 using LNI = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface;
@@ -61,19 +58,21 @@ LNI::CallbackReturn SerialBridgeNode::on_configure(const lc::State & state)
 {
   (void)state;
 
-  // Create Publisher
-  m_publisher = this->create_publisher<UInt8MultiArray>(
-    "serial_read", rclcpp::QoS{100});
-
+  // Read serial message and publish as ackermann drive info of the gokart
   drive_publisher = this->create_publisher<ackermann_msgs::msg::AckermannDriveStamped>(
     "/drive_info_from_nucleo", rclcpp::QoS{100});
 
+  // This publisher sends out a test ackermann command drive message to the nucleo
+  // For testing only and MUST be disabled once we have a real data publisher configured.
   drive_test_publisher = this->create_publisher<ackermann_msgs::msg::AckermannDriveStamped>(
     "/drive_command_to_nucleo", rclcpp::QoS{100});
 
+  // Reads ackermann command drive message and publish on serial port to nucleo
+  drive_subscriber = this->create_subscription<ackermann_msgs::msg::AckermannDriveStamped>(
+    "/drive_command_to_nucleo", 10, bind(&SerialBridgeNode::drive_cmd_callback, this, placeholders::_1));
+
   drive_publisher -> on_activate();
   drive_test_publisher -> on_activate();
-  m_publisher -> on_activate();
 
   try {
     m_serial_driver->init_port(m_device_name, *m_device_config);
@@ -91,16 +90,6 @@ LNI::CallbackReturn SerialBridgeNode::on_configure(const lc::State & state)
     return LNI::CallbackReturn::FAILURE;
   }
 
-  // Create Subscriber
-  auto qos = rclcpp::QoS(rclcpp::KeepLast(32)).best_effort();
-  auto callback = std::bind(&SerialBridgeNode::subscriber_callback, this, std::placeholders::_1);
-
-  m_subscriber = this->create_subscription<UInt8MultiArray>(
-    "serial_write", qos, callback);
-
-  drive_subscriber = this->create_subscription<ackermann_msgs::msg::AckermannDriveStamped>(
-    "/drive_command_to_nucleo", 10, bind(&SerialBridgeNode::drive_cmd_callback, this, placeholders::_1));
-
   RCLCPP_DEBUG(get_logger(), "Serial port successfully configured.");
 
   return LNI::CallbackReturn::SUCCESS;
@@ -109,7 +98,7 @@ LNI::CallbackReturn SerialBridgeNode::on_configure(const lc::State & state)
 LNI::CallbackReturn SerialBridgeNode::on_activate(const lc::State & state)
 {
   (void)state;
-  m_publisher->on_activate();
+  // m_publisher->on_activate();
   RCLCPP_DEBUG(get_logger(), "Serial bridge activated.");
   return LNI::CallbackReturn::SUCCESS;
 }
@@ -117,7 +106,6 @@ LNI::CallbackReturn SerialBridgeNode::on_activate(const lc::State & state)
 LNI::CallbackReturn SerialBridgeNode::on_deactivate(const lc::State & state)
 {
   (void)state;
-  m_publisher->on_deactivate();
   RCLCPP_DEBUG(get_logger(), "Serial bridge deactivated.");
   return LNI::CallbackReturn::SUCCESS;
 }
@@ -126,8 +114,6 @@ LNI::CallbackReturn SerialBridgeNode::on_cleanup(const lc::State & state)
 {
   (void)state;
   m_serial_driver->port()->close();
-  m_publisher.reset();
-  m_subscriber.reset();
   RCLCPP_DEBUG(get_logger(), "Serial bridge cleaned up.");
   return LNI::CallbackReturn::SUCCESS;
 }
@@ -157,6 +143,13 @@ void SerialBridgeNode::get_params()
     baud_rate = declare_parameter<int>("baud_rate", 0);
   } catch (rclcpp::ParameterTypeException & ex) {
     RCLCPP_ERROR(get_logger(), "The baud_rate provided was invalid");
+    throw ex;
+  }
+
+  try{
+    test_publish = declare_parameter<bool>("test_publish", true);
+  } catch (rclcpp::ParameterTypeException & ex) {
+    RCLCPP_ERROR(get_logger(), "Please indicate test publish (true / false)");
     throw ex;
   }
 
@@ -217,6 +210,8 @@ void SerialBridgeNode::get_params()
   m_device_config = std::make_unique<SerialPortConfig>(baud_rate, fc, pt, sb);
 }
 
+// data format [steer x.xxxx speed x.xxxx]
+// data length = 25 and must stay this way
 void SerialBridgeNode::receive_callback(
   const std::vector<uint8_t> & buffer,
   const size_t & bytes_transferred)
@@ -226,12 +221,10 @@ void SerialBridgeNode::receive_callback(
 
   vector<unsigned char> message = out.data;
   string drive_info(message.begin(), message.end());
-
-  m_publisher->publish(out);
-
-  int msg_length = drive_info.length();
   
-  if(msg_length == 25){
+  // split received data by space " "
+  // parsed data: [steer x.xxx speed x.xxx]
+  if(drive_info.length() == msg_length){
     string tmp; 
     stringstream ss(drive_info);
     vector<string> drive_ackermann;
@@ -247,21 +240,32 @@ void SerialBridgeNode::receive_callback(
     cout << "drive info from nucleo: " << "steer " << ackermann_msg.drive.steering_angle << " radians" 
     " speed " << ackermann_msg.drive.speed << "m/s" << endl;
   }
-  // else{
-  //   cout << "message corrupt, discard" << endl;
-  // }
 
-  // this is for subscriber test only, remove later.
-  ackermann_msg.drive.steering_angle = 0.539;
-  ackermann_msg.drive.speed = 1.0;
-  drive_test_publisher->publish(ackermann_msg);
+  // There is about 20% message corruption rate, in which message length will be different
+  // Throw away the corrupted data and print out an error message
+  // else{
+    // cout << "message corrupt, discard" << endl;
+  //}
+
+  // Dumb ackermann drive command for testing
+  if (test_publish){
+    ackermann_msg.drive.steering_angle = 0.539;
+    ackermann_msg.drive.speed = 1.0;
+    drive_test_publisher->publish(ackermann_msg);
+  }
+
 }
 
+// subscribe to ros topic /drive_command_to_nucleo and send its command to nucleo
 void SerialBridgeNode::drive_cmd_callback(const ackermann_msgs::msg::AckermannDriveStamped::SharedPtr msg){
+  // send steering command to degrees
   float steering_angle = msg -> drive.steering_angle * 180.0 / M_PI;
   float speed = msg -> drive.speed;
 
+  // if serial port is open and active
   if (this->get_current_state().id() == State::PRIMARY_STATE_ACTIVE) {
+    // convert float to string with 4 decimals then case to 6 characters only
+    // outcome data formats: x.xxxx, xx.xxx, xxx.xx, xxxx.x, xxxxxx
     stringstream stream1;
     stream1 << std::fixed << std::setprecision(4) << steering_angle;
     string s_steer = stream1.str().substr(0, 6);
@@ -275,15 +279,6 @@ void SerialBridgeNode::drive_cmd_callback(const ackermann_msgs::msg::AckermannDr
 
     m_serial_driver->port()->async_send(out);
     cout << "drive command to nucleo: " << "steer " + s_steer + " degrees" + " speed " + s_speed + "m/s" << endl << endl;
-  }
-}
-
-void SerialBridgeNode::subscriber_callback(const UInt8MultiArray::SharedPtr msg)
-{
-  if (this->get_current_state().id() == State::PRIMARY_STATE_ACTIVE) {
-    std::vector<uint8_t> out;
-    drivers::common::from_msg(msg, out);
-    m_serial_driver->port()->async_send(out);
   }
 }
 

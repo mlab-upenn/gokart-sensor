@@ -1,7 +1,15 @@
 /**:
   ros__parameters:
+    # If permission denined, run sudo chmod 666 /dev/ttyUSB0 (or your device number)
     device_name: /dev/ttyUSB0
+
+    # Please do don't adjust this baud rate, it must be the same as the Nucleo side
     baud_rate: 115200
+
+    # No hardware flow control or parity bit
     flow_control: none
     parity: none
     stop_bits: "1"
+
+    # Dumb ackermann drive command for testing
+    test_publish: true

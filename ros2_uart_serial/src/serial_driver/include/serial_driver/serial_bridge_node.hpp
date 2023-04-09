@@ -77,9 +77,6 @@ public:
   /// \param[in] state The current state that the node is in.
   LNI::CallbackReturn on_shutdown(const lc::State & state) override;
 
-  /// \brief Callback for sending a raw serial message
-  void subscriber_callback(const UInt8MultiArray::SharedPtr msg);
-
   /// \breif Callback for when serial data are received
   void receive_callback(const std::vector<uint8_t> & buffer, const size_t & bytes_transferred);
 
@@ -88,15 +85,16 @@ public:
 private:
   void get_params();
 
+  // preset message length on both sides of communication for sanity check
+  uint8_t msg_length = 25;
+  bool test_publish;
+
   ackermann_msgs::msg::AckermannDriveStamped ackermann_msg;
 
   std::unique_ptr<IoContext> m_owned_ctx{};
   std::string m_device_name{};
   std::unique_ptr<SerialPortConfig> m_device_config;
   std::unique_ptr<SerialDriver> m_serial_driver;
-
-  lc::LifecyclePublisher<UInt8MultiArray>::SharedPtr m_publisher;
-  rclcpp::Subscription<UInt8MultiArray>::SharedPtr m_subscriber;
 
   lc::LifecyclePublisher<ackermann_msgs::msg::AckermannDriveStamped>::SharedPtr drive_publisher;
   lc::LifecyclePublisher<ackermann_msgs::msg::AckermannDriveStamped>::SharedPtr drive_test_publisher;
