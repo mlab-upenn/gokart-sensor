@@ -16,6 +16,8 @@
 
 #include "serial_driver/serial_bridge_node.hpp"
 
+#include "math.h"
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -64,9 +66,13 @@ LNI::CallbackReturn SerialBridgeNode::on_configure(const lc::State & state)
     "serial_read", rclcpp::QoS{100});
 
   drive_publisher = this->create_publisher<ackermann_msgs::msg::AckermannDriveStamped>(
-    "/drive", rclcpp::QoS{100});
+    "/drive_info_from_nucleo", rclcpp::QoS{100});
+
+  drive_test_publisher = this->create_publisher<ackermann_msgs::msg::AckermannDriveStamped>(
+    "/drive_command_to_nucleo", rclcpp::QoS{100});
 
   drive_publisher -> on_activate();
+  drive_test_publisher -> on_activate();
   m_publisher -> on_activate();
 
   try {
@@ -91,6 +97,9 @@ LNI::CallbackReturn SerialBridgeNode::on_configure(const lc::State & state)
 
   m_subscriber = this->create_subscription<UInt8MultiArray>(
     "serial_write", qos, callback);
+
+  drive_subscriber = this->create_subscription<ackermann_msgs::msg::AckermannDriveStamped>(
+    "/drive_command_to_nucleo", 10, bind(&SerialBridgeNode::drive_cmd_callback, this, placeholders::_1));
 
   RCLCPP_DEBUG(get_logger(), "Serial port successfully configured.");
 
@@ -222,24 +231,51 @@ void SerialBridgeNode::receive_callback(
 
   int msg_length = drive_info.length();
   
-  if(msg_length == 39){
+  if(msg_length == 25){
     string tmp; 
     stringstream ss(drive_info);
     vector<string> drive_ackermann;
 
     while(getline(ss, tmp, ' ')){
         drive_ackermann.push_back(tmp);
-        // std::cout << tmp << std::endl;
     }
 
     ackermann_msg.drive.steering_angle = stof(drive_ackermann[1]);
     ackermann_msg.drive.speed = stof(drive_ackermann[3]);
     drive_publisher->publish(ackermann_msg);
-  }
 
+    cout << "drive info from nucleo: " << "steer " << ackermann_msg.drive.steering_angle << " radians" 
+    " speed " << ackermann_msg.drive.speed << "m/s" << endl;
+  }
   // else{
   //   cout << "message corrupt, discard" << endl;
   // }
+
+  // this is for subscriber test only, remove later.
+  ackermann_msg.drive.steering_angle = 0.539;
+  ackermann_msg.drive.speed = 1.0;
+  drive_test_publisher->publish(ackermann_msg);
+}
+
+void SerialBridgeNode::drive_cmd_callback(const ackermann_msgs::msg::AckermannDriveStamped::SharedPtr msg){
+  float steering_angle = msg -> drive.steering_angle * 180.0 / M_PI;
+  float speed = msg -> drive.speed;
+
+  if (this->get_current_state().id() == State::PRIMARY_STATE_ACTIVE) {
+    stringstream stream1;
+    stream1 << std::fixed << std::setprecision(4) << steering_angle;
+    string s_steer = stream1.str().substr(0, 6);
+
+    stringstream stream2;
+    stream2 << std::fixed << std::setprecision(4) << speed;
+    string s_speed = stream2.str().substr(0, 6);
+
+    string drive_command = "steer " + s_steer + " speed " + s_speed;
+    std::vector<uint8_t> out(drive_command.begin(), drive_command.end());
+
+    m_serial_driver->port()->async_send(out);
+    cout << "drive command to nucleo: " << "steer " + s_steer + " degrees" + " speed " + s_speed + "m/s" << endl << endl;
+  }
 }
 
 void SerialBridgeNode::subscriber_callback(const UInt8MultiArray::SharedPtr msg)

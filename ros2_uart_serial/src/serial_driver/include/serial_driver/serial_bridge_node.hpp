@@ -83,6 +83,8 @@ public:
   /// \breif Callback for when serial data are received
   void receive_callback(const std::vector<uint8_t> & buffer, const size_t & bytes_transferred);
 
+  void drive_cmd_callback(const ackermann_msgs::msg::AckermannDriveStamped::SharedPtr msg);
+
 private:
   void get_params();
 
@@ -92,9 +94,13 @@ private:
   std::string m_device_name{};
   std::unique_ptr<SerialPortConfig> m_device_config;
   std::unique_ptr<SerialDriver> m_serial_driver;
+
   lc::LifecyclePublisher<UInt8MultiArray>::SharedPtr m_publisher;
   rclcpp::Subscription<UInt8MultiArray>::SharedPtr m_subscriber;
+
   lc::LifecyclePublisher<ackermann_msgs::msg::AckermannDriveStamped>::SharedPtr drive_publisher;
+  lc::LifecyclePublisher<ackermann_msgs::msg::AckermannDriveStamped>::SharedPtr drive_test_publisher;
+  rclcpp::Subscription<ackermann_msgs::msg::AckermannDriveStamped>::SharedPtr drive_subscriber;
 };  // class SerialBridgeNode
 
 }  // namespace serial_driver
