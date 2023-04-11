@@ -1,4 +1,4 @@
 services:
   sut:
     build: .
-    command: exit_success
+    command: sleep 2
