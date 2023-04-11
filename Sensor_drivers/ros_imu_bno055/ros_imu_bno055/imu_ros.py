@@ -386,13 +386,9 @@ class SensorIMU(Node):
         quaternion = self.bno055.get_quaternion_orientation()
         linear_acceleration = self.bno055.get_linear_acceleration()
         gyroscope = self.bno055.get_gyroscope()
-        
-        # imu_data.header.stamp = rospy.Time.now()
-        # [ros2]
-        imu_data.header.stamp = self.get_clock().now().to_msg()
 
+        imu_data.header.stamp = self.get_clock().now().to_msg()
         imu_data.header.frame_id = self.frame_id
-        # imu_data.header.seq = self.imu_data_seq_counter
 
         imu_data.orientation.w = float(quaternion[0])
         imu_data.orientation.x = float(quaternion[1])
@@ -427,7 +423,7 @@ class SensorIMU(Node):
         imu_magnetometer.header.stamp = self.get_clock().now().to_msg()
 
         imu_magnetometer.header.frame_id = self.frame_id
-        imu_magnetometer.header.seq = self.imu_magnetometer_seq_counter
+        # imu_magnetometer.header.seq = self.imu_magnetometer_seq_counter
 
         imu_magnetometer.magnetic_field.x = magnetometer[0]
         imu_magnetometer.magnetic_field.y = magnetometer[1]
