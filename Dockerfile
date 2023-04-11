@@ -76,7 +76,6 @@ RUN source /home/gokart_ws/install/setup.bash
 #COPY --from=0 /home/gokart_ws/build /home/gokart_ws/build
 #RUN source /opt/ros/foxy/setup.bash
 #RUN source /home/gokart_ws/install/setup.bash
-
 ENV LIBGL_ALWAYS_SOFTWARE=true
 ENV QT_QPA_PLATFORM=xcb
 #ENV XDG_RUNTIME_DIR=/tmp/runtime-root
