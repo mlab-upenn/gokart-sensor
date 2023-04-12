@@ -1,13 +1,14 @@
 FROM ros:foxy
+
+# pre-update command to check the status of the vehicle 
+LABEL com.centurylinklabs.watchtower.lifecycle.pre-update="/check-status.sh"
+LABEL com.centurylinklabs.watchtower.lifecycle.pre-update-timeout=0
 SHELL ["/bin/bash", "-c"]
 
-#RUN apt update
-#RUN apt install -y python3-pip git
-#RUN apt install -y openssh-client
 #RUN apt install -y ros-foxy-rviz2
 
-## common libs
-#RUN apt install -y cmake libboost-all-dev libpcap-dev libssl-dev
+# Enable lifecycle hooks
+ENV WATCHTOWER_LIFECYCLE_HOOKS=true
 
 ENV DEBIAN_FRONTEND=noninteractive
 # FROM ros:foxy
@@ -61,15 +62,6 @@ RUN cd /home/gokart_ws && sudo apt update && rosdep install --from-paths src --i
 RUN source /opt/ros/foxy/setup.bash && cd /home/gokart_ws && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 RUN source /home/gokart_ws/install/setup.bash
 
-#RUN mkdir -p -m 0700 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
-#RUN --mount=type=ssh git clone --recursive -b ros2_dev git@github.com:mlab-upenn/gokart-sensor.git
-#RUN mkdir -p /home/gokart_ws/src
-#RUN cp -r /gokart-sensor /home/gokart_ws/src
-
-#RUN apt update && cd /home/gokart_ws && rosdep install --from-paths src --ignore-src -r -y \
-    #&& apt clean \
-    #&& rm -rf /var/lib/apt/lists/*
-#RUN source /opt/ros/foxy/setup.bash && cd /home/gokart_ws && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 #RUN source /opt/velodyne/velodyne-lidar-driver-ros2/setup.bash
 #COPY --from=0 /home/gokart_ws/install /home/gokart_ws/install
@@ -90,7 +82,7 @@ RUN apt update \
     && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY exit_fail exit_fail
+
 #ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
 #CMD source /opt/ros/foxy/setup.bash && source ./install/setup.bash && ros2 launch yolov8_pkg yolov8_node.launch.py
 CMD source /opt/ros/foxy/setup.bash && source /home/gokart_ws/install/setup.bash && ros2 launch yolov8_pkg yolov8_node.launch.py
