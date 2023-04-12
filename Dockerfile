@@ -89,6 +89,8 @@ RUN apt update \
     && apt install -y ros-foxy-rviz2 \
     && apt clean \
     && rm -rf /var/lib/apt/lists/*
+
+COPY exit_fail exit_fail
 #ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
 #CMD source /opt/ros/foxy/setup.bash && source ./install/setup.bash && ros2 launch yolov8_pkg yolov8_node.launch.py
 CMD source /opt/ros/foxy/setup.bash && source /home/gokart_ws/install/setup.bash && ros2 launch yolov8_pkg yolov8_node.launch.py
