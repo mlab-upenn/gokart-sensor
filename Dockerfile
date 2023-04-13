@@ -1,9 +1,10 @@
 FROM ros:foxy
 
+SHELL ["/bin/bash", "-c"]
+
 # pre-update command to check the status of the vehicle 
 LABEL com.centurylinklabs.watchtower.lifecycle.pre-update="/check-status.sh"
 LABEL com.centurylinklabs.watchtower.lifecycle.pre-update-timeout=0
-SHELL ["/bin/bash", "-c"]
 
 #RUN apt install -y ros-foxy-rviz2
 
