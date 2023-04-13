@@ -79,10 +79,10 @@ ENV NVIDIA_VISIBLE_DEVICES \
 ENV NVIDIA_DRIVER_CAPABILITIES \
     ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
 # GUI Tool
-#RUN apt update \
-#    && apt install -y ros-foxy-rviz2 \
-#    && apt clean \
-#    && rm -rf /var/lib/apt/lists/*
+RUN apt update \
+    && apt install -y ros-foxy-rviz2 \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/*
 
 
 COPY check-status.sh /check-status.sh
