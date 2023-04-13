@@ -55,6 +55,8 @@ COPY robot_localization /home/gokart_ws/src/robot_localization
 COPY Sensor_drivers /home/gokart_ws/src/Sensor_drivers
 COPY Slam /home/gokart_ws/src/Slam
 
+COPY sub_status /home/gokart_ws/src/sub_status
+
 ENV DEBIAN_FRONTEND=noninteractive
 RUN cd /home/gokart_ws && sudo apt update && rosdep install --from-paths src --ignore-src -r -y \ 
     && apt clean \
