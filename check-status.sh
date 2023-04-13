@@ -1,6 +1,7 @@
 
 echo "check-status.sh started" > log.txt
 source /opt/ros/foxy/setup.bash
+source /home/gokart_ws/install/setup.bash
 
 echo "ros2 run sub_status start" >> log.txt
 ros2 run sub_status subscribe >> log.txt
