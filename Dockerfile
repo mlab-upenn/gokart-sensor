@@ -86,6 +86,7 @@ ENV NVIDIA_DRIVER_CAPABILITIES \
 
 
 COPY check-status.sh /check-status.sh
+RUN chmod 755 check-status.sh
 
 #ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
 #CMD source /opt/ros/foxy/setup.bash && source ./install/setup.bash && ros2 launch yolov8_pkg yolov8_node.launch.py
