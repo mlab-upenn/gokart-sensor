@@ -88,6 +88,8 @@ RUN apt update \
 
 COPY check-status.sh /check-status.sh
 RUN chmod 755 check-status.sh
+# /bin/sh -> bash to source setup.bash as pre-update command
+RUN ln -sf bash /bin/sh
 
 #ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
 #CMD source /opt/ros/foxy/setup.bash && source ./install/setup.bash && ros2 launch yolov8_pkg yolov8_node.launch.py
