@@ -1,0 +1,35 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/zzjun/ros2Project/gokart_ws/install/septentrio_gnss_driver/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/install/scanmatcher/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/install/robot_localization/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/install/ouster_ros/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/install/ouster_srvs/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/install/ouster_msgs/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/install/graph_based_slam/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/install/ndt_omp_ros2/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/install/lidarslam_msgs/include/**",
+        "/opt/ros/foxy/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/Sensor_drivers/ouster-ros/ouster-ros/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/Sensor_drivers/septentrio_gnss_driver/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/Slam/lidarslam_ros2/Thirdparty/ndt_omp_ros2/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/Slam/lidarslam_ros2/graph_based_slam/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/Slam/lidarslam_ros2/scanmatcher/include/**",
+        "/home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/robot_localization/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

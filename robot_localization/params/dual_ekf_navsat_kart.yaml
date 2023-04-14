@@ -1,4 +1,5 @@
 # For parameter descriptions, please refer to the template parameter files for each node.
+# X, Y, Z, roll, pitch, yaw
 
 ekf_filter_node:
   ros__parameters:
@@ -87,7 +88,7 @@ navsat_transform:
     use_sim_time: false
     frequency: 10.0
     delay: 3.0
-    magnetic_declination_radians: 0.0  # For lat/long 55.944831, -3.186998
+    magnetic_declination_radians: 0.2  # For lat/long 55.944831, -3.186998
     yaw_offset: -1.57  # if IMU reads 0 when facing magnetic north instead of east then set parameter to pi/2
     zero_altitude: true
     broadcast_utm_transform: false

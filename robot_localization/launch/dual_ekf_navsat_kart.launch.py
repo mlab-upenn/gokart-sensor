@@ -52,6 +52,13 @@ def generate_launch_description():
 
     launch_ros.actions.Node(
             package='data_aug_ros2', 
+            executable='gnss_filter', 
+            name='gnss_filter',
+	        output='screen'
+           ), 
+
+    launch_ros.actions.Node(
+            package='data_aug_ros2', 
             executable='imu_listener', 
             name='imu_listener',
 	        output='screen'
@@ -74,7 +81,7 @@ def generate_launch_description():
 	        output='screen',
             parameters=[parameters_file_path],
             remappings=[('imu', 'imu/use'),
-                        ('gps/fix', '/navsatfix/use'), 
+                        ('gps/fix', '/navsatfix/drop'), 
                         ('gps/filtered', 'gps/filtered'),
                         ('odometry/gps', 'odometry/gps'),
                         ('odometry/filtered', 'odometry/filtered')]           

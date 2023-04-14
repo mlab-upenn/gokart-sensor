@@ -1,0 +1,32 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/zzjun/ros2Project/gokart_ws/build/yolov8_pkg",
+        "/home/zzjun/ros2Project/gokart_ws/install/yolov8_pkg/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/install/septentrio_gnss_driver/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/build/ros_imu_bno055",
+        "/home/zzjun/ros2Project/gokart_ws/install/ros_imu_bno055/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/build/ros2_python_pkg",
+        "/home/zzjun/ros2Project/gokart_ws/install/ros2_python_pkg/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/install/robot_localization/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/install/ouster_srvs/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/install/ouster_msgs/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/install/lidarslam_msgs/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/install/gnss_to_local/lib/python3.8/site-packages",
+        "/opt/ros/foxy/lib/python3.8/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/zzjun/ros2Project/gokart_ws/build/yolov8_pkg",
+        "/home/zzjun/ros2Project/gokart_ws/install/yolov8_pkg/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/install/septentrio_gnss_driver/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/build/ros_imu_bno055",
+        "/home/zzjun/ros2Project/gokart_ws/install/ros_imu_bno055/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/build/ros2_python_pkg",
+        "/home/zzjun/ros2Project/gokart_ws/install/ros2_python_pkg/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/install/robot_localization/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/install/ouster_srvs/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/install/ouster_msgs/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/install/lidarslam_msgs/lib/python3.8/site-packages",
+        "/home/zzjun/ros2Project/gokart_ws/install/gnss_to_local/lib/python3.8/site-packages",
+        "/opt/ros/foxy/lib/python3.8/site-packages"
+    ]
+}

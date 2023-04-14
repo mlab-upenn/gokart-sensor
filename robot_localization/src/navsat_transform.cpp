@@ -573,6 +573,11 @@ void NavSatTransform::gpsFixCallback(
     gps_update_time_ = msg->header.stamp;
     gps_updated_ = true;
   }
+  else{
+    RCLCPP_WARN(
+      this->get_logger(),
+      "NavSatFix message contains invalid data. ");
+  }
 }
 
 void NavSatTransform::imuCallback(const sensor_msgs::msg::Imu::SharedPtr msg)

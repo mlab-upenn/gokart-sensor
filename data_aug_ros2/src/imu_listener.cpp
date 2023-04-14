@@ -22,12 +22,11 @@ class MinimalPublisher : public rclcpp::Node
     : Node("minimal_publisher"), count_(0)
     {
       publisher_ = this->create_publisher<sensor_msgs::msg::Imu>("/imu/use", 10);
-      gps_publisher_ = this->create_publisher<sensor_msgs::msg::NavSatFix>("/navsatfix/use", 10);
-      timer_ = this->create_wall_timer(500ms, std::bind(&MinimalPublisher::timer_callback, this));
+      // gps_publisher_ = this->create_publisher<sensor_msgs::msg::NavSatFix>("/navsatfix/use", 10);
       subscription_ = this->create_subscription<sensor_msgs::msg::Imu>(
         "/imu/data", 10, std::bind(&MinimalPublisher::topic_callback, this, _1));
-      gps_subscription_ = this->create_subscription<sensor_msgs::msg::NavSatFix>(
-        "/navsatfix", 10, std::bind(&MinimalPublisher::gps_callback, this, _1));
+      // gps_subscription_ = this->create_subscription<sensor_msgs::msg::NavSatFix>(
+      //   "/navsatfix", 10, std::bind(&MinimalPublisher::gps_callback, this, _1));
     }
 
   private:
@@ -116,10 +115,13 @@ class MinimalPublisher : public rclcpp::Node
             lat = lat_old_;
             lon = lon_old_;
             std::array<double, 9> gps_covar_new;
-            gps_covar_new[0]= 10e10;
-            gps_covar_new[4]= 10e10;
-            gps_covar_new[8]= 10e10;
+            for(int i=0; i<9; i++)
+            {
+                gps_covar_new[i] = 10e9;
+            }
             gps_covar = gps_covar_new;
+            lat = NAN;
+            lon = NAN;
             // std::cout << "JUMP at time" << rclcpp::Clock{RCL_ROS_TIME}.now().seconds()<< std::endl;
             // std::cout << "lat" << " " << lat << std::endl;
             // std::cout << "lon" << " " << lon << std::endl;
@@ -136,13 +138,6 @@ class MinimalPublisher : public rclcpp::Node
         gps_publisher_->publish(message);
     }
 
-    void timer_callback()
-    {
-    //   auto message = sensor_msgs::msg::Imu();
-    //   message.data = "Hello, world! " + std::to_string(count_++);
-    //   RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
-    //   publisher_->publish(message);
-    }
     rclcpp::TimerBase::SharedPtr timer_;
     rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr publisher_;
     rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr gps_publisher_;

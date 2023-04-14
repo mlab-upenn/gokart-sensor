@@ -26,6 +26,8 @@ find_package(tf2_geometry_msgs REQUIRED)
 
 add_executable(imu_listener src/imu_listener.cpp)
 ament_target_dependencies(imu_listener rclcpp std_msgs sensor_msgs)
+add_executable(gnss_filter src/gnss_filter.cpp)
+ament_target_dependencies(gnss_filter rclcpp std_msgs sensor_msgs)
 
 install(TARGETS
   imu_listener
