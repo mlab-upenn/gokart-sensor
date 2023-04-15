@@ -39,7 +39,7 @@ def generate_launch_description():
             executable='static_transform_publisher',
             name='base_imu_transform',
 	        output='screen',
-            arguments = ["-0.396", "0.355", "0.6096", "0", "0", "0", "base_link","imu_link"]
+            arguments = ["-0.396", "-0.355", "0.6096", "0", "0", "0", "base_link","imu_link"]
            ), 
 
     launch_ros.actions.Node(
