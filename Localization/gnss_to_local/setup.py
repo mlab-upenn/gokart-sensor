@@ -29,7 +29,7 @@ setup(
     # Add new executable here
     entry_points={
         'console_scripts': [
-            f'node = {package_name}.gnss_to_local_node:main',
+            f'gnss_to_local_node = {package_name}.gnss_to_local_node:main',
         ],
     },
 )

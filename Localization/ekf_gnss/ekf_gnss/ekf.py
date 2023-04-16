@@ -5,8 +5,8 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.spatial.transform import Rotation as Rot
-from utils import rot_mat_2d
-
+# from utils import rot_mat_2d
+from scipy.spatial.transform import Rotation as Rot
 
 FAKE_GPS_NOISE = np.diag([0.1, 0.1]) ** 2 
 FAKE_IMU_NOISE = np.diag([1.0, np.deg2rad(1.0)]) ** 2
@@ -22,12 +22,15 @@ class EKF:
             0.1,  # variance of location on x-axis
             0.1,  # variance of location on y-axis
             np.deg2rad(0.1),  # variance of yaw angle
-            2.0  # variance of velocity
+            1.0,  # variance of x velocity
+            0.1  # variance of yaw angular velocity
         ]) ** 2  # predict state covariance
-        self.Q_mea = np.diag([0.1, 0.1]) ** 2  # Observation x,y position covariance
-        self.dt = 0.1
-
+        self.Q_mea = np.diag([0.1, 0.1, 1e-5, 0.1, 1e-5]) ** 2  # Observation x,y position covariance
+        self.dt = 0.1   
+    
     def set_Q(self, x_var, y_var):
+        # we know that imu variance is not changing and only GPS covar is changing
+        # so only setting GPS variance as it fluctuates 
         self.Q_mea[0][0] = x_var
         self.Q_mea[1][1] = y_var
     
@@ -53,23 +56,28 @@ class EKF:
         return xTrue, z, xd, ud
 
     def motion_model(self, x, u, dt):
-        F = np.array([[1.0, 0, 0, 0],
-                    [0, 1.0, 0, 0],
-                    [0, 0, 1.0, 0],
-                    [0, 0, 0, 0]])
+        F = np.array([[1.0, 0, 0, 0, 0],
+                    [0, 1.0, 0, 0,0],
+                    [0, 0, 1.0, 0,0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0]])
 
         B = np.array([[dt * math.cos(x[2, 0]), 0],
                       [dt * math.sin(x[2, 0]), 0],
                       [0.0, dt],
-                      [1.0, 0.0]])
+                      [1.0, 0.0],
+                      [0.0,1.0]])
 
         x = F @ x + B @ u
 
         return x
     
     def observation_model(self, x):
-        H = np.array([[1.0, 0, 0, 0],
-                      [0, 1.0, 0, 0]])
+        H = np.array([[1.0, 0, 0, 0,0],
+                      [0, 1.0, 0, 0,0],
+                      [0, 0, 1.0, 0,0],
+                      [0, 0, 0, 1.0,0],
+                      [0, 0, 0, 0,1.0]])
 
         z = H @ x
 
@@ -80,10 +88,11 @@ class EKF:
         yaw = x[2, 0]
         v = u[0, 0]
         jF = np.array([
-            [1.0, 0.0, -dt * v * math.sin(yaw), dt * math.cos(yaw)],
-            [0.0, 1.0, dt * v * math.cos(yaw), dt * math.sin(yaw)],
-            [0.0, 0.0, 1.0, 0.0],
-            [0.0, 0.0, 0.0, 1.0]])
+            [1.0, 0.0, -dt * v * math.sin(yaw), dt * math.cos(yaw),0],
+            [0.0, 1.0, dt * v * math.cos(yaw), dt * math.sin(yaw),0],
+            [0.0, 0.0, 1.0, 0.0, dt],
+            [0.0, 0.0, 0.0, 1.0,0.0],
+            [0.0, 0.0, 0.0, 0.0,1.0]])
 
         return jF
 
@@ -91,9 +100,11 @@ class EKF:
     def jacob_h(self):
         # Jacobian of Observation Model
         jH = np.array([
-            [1, 0, 0, 0],
-            [0, 1, 0, 0]
-        ])
+            [1, 0, 0, 0,0],
+            [0, 1, 0, 0,0],
+            [0, 0, 1, 0,0],
+            [0, 0, 0, 1,0],
+            [0, 0, 0, 0,1]])
 
         return jH
 
@@ -109,11 +120,16 @@ class EKF:
         zPred = self.observation_model(xPred)
         y = z - zPred
         S = jH @ PPred @ jH.T + self.Q_mea
-        K = PPred @ jH.T @ np.linalg.inv(S)
+        S_inv = np.linalg.inv(S)
+
+        K = PPred @ jH.T @ S_inv
         xEst = xPred + K @ y
         PEst = (np.eye(len(xEst)) - K @ jH) @ PPred
         return xEst, PEst
 
+
+def rot_mat_2d(angle):
+    return Rot.from_euler('z', angle).as_matrix()[0:2, 0:2] 
 
 def plot_covariance_ellipse(xEst, PEst):  # pragma: no cover
     Pxy = PEst[0:2, 0:2]

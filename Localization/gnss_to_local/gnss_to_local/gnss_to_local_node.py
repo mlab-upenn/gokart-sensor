@@ -23,7 +23,7 @@ class Python_node(Node):
             ])
 
         # subscribe and publish
-        self.gnss_sub = self.create_subscription(NavSatFix, "/navsatfix/drop", self.gnss_cb, qos_profile=qos_profile_sensor_data)
+        self.gnss_sub = self.create_subscription(NavSatFix, "/navsatfix/use", self.gnss_cb, qos_profile=qos_profile_sensor_data)
         self.position_pub = self.create_publisher(PoseWithCovarianceStamped, "/gnss_local", 10)
 
         # init local frame
@@ -74,8 +74,8 @@ class Python_node(Node):
         pose.pose.pose.orientation.y = 0.0
         pose.pose.pose.orientation.z = 0.0
         pose.pose.pose.orientation.w = 1.0
-        pose.pose.covariance[8] = msg.position_covariance[8]
-        pose.pose.covariance[8] = msg.position_covariance[8]
+        pose.pose.covariance[0] = msg.position_covariance[0]
+        pose.pose.covariance[4] = msg.position_covariance[4]
         self.position_pub.publish(pose)
 
 

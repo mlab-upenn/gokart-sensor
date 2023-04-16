@@ -15,7 +15,20 @@ def generate_launch_description():
     ekf_gnss_node = Node(
         package="ekf_gnss",
         executable="ekf_gnss_node",
-        parameters=[config]
+        parameters=[config],
+        output='screen'
+    )
+
+    gnss_local = Node(
+        package="gnss_to_local",
+        executable="gnss_to_local_node",
+        output='screen'
+    )
+
+    data_aug = Node(
+        package="data_aug_ros2",
+        executable="imu_listener",
+        output='screen'
     )
 
     # rviz_node = Node(
@@ -26,4 +39,6 @@ def generate_launch_description():
     # )
 
     ld.add_action(ekf_gnss_node)
+    ld.add_action(gnss_local)
+    ld.add_action(data_aug)
     return ld
