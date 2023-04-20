@@ -98,6 +98,9 @@ sudo apt install -y         \
 
 # for Velodyne driver:
 cd Sensor_drivers/ros2_velodyne, then do as the README said.
+
+# for IMU driver:
+pip install pyserial
 ```
 
 
@@ -140,6 +143,9 @@ The Ouster and Velodyne LiDARs are connected to an Ethernet switcher, which keep
 Run ros2 launch/run in different terminals for each driver(can use **tmux**, see [section link](#tmux-intro))
 
 ```bash
+# under the workspace folder, source
+source /opt/ros/foxy/setup.bash && source install/setup.bash
+
 # launch Ouster driver
 ros2 launch ouster_ros sensor.launch.xml sensor_hostname:=192.0.2.100 timestamp_mode:=TIME_FROM_ROS_TIME
 
@@ -157,8 +163,6 @@ ros2 launch ros_imu_bno055 imu_launch.py
 # launch OAK-D camera driver
 ros2 launch depthai_examples rgb_publisher.launch.py
 ```
-
-
 
 ### Object detection(yolov8)
 
@@ -179,7 +183,12 @@ ros2 launch lidarslam lidarslam.launch.py
 ```
 
 
-
+### Checking
+You can show all the topic list and echo some specific topics to see if the drivers and applications are launched successfully.
+```
+ros2 topic list
+ros2 topic echo <topic name> --no-arr
+```
 
 
 ## Reference Links
