@@ -2,7 +2,7 @@ import os
 from glob import glob
 from setuptools import setup
 
-package_name = 'ros2_python_pkg'
+package_name = 'ekf_gnss'
 
 setup(
     name=package_name,
@@ -13,7 +13,7 @@ setup(
         ('share/ament_index/resource_index/packages',
          ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
+        (os.path.join('share', package_name, 'launch'), glob('launch/*launch.py')),
         (os.path.join('share', package_name, 'launch'), glob('launch/*.xacro')),
         (os.path.join('share', package_name, 'launch'), glob('launch/*.rviz')),
         (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
@@ -29,7 +29,7 @@ setup(
     # Add new executable here
     entry_points={
         'console_scripts': [
-            f'python_node = {package_name}.python_node:main',
+            f'ekf_gnss_node = {package_name}.ekf_gnss_node:main',
         ],
     },
 )
