@@ -12,4 +12,4 @@
     stop_bits: "1"
 
     # Dumb ackermann drive command for testing
-    test_publish: true
+    test_publish: false

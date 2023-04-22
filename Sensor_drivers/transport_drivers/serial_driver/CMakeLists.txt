@@ -38,7 +38,7 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
   src/serial_driver.cpp
 )
 
-ament_target_dependencies(${PROJECT_NAME} "ASIO" ackermann_msgs)
+ament_target_dependencies(${PROJECT_NAME} "ASIO" "ackermann_msgs")
 
 ament_auto_add_library(${PROJECT_NAME}_nodes SHARED
   src/serial_bridge_node.cpp
@@ -50,7 +50,7 @@ rclcpp_components_register_node(${PROJECT_NAME}_nodes
 )
 
 target_link_libraries(${PROJECT_NAME}_nodes ${PROJECT_NAME})
-ament_target_dependencies(${PROJECT_NAME}_nodes "ASIO" ackermann_msgs)
+ament_target_dependencies(${PROJECT_NAME}_nodes "ASIO" "ackermann_msgs")
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto)

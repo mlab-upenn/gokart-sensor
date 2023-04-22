@@ -1,3 +1,6 @@
+// #include <rclcpp_components/register_node_macro.hpp>  // NOLINT
+// RCLCPP_COMPONENTS_REGISTER_NODE(drivers::serial_driver::SerialBridgeNode)
+
 // Copyright 2021 LeoDrive, Copyright 2021 the Autoware Foundation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,12 +14,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-#include "math.h"
-#include <memory>
-#include <string>
-#include <vector>
-#include <iomanip>
 
 #include "serial_driver/serial_bridge_node.hpp"
 
@@ -218,7 +215,7 @@ void SerialBridgeNode::receive_callback(
   const size_t & bytes_transferred)
 {
   UInt8MultiArray out;
-  drivers::common::to_msg(buffer, out);
+  drivers::common::to_msg(buffer, out, bytes_transferred);
 
   vector<unsigned char> message = out.data;
   string drive_info(message.begin(), message.end());
@@ -254,7 +251,6 @@ void SerialBridgeNode::receive_callback(
     ackermann_msg.drive.speed = 1.0;
     drive_test_publisher->publish(ackermann_msg);
   }
-
 }
 
 // subscribe to ros topic /drive_command_to_nucleo and send its command to nucleo
