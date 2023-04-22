@@ -1,7 +1,0 @@
-yolov8_node:
-  ros__parameters:
-    model_path: best.pt
-    device: cpu
-    threshold: 0.5
-    class_num: 2
-    image_topic: /color/image
