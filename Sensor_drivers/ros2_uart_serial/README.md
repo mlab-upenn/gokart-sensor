@@ -66,3 +66,4 @@ ros2 launch serial_driver serial_driver_bridge_node.launch.py
 
 ## Touble Shooting
 
+`[serial_bridge-1] [ERROR] [1682451189.016799529] [serial_bridge_node]: Error creating serial port: /dev/ttyUSB0 - open: No such file or directory`
