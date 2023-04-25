@@ -1,19 +1,8 @@
-# transport_drivers
+# ros2_uart_serial
 
-A set of ROS2 drivers for transport-layer protocols. Currently utilizes the stand-alone ASIO library for most transport-layer functionality.
+A set of ROS2 drivers to support the USB-TTL communication between the gokart laptop and the nucleo main controller. The repository is developed based on the [transport_drivers](https://github.com/ros-drivers/transport_drivers) pacakges developed by the Autoware Foundation
 
 ## Supported Drivers:
-
-* **UDP Driver**
-
-A package which encapsulates basic receving and sending of udp data.
-
-Provided within this package are the following executabes:
-- udp_receiver_node_exe: can receive UDP data
-- udp_sender_node_exe: can send UDP data asynchronosouly
-- udp_bridge_node_exe: combined both receiver and sender nodes into one
-
-Provided within this package also is a `udp_driver` library without the ROS2 dependencies which could be used elsewhere.
     
 * **Serial Driver**
 
@@ -27,7 +16,6 @@ Provided within this package also is a `serial_driver` library without the ROS2 
 * **IO Context**
 
 A library to write synchronous and asynchronous networking applications.
-
 
 ## Quick start
 
