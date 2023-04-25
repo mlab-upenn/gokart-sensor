@@ -54,12 +54,15 @@ source install/setup.bash
 ros2 launch serial_driver serial_driver_bridge_node.launch.py
 ```
 
-# Topics published by the simulation
+## Topics published by the simulation
 
 `/drive_info_from_nucleo`: gokart's current speed (m/s) and steering (radians) information published as AckermannDriveStamped Message
 
 `/effective_command_to_nucleo`: current driving command gokart is executing published as AckermannDriveStamped Message. Three sources of driving command happening at the same time: manual, teleop, autonomous. The nucleo will select the command based on the current control mode and filter out other commands.
 
-# Topics subscribed by the simulation
+## Topics subscribed by the simulation
 
 `/automous_command_to_nucleo`: the serial_bridge_node subscribes to this topic as AckermannDriveStamped Message and transmit the autonomous command to the nucleo through usb-ttl.
+
+## Touble Shooting
+
