@@ -68,6 +68,6 @@ ros2 launch serial_driver serial_driver_bridge_node.launch.py
 If you encounter an error like below, there might be several causes.
 `[serial_bridge-1] [ERROR] [1682451189.016799529] [serial_bridge_node]: Error creating serial port: /dev/ttyUSB0 - open: No such file or directory`
 
-1. Type ls ```/dev/ttyUSB0``` in a terminal and see if the port is available. If the port has a different name, go to the serial.params.yaml file and change it.
+1. Type ls ```/dev/ttyUSB0``` in a terminal and see if the port is available. If the port has a different name, change it in the serial.params.yaml.
 2. The permission to use the serial port is denied. Type ```chmod 666 /dev/ttyUSB0``` (or your port number) to change permission.
 3. Check the cable connection and make sure the six TTL pins are connected in the correct order.
