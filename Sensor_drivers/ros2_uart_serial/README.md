@@ -25,6 +25,7 @@ Clone the repo into your workspace, normally with the structure `workspace/src/<
 git clone https://github.com/mlab-upenn/gokart-sensor.git
 ```
 
+Switch to the pure pursuit branch
 ```
 git checkout ros2_foxy_purepursuit
 ```
@@ -50,15 +51,5 @@ source install/setup.bash
 ...and now you should be able to run your newly built executables. Here is how you would launch the `serial_driver` bridge node:
 
 ```
-ros2 launch serial_driver serial_bridge_launch.py
-```
-
-## Testing
-
-Comprehensive unit tests have been written for every package within this repository.
-
-To run them yourself, use the normal command from your top-level workspace directory:
-
-```
-colcon test
+ros2 launch serial_driver serial_driver_bridge_node.launch.py
 ```
