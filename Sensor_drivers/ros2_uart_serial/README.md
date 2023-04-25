@@ -56,9 +56,9 @@ ros2 launch serial_driver serial_driver_bridge_node.launch.py
 
 # Topics published by the simulation
 
-`/drive_info_from_nucleo`: Gokart's current speed (m/s) and steering (radians) information published as AckermannDriveStamped Message
+`/drive_info_from_nucleo`: gokart's current speed (m/s) and steering (radians) information published as AckermannDriveStamped Message
 
-`/effective_command_to_nucleo`: Current driving command gokart is executing published as AckermannDriveStamped Message. Three sources of driving command happening at the same time: manual, teleop, autonomous. The nucleo will select the command based on the current control mode and filter out other commands.
+`/effective_command_to_nucleo`: current driving command gokart is executing published as AckermannDriveStamped Message. Three sources of driving command happening at the same time: manual, teleop, autonomous. The nucleo will select the command based on the current control mode and filter out other commands.
 
 # Topics subscribed by the simulation
 
