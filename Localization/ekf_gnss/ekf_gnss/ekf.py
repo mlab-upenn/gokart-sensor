@@ -8,7 +8,7 @@ from scipy.spatial.transform import Rotation as Rot
 # from utils import rot_mat_2d
 from scipy.spatial.transform import Rotation as Rot
 
-FAKE_GPS_NOISE = np.diag([0.1, 0.1]) ** 2 
+FAKE_GPS_NOISE = np.diag([0.1, 0.1, 0.1,0.1,0.1]) ** 2 
 FAKE_IMU_NOISE = np.diag([1.0, np.deg2rad(1.0)]) ** 2
 
 class EKF:
@@ -47,9 +47,10 @@ class EKF:
         xTrue = self.motion_model(xTrue, u, dt)
 
         # add noise to gps x-y
-        z = self.observation_model(xTrue) +  FAKE_GPS_NOISE @ np.random.randn(2, 1)
+        z = self.observation_model(xTrue) +  FAKE_GPS_NOISE @ np.random.randn(5, 1)
         # add noise to input
         ud = u + FAKE_IMU_NOISE @ np.random.randn(2, 1)
+        # print(z)
 
         xd = self.motion_model(xd, ud, dt)
 
@@ -107,6 +108,34 @@ class EKF:
             [0, 0, 0, 0,1]])
 
         return jH
+    
+    def ekf_predict(self, xEst, PEst, u, dt):
+        #  Predict
+        xPred = self.motion_model(xEst, u, dt)
+        jF = self.jacob_f(xEst, u, dt)
+        PPred = jF @ PEst @ jF.T + self.R_dyn
+        return xPred, PPred
+    
+    def ekf_partial_update(self, xEst, PEst, z_partial, z_bool, m_covar):
+        #  Update
+        assert z_bool.shape[0] ==5 #need to make sure we know what elements are to be updates
+        num_param = np.zeros((5,1))[z_bool,:].shape[0] #find number of True's in vec 
+        assert num_param>0 #atlease one update
+        assert m_covar.shape[0] == num_param #if 2 elements are to be updates, covar should be 2*2
+        assert m_covar.shape[1] == num_param
+        x_par = xEst[z_bool,:]
+        #the observation model is direct, so it will be unity
+        #here we are observing partial states directly, so jacobian will be unity
+        zPred = x_par
+        jH = np.eye(5)[z_bool,:]
+        S = jH @ PEst @ jH.T + m_covar
+        S_inv = np.linalg.inv(S)
+        K = PEst @ jH.T @ S_inv
+
+        y = z_partial - zPred #what partially we observed minus what partially was predicted
+        xEst = xEst + K @ y
+        PEst = (np.eye(len(xEst)) - K @ jH) @ PEst
+        return xEst, PEst       
 
 
     def ekf_estimation(self, xEst, PEst, z, u, dt):
@@ -159,27 +188,49 @@ def main():
 
     time = 0.0
 
-    # State Vector [x y yaw v]'
-    xEst = np.zeros((4, 1))
-    xTrue = np.zeros((4, 1))
-    PEst = np.eye(4)
-    xDR = np.zeros((4, 1))  # Dead reckoning
+    # State Vector [x y yaw v omega]'
+    xEst = np.zeros((5, 1))
+    xTrue = np.zeros((5, 1))
+    PEst = np.eye(5)
+    xDR = np.zeros((5, 1))  # Dead reckoning
 
     # history
     hxEst = xEst
     hxTrue = xTrue
     hxDR = xTrue
-    hz = np.zeros((2, 1))
+    hz = np.zeros((5, 1))
 
     SIM_TIME = 50.0  # simulation time
     DT = 0.1  # time tick [s]
     ekf = EKF()
     ekf.set_dt(DT)
+    import sys
     
     while SIM_TIME >= time:
         time += DT
         u = ekf.fake_input()
         xTrue, z, xDR, ud = ekf.fake_observation(xTrue, xDR, u, DT)
+
+        #test for partial update
+        # z_p = z[2:4]
+        # z_covar = np.eye(2)*0.1
+        # z_b = np.array([False, False, True, True, False])
+        # print("before")
+        # print("xEst")
+        # print(xEst)
+        # print("PEst")
+        # print(PEst)
+        
+        # xEst, PEst = ekf.ekf_partial_update(xEst, PEst, z_p, z_b, z_covar)
+
+        # print("after")
+        # print("xEst")
+        # print(xEst)
+        # print("PEst")
+        # print(PEst)
+        # sys.exit()
+        #test for partial update ends
+
 
         xEst, PEst = ekf.ekf_estimation(xEst, PEst, z, ud, DT)
 
