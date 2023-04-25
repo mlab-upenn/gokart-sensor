@@ -31,6 +31,7 @@ ament_target_dependencies(gnss_filter rclcpp std_msgs sensor_msgs)
 
 install(TARGETS
   imu_listener
+  gnss_filter
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)

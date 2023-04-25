@@ -18,6 +18,7 @@ setup(
         (os.path.join('share', package_name, 'launch'), glob('launch/*.rviz')),
         (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
         (os.path.join('share', package_name, 'config'), glob('config/*.pt')),
+        (os.path.join('share', package_name, 'config'), glob('config/*.csv')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -30,6 +31,7 @@ setup(
     entry_points={
         'console_scripts': [
             f'python_node = {package_name}.python_node:main',
+            f'visualize_node = {package_name}.visualize_node:main'
         ],
     },
 )
