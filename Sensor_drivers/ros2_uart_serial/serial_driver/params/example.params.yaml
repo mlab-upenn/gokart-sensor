@@ -10,6 +10,3 @@
     flow_control: none
     parity: none
     stop_bits: "1"
-
-    # Dumb ackermann drive command for testing
-    test_publish: false

@@ -88,7 +88,7 @@ private:
   void get_params();
 
   // preset message length on both sides of communication for sanity check
-  uint8_t msg_length = 25;
+  uint8_t msg_length = 35;
   bool test_publish;
 
   ackermann_msgs::msg::AckermannDriveStamped ackermann_msg;
@@ -98,8 +98,8 @@ private:
   std::unique_ptr<SerialPortConfig> m_device_config;
   std::unique_ptr<SerialDriver> m_serial_driver;
 
-  lc::LifecyclePublisher<ackermann_msgs::msg::AckermannDriveStamped>::SharedPtr drive_publisher;
-  lc::LifecyclePublisher<ackermann_msgs::msg::AckermannDriveStamped>::SharedPtr drive_test_publisher;
+  lc::LifecyclePublisher<ackermann_msgs::msg::AckermannDriveStamped>::SharedPtr drive_info_publisher;
+  lc::LifecyclePublisher<ackermann_msgs::msg::AckermannDriveStamped>::SharedPtr drive_command_publisher;
   rclcpp::Subscription<ackermann_msgs::msg::AckermannDriveStamped>::SharedPtr drive_subscriber;
 };  // class SerialBridgeNode
 

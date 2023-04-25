@@ -4,6 +4,7 @@ from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import NavSatFix, Imu
 from vision_msgs.msg import Detection2DArray
 from geometry_msgs.msg import PoseWithCovarianceStamped
+from ackermann_msgs.msg import AckermannDriveStamped
 from math import sin, cos, asin, sqrt, pi, radians, atan2
 from collections import namedtuple
 from ekf_gnss.ekf import EKF
@@ -36,6 +37,7 @@ class Ekf_gnss_node(Node):
         # subscribe and publish
         self.get_logger().info("ekf_gnss node initialized, dt = %f" % self.dt)
         self.gnss_local_sub = self.create_subscription(PoseWithCovarianceStamped, "/gnss_local", self.gnss_cb, qos_profile=qos_profile_sensor_data)
+        # self.odom_sub = self.create_subscription(AckermannDriveStamped, "/drive_info_from_nucleo", self.odom_cb, qos_profile=qos_profile_sensor_data)
         self.imu_sub = self.create_subscription(Imu, "/imu/data", self.imu_cb, qos_profile=qos_profile_sensor_data)
         self.ekf_pub = self.create_publisher(PoseWithCovarianceStamped, "/gnss_ekf", 10)
         self.timer = self.create_timer(self.dt, self.ekf_update)
@@ -54,6 +56,11 @@ class Ekf_gnss_node(Node):
 
         self.msgLock = threading.Lock()
     
+    def odom_cb(self, msg: AckermannDriveStamped):
+        steer = msg.drive.steering_angle
+        steer = steer * pi / 180
+        speed = msg.drive.speed
+
 
     def imu_cb(self, msg: Imu):
         # calculate the current yaw from orientation quaternion
@@ -128,7 +135,6 @@ class Ekf_gnss_node(Node):
         # xEst, PEst = self.ekf.ekf_estimation(x_est, self.P_est, z, ud, dt, dead_reckoning=False)
         xEst, PEst = self.ekf.ekf_estimation(x_est, self.P_est, z, ud, dt)
 
-        
 
         # if(self.ekf.Q_mea[-1][-1] > 0.4):
         #     xEst, PEst = self.ekf.ekf_estimation(x_est, self.P_est, z, ud, dt, dead_reckoning=False)

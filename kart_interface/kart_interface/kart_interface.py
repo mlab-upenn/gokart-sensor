@@ -2,7 +2,7 @@
 import rclpy
 from rclpy.node import Node
 
-
+import numpy as np
 from geometry_msgs.msg import PoseStamped
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from geometry_msgs.msg import Twist
@@ -27,19 +27,22 @@ class kart_interface(Node):
         ego_requested_speed = twist_msg.linear.x
         ego_requested_angle = twist_msg.angular.z
 
-        if ego_requested_angle > 0.0:
-            ego_requested_angle = 0.3
-        elif ego_requested_angle < 0.0:
-            ego_requested_angle = -0.3
-        else:
-            ego_requested_angle = 0.0
+        # if ego_requested_angle > 0.0:
+        #     ego_requested_angle = 0.3
+        # elif ego_requested_angle < 0.0:
+        #     ego_requested_angle = -0.3
+        # else:
+        #     ego_requested_angle = 0.0
         
-        if ego_requested_speed >0.2:
-            ego_requested_speed = 0.2
-        elif ego_requested_speed<-0.2:
-            ego_requested_speed = -0.2
-        else:
-            ego_requested_speed =0.0
+        # if ego_requested_speed >0.2:
+        #     ego_requested_speed = 0.2
+        # elif ego_requested_speed<-0.2:
+        #     ego_requested_speed = -0.2
+        # else:
+        #     ego_requested_speed =0.0
+
+        ego_requested_angle = np.clip(ego_requested_angle, -0.8, 0.8)
+        ego_requested_speed = np.clip(ego_requested_speed, 0, 3.0)
         
         command_to_publish  = AckermannDriveStamped()
         command_to_publish.header.stamp = self.get_clock().now().to_msg()

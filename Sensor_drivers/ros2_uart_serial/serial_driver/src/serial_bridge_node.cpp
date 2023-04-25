@@ -57,20 +57,22 @@ LNI::CallbackReturn SerialBridgeNode::on_configure(const lc::State & state)
   (void)state;
 
   // Read serial message and publish as ackermann drive info of the gokart
-  drive_publisher = this->create_publisher<ackermann_msgs::msg::AckermannDriveStamped>(
+  drive_info_publisher = this->create_publisher<ackermann_msgs::msg::AckermannDriveStamped>(
     "/drive_info_from_nucleo", rclcpp::QoS{100});
 
-  // This publisher sends out a test ackermann command drive message to the nucleo
-  // For testing only and MUST be disabled once we have a real data publisher configured.
-  drive_test_publisher = this->create_publisher<ackermann_msgs::msg::AckermannDriveStamped>(
-    "/drive_command_to_nucleo", rclcpp::QoS{100});
+  // The nucleo main controller will process command based on drive mode and send the
+  // command that is in effect to the topic /effective_command_to_nucleo
+  // if in autonomous mode, then "effective_command_to_nucleo" should match the topic
+  // "automous_command_to_nucleo" (precision will vary). If in teleop mode, then not.
+  drive_command_publisher = this->create_publisher<ackermann_msgs::msg::AckermannDriveStamped>(
+    "/effective_command_to_nucleo", rclcpp::QoS{100});
 
-  // Reads ackermann command drive message and publish on serial port to nucleo
+  // Reads autonomous ackermann command drive message and publish on serial port to nucleo
   drive_subscriber = this->create_subscription<ackermann_msgs::msg::AckermannDriveStamped>(
-    "/drive_command_to_nucleo", 10, bind(&SerialBridgeNode::drive_cmd_callback, this, placeholders::_1));
+    "/automous_command_to_nucleo", 10, bind(&SerialBridgeNode::drive_cmd_callback, this, placeholders::_1));
 
-  drive_publisher -> on_activate();
-  drive_test_publisher -> on_activate();
+  drive_info_publisher -> on_activate();
+  drive_command_publisher -> on_activate();
 
   try {
     m_serial_driver->init_port(m_device_name, *m_device_config);
@@ -221,7 +223,7 @@ void SerialBridgeNode::receive_callback(
   string drive_info(message.begin(), message.end());
   
   // split received data by space " "
-  // parsed data: [steer x.xxx speed x.xxx]
+  // parsed data: [steer x.xxx speed x.xxx type [info/cmmd]]
   if(drive_info.length() == msg_length){
     string tmp; 
     stringstream ss(drive_info);
@@ -233,24 +235,25 @@ void SerialBridgeNode::receive_callback(
 
     ackermann_msg.drive.steering_angle = stof(drive_ackermann[1]);
     ackermann_msg.drive.speed = stof(drive_ackermann[3]);
-    drive_publisher->publish(ackermann_msg);
 
-    cout << "drive info from nucleo: " << "steer " << ackermann_msg.drive.steering_angle << " radians" 
-    " speed " << ackermann_msg.drive.speed << "m/s" << endl;
+    if(drive_ackermann[5] == "info"){
+      drive_info_publisher->publish(ackermann_msg);
+      cout << "gokart drive info: " << endl;
+    }
+    else if (drive_ackermann[5] == "cmmd"){
+      drive_command_publisher->publish(ackermann_msg);
+      cout << "gokart drive command: " << endl;
+    }
+
+    cout << "steer " << ackermann_msg.drive.steering_angle << "radians" 
+    " speed " << ackermann_msg.drive.speed << "m/s" << endl << endl;
   }
 
   // There is about 20% message corruption rate, in which message length will be different
   // Throw away the corrupted data and print out an error message
   // else{
-    // cout << "message corrupt, discard" << endl;
-  //}
-
-  // Dumb ackermann drive command for testing
-  if (test_publish){
-    ackermann_msg.drive.steering_angle = 0.539;
-    ackermann_msg.drive.speed = 1.0;
-    drive_test_publisher->publish(ackermann_msg);
-  }
+  //   cout << "message corrupt, discard" << endl << drive_info << endl;
+  // }
 }
 
 // subscribe to ros topic /drive_command_to_nucleo and send its command to nucleo
@@ -275,7 +278,6 @@ void SerialBridgeNode::drive_cmd_callback(const ackermann_msgs::msg::AckermannDr
     std::vector<uint8_t> out(drive_command.begin(), drive_command.end());
 
     m_serial_driver->port()->async_send(out);
-    cout << "drive command to nucleo: " << "steer " + s_steer + " degrees" + " speed " + s_speed + "m/s" << endl << endl;
   }
 }
 
