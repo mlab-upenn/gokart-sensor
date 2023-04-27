@@ -152,7 +152,7 @@ class Ekf_gnss_node(Node):
         msg = PoseWithCovarianceStamped()
         msg.header.stamp.sec = self.last_x.sec
         msg.header.stamp.nanosec = self.last_x.nanosec
-        msg.header.frame_id = "/map"
+        msg.header.frame_id = "map"
         msg.pose.pose.position.x = xEst[0][0]
         msg.pose.pose.position.y = xEst[1][0]
         msg.pose.pose.position.z = 0.0

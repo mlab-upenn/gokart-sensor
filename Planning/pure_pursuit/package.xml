@@ -9,6 +9,8 @@
 
   <depend>rclpy</depend>
   <depend>ackermann_msgs</depend>
+  <exec_depend>nav2_map_server</exec_depend>
+  <exec_depend>nav2_lifecycle_manager</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

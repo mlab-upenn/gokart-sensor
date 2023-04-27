@@ -55,6 +55,8 @@ class LaneVisualize(Node):
         self.traj_y = waypoints[:, 1]
         self.traj_v = waypoints[:, 2]
         self.num_traj_pts = len(self.traj_x)
+        self.v_max = 6.0
+        self.v_min = 0.0
 
     def timer_callback(self):
         self.visualize_global_path()
