@@ -58,11 +58,11 @@ class Python_node(Node):
         
         self.get_logger().info("python node initialized")
         self.drive_pub = self.create_publisher(AckermannDriveStamped, self.get_parameter('drive_topic').get_parameter_value().string_value, 10)
-        # self.pose_sub = self.create_subscription(PoseWithCovarianceStamped, self.get_parameter('pose_topic').get_parameter_value().string_value, 
-        #                                          self.pose_cb,
-        #                                          10)
+        self.pose_sub = self.create_subscription(PoseWithCovarianceStamped, self.get_parameter('pose_topic').get_parameter_value().string_value, 
+                                                  self.pose_cb,
+                                                 10)
         self.odom_sub = self.create_subscription(AckermannDriveStamped, self.get_parameter('odom_topic').get_parameter_value().string_value, 
-                                                 self.pose_cb,
+                                                 self.odom_cb,
                                                  10)
         
         self.lane = None
@@ -99,9 +99,11 @@ class Python_node(Node):
         # 3 cols: x, y, v
         waypoints = np.vstack((waypoints[:, 0], waypoints[:, 1], waypoints[:, 2])).T
         self.lane = np.expand_dims(waypoints, axis=0)
+        print(self.lane)
+        print(self.lane.shape)
 
     def pose_cb(self, pose_msg: PoseWithCovarianceStamped):
-        '''
+        
         cur_speed = self.curr_vel
         curr_x = pose_msg.pose.pose.position.x
         curr_y = pose_msg.pose.pose.position.y
@@ -109,26 +111,28 @@ class Python_node(Node):
         curr_quat = pose_msg.pose.pose.orientation
         curr_yaw = math.atan2(2 * (curr_quat.w * curr_quat.z + curr_quat.x * curr_quat.y),
                               1 - 2 * (curr_quat.y ** 2 + curr_quat.z ** 2))
-        
+        self.get_logger().info(f'curr_yaw: {curr_yaw * 180/pi}')
         curr_pos_idx = np.argmin(np.linalg.norm(self.lane[0][:, :2] - curr_pos, axis=1))
         curr_lane_nearest_idx = np.argmin(np.linalg.norm(self.lane[self.last_lane][:, :2] - curr_pos, axis=1))
         traj_distances = np.linalg.norm(self.lane[self.last_lane][:, :2] - self.lane[self.last_lane][curr_lane_nearest_idx, :2], axis=1)
         segment_end = np.argmin(traj_distances)
         num_lane_pts = len(self.lane[self.last_lane])
-        if curr_pos_idx in self.corner_wpIdx:
-            L = self.get_L_w_speed(cur_speed, corner=True)
-        else:
-            L = self.get_L_w_speed(cur_speed)
+        L = self.get_L_w_speed(cur_speed, False)
+        # if curr_pos_idx in self.corner_wpIdx:
+        #     L = self.get_L_w_speed(cur_speed, corner=True)
+        # else:
+        #     L = self.get_L_w_speed(cur_speed)
         while traj_distances[segment_end] <= L:
             segment_end = (segment_end + 1) % num_lane_pts
         segment_begin = (segment_end - 1 + num_lane_pts) % num_lane_pts
-        x_array = np.linspace(self.lane[self.last_lane][0][segment_begin], self.lane[self.last_lane][0][segment_end], self.interpScale)
-        y_array = np.linspace(self.lane[self.last_lane][1][segment_begin], self.lane[self.last_lane][1][segment_end], self.interpScale)
-        v_array = np.linspace(self.lane[self.last_lane][2][segment_begin], self.lane[self.last_lane][2][segment_end], self.interpScale)
+        x_array = np.linspace(self.lane[self.last_lane][segment_begin][0], self.lane[self.last_lane][segment_end][0], self.interpScale)
+        y_array = np.linspace(self.lane[self.last_lane][segment_begin][1], self.lane[self.last_lane][segment_end][1], self.interpScale)
+        v_array = np.linspace(self.lane[self.last_lane][segment_begin][2], self.lane[self.last_lane][segment_end][2], self.interpScale)
         xy_interp = np.vstack([x_array, y_array]).T
         dist_interp = np.linalg.norm(xy_interp-curr_pos, axis=1) - L
         i_interp = np.argmin(np.abs(dist_interp))
         target_global = np.array([x_array[i_interp], y_array[i_interp]])
+        self.target_point = target_global
         target_v = v_array[i_interp]
         speed = target_v * self.vel_scale
 
@@ -140,10 +144,10 @@ class Python_node(Node):
         gamma = 2 / L ** 2
         error = gamma * target_local_y
         steer = self.get_steer_w_speed(cur_speed, error)
-        '''
+        
         message = AckermannDriveStamped()
-        message.drive.speed = 1.6
-        message.drive.steering_angle = 0.87
+        message.drive.speed = speed
+        message.drive.steering_angle = steer
         self.drive_pub.publish(message)
 
     def odom_cb(self, odom: AckermannDriveStamped):

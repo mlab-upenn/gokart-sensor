@@ -1,14 +1,14 @@
 python_node:
   ros__parameters:
-    minL: 1.2
-    maxL: 1.2
+    minL: 0.6
+    maxL: 0.6
     Lscale: 4.0 
     minL_corner: 0.5
     maxL_corner: 0.5
     Lscale_corner: 4.0
     interpScale: 20
-    minP: 0.6
-    maxP: 0.6
+    minP: 1.0
+    maxP: 1.0
     Pscale: 4.0
     minP_corner: 0.3
     maxP_corner: 0.3

@@ -73,9 +73,9 @@ def generate_launch_description():
     )
 
     ld.add_action(python_node)
-    # ld.add_action(visualize_node)
-    # ld.add_action(nav_lifecycle_node)
-    # ld.add_action(map_server_node)
+    ld.add_action(visualize_node)
+    ld.add_action(nav_lifecycle_node)
+    ld.add_action(map_server_node)
     # ld.add_action(rviz_node)
     # ld.add_action(tf_node)
 

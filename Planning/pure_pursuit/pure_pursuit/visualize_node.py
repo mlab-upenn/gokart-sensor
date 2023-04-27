@@ -85,7 +85,7 @@ class LaneVisualize(Node):
             this_color.g = speed_ratio
             marker.colors.append(this_color)
 
-        this_scale = 0.1
+        this_scale = 2.0
         marker.scale.x = this_scale
         marker.scale.y = this_scale
         marker.scale.z = this_scale
