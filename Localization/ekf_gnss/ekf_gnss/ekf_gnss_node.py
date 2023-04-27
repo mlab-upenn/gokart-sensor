@@ -132,7 +132,7 @@ class Ekf_gnss_node(Node):
         if self.last_yaw is not None and self.last_x is not None and self.last_y is not None:
             self.initStatus_1 = True
         
-        if self.curr_v is not None and self.curr_w is not None:
+        if self.curr_v is not None and self.curr_w is not None and self.wheel_v is not None:
             self.initStatus_2 = True
             self.X_est = X(self.last_x.sec, self.last_x.nanosec, self.last_x.val, self.last_y.val, self.last_yaw.val, self.curr_v.val, self.curr_w.val)
             self.get_logger().info("EKF initialized")
@@ -196,6 +196,7 @@ class Ekf_gnss_node(Node):
         z_covar = np.diag([1e-5]) ** 2
         z = np.array([[self.wheel_v.val]]) 
         xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
+        quat_to_pub = transforms3d.euler.euler2quat(0,0,xEst[2][0])
 
         #the time stamps are wrong here UPDATE IT TODO
         self.X_est = X(self.last_x.sec, self.last_x.nanosec, xEst[0][0], xEst[1][0], xEst[2][0], xEst[3][0], xEst[4][0])
@@ -213,10 +214,10 @@ class Ekf_gnss_node(Node):
         msg.pose.pose.position.x = xEst[0][0]
         msg.pose.pose.position.y = xEst[1][0]
         msg.pose.pose.position.z = 0.0
-        msg.pose.pose.orientation.x = 0.0
-        msg.pose.pose.orientation.y = 0.0
-        msg.pose.pose.orientation.z = sin(xEst[2][0]/2)
-        msg.pose.pose.orientation.w = cos(xEst[2][0]/2)
+        msg.pose.pose.orientation.x = quat_to_pub[1]
+        msg.pose.pose.orientation.y = quat_to_pub[2]
+        msg.pose.pose.orientation.z = quat_to_pub[3]
+        msg.pose.pose.orientation.w = quat_to_pub[0]
         msg.pose.covariance[0] = PEst[0][0] #x
         msg.pose.covariance[7] = PEst[1][1] #y
         msg.pose.covariance[35] = PEst[2][2] #yaw
