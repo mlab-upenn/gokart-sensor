@@ -103,7 +103,7 @@ class Ekf_gnss_node(Node):
         self.last_x_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, msg.pose.covariance[0])
         self.last_y_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, msg.pose.covariance[4])
         # self.get_logger().info("gnss covariance = %f" % msg.pose.covariance[0])
-        if(msg.pose.covariance[0] > 0.2 or msg.pose.covariance[4] > 0.2 ):
+        if(msg.pose.covariance[0] > 0.4 or msg.pose.covariance[4] > 0.4 ):
             self.get_logger().info("gnss covariance is large")
             # self.ekf.set_Q(50*msg.pose.covariance[0], 50*msg.pose.covariance[0])
             self.last_x_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, 50*msg.pose.covariance[0])

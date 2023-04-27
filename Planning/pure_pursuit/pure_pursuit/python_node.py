@@ -51,18 +51,18 @@ class Python_node(Node):
                 ('wp_skiprows', None),
                 # topics
                 ('pose_topic', '/gnss_ekf'),
-                ('drive_topic', '/drive_command_to_nucleo'),
+                ('drive_topic', '/automous_command_to_nucleo'),
                 ('odom_topic', '/drive_info_from_nucleo')
             ])
         
         
         self.get_logger().info("python node initialized")
         self.drive_pub = self.create_publisher(AckermannDriveStamped, self.get_parameter('drive_topic').get_parameter_value().string_value, 10)
-        self.pose_sub = self.create_subscription(PoseWithCovarianceStamped, self.get_parameter('pose_topic').get_parameter_value().string_value, 
-                                                 self.pose_cb,
-                                                 10)
+        # self.pose_sub = self.create_subscription(PoseWithCovarianceStamped, self.get_parameter('pose_topic').get_parameter_value().string_value, 
+        #                                          self.pose_cb,
+        #                                          10)
         self.odom_sub = self.create_subscription(AckermannDriveStamped, self.get_parameter('odom_topic').get_parameter_value().string_value, 
-                                                 self.odom_cb,
+                                                 self.pose_cb,
                                                  10)
         
         self.lane = None
@@ -101,6 +101,7 @@ class Python_node(Node):
         self.lane = np.expand_dims(waypoints, axis=0)
 
     def pose_cb(self, pose_msg: PoseWithCovarianceStamped):
+        '''
         cur_speed = self.curr_vel
         curr_x = pose_msg.pose.pose.position.x
         curr_y = pose_msg.pose.pose.position.y
@@ -139,10 +140,11 @@ class Python_node(Node):
         gamma = 2 / L ** 2
         error = gamma * target_local_y
         steer = self.get_steer_w_speed(cur_speed, error)
+        '''
         message = AckermannDriveStamped()
-        message.drive.speed = speed
-        message.drive.steering_angle = steer
-        self.drive_pub_.publish(message)
+        message.drive.speed = 1.6
+        message.drive.steering_angle = 0.87
+        self.drive_pub.publish(message)
 
     def odom_cb(self, odom: AckermannDriveStamped):
         self.curr_vel = odom.drive.speed
