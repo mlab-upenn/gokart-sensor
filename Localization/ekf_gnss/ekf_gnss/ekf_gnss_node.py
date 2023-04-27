@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import NavSatFix, Imu
+from ackermann_msgs.msg import AckermannDriveStamped
 from vision_msgs.msg import Detection2DArray
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from math import sin, cos, asin, sqrt, pi, radians, atan2
@@ -38,6 +39,7 @@ class Ekf_gnss_node(Node):
         self.get_logger().info("ekf_gnss node initialized, dt = %f" % self.dt)
         self.gnss_local_sub = self.create_subscription(PoseWithCovarianceStamped, "/gnss_local", self.gnss_cb, qos_profile=qos_profile_sensor_data)
         self.imu_sub = self.create_subscription(Imu, "/imu/data", self.imu_cb, qos_profile=qos_profile_sensor_data)
+        self.wheel_sub = self.create_subscription(AckermannDriveStamped, "/drive_info_from_nucleo", self.wheel_cb, qos_profile=qos_profile_sensor_data)
         self.ekf_pub = self.create_publisher(PoseWithCovarianceStamped, "/gnss_ekf", 10)
         self.timer = self.create_timer(self.dt, self.ekf_update)
 
@@ -49,6 +51,7 @@ class Ekf_gnss_node(Node):
         self.last_x_covar = None
         self.last_y_covar = None
         self.curr_v = None
+        self.wheel_v = None
         self.last_v = None
         self.X_est = None
         self.P_est = np.eye(5)
@@ -88,6 +91,11 @@ class Ekf_gnss_node(Node):
         #     xEst, self.P_est = self.ekf.ekf_partial_update(xEst, self.P_est, z, z_b ,z_covar)
         #     self.X_est = X(self.last_x.sec, self.last_x.nanosec, xEst[0][0], xEst[1][0], xEst[2][0], xEst[3][0], xEst[4][0])
 
+
+    def wheel_cb(self, msg: AckermannDriveStamped):
+        # calculate the current yaw from orientation quaternion
+        speed = msg.drive.speed
+        self.wheel_v = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, speed)
 
 
 
@@ -176,10 +184,17 @@ class Ekf_gnss_node(Node):
         z = np.array([[self.last_x.val], [self.last_y.val]]) 
         xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
 
-        # #IMU ONLY UPDATE
+        #IMU ONLY UPDATE
         z_b = np.array([False, False, True, True, True]) #yaw, velo, yawvelo
         z_covar = np.diag([1e-5, 0.1, 1e-5]) ** 2
         z = np.array([[self.last_yaw.val], [self.curr_v.val], [self.curr_w.val]]) 
+        xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
+
+
+        #Wheel speed UPDATE
+        z_b = np.array([False, False, False, True, False]) #yaw, velo, yawvelo
+        z_covar = np.diag([1e-5]) ** 2
+        z = np.array([[self.wheel_v.val]]) 
         xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
 
         #the time stamps are wrong here UPDATE IT TODO
