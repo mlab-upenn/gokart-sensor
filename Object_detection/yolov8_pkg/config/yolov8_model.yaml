@@ -1,7 +1,7 @@
 yolov8_node:
   ros__parameters:
-      #model_path: best.pt
-    model_path: best_yolov8n.pt
+    model_path: best.pt
+      #model_path: best_yolov8n.pt
     device: cpu
     threshold: 0.5
     class_num: 2
