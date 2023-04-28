@@ -195,6 +195,7 @@ DOCKER_BUILDKIT=1 docker build . -t gokart-app:latest
 
 ### Pulling an image from the DockerHub
 ```
+docker pull mlabupenn/gokart-app:latest
 ```
 
 ### Running the container
