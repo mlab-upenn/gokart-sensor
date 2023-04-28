@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  app:
+    image: index.docker.io/mlabupenn/gokart-app:latest
+    build:
+      context: .
+    environment:
+        - DISPLAY=${DISPLAY}
+          #DISPLAY: :1
+    privileged: true #dbus
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    network_mode: host
+  watchtower:
+    image: index.docker.io/containrrr/watchtower:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/koichiimai/.docker/config.json:/config.json
+    command: --interval 60 --enable-lifecycle-hooks --debug
+
+
+
