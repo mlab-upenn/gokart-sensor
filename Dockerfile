@@ -53,6 +53,7 @@ COPY robot_localization /home/gokart_ws/src/robot_localization
 COPY Sensor_drivers /home/gokart_ws/src/Sensor_drivers
 COPY Slam /home/gokart_ws/src/Slam
 
+# The ros2 package to receive the status of the gokart before the update (Used in pre-update command of Watchtower)
 COPY sub_status /home/gokart_ws/src/sub_status
 
 ENV DEBIAN_FRONTEND=noninteractive
