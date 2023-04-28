@@ -6,15 +6,10 @@ SHELL ["/bin/bash", "-c"]
 LABEL com.centurylinklabs.watchtower.lifecycle.pre-update="/check-status.sh"
 LABEL com.centurylinklabs.watchtower.lifecycle.pre-update-timeout=0
 
-#RUN apt install -y ros-foxy-rviz2
-
 # Enable lifecycle hooks
 ENV WATCHTOWER_LIFECYCLE_HOOKS=true
 
 ENV DEBIAN_FRONTEND=noninteractive
-# FROM ros:foxy
-# SHELL ["/bin/bash", "-c"]
-# ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \ 
     python3-pip \
 # common libs
@@ -40,7 +35,9 @@ RUN apt update && apt install -y \
     && apt clean \
     && rm -rf /var/lib/apt/lists/*
 # for yolov8(ultralytics)
-RUN pip install ultralytics
+RUN pip install ultralytics \
+# for IMU driver:
+    pyserial
 # for OAK-D camera:
 RUN apt update \
     && apt install -y ros-foxy-depthai-ros \
@@ -67,10 +64,7 @@ RUN source /home/gokart_ws/install/setup.bash
 
 
 #RUN source /opt/velodyne/velodyne-lidar-driver-ros2/setup.bash
-#COPY --from=0 /home/gokart_ws/install /home/gokart_ws/install
-#COPY --from=0 /home/gokart_ws/build /home/gokart_ws/build
-#RUN source /opt/ros/foxy/setup.bash
-#RUN source /home/gokart_ws/install/setup.bash
+
 ENV LIBGL_ALWAYS_SOFTWARE=true
 ENV QT_QPA_PLATFORM=xcb
 #ENV XDG_RUNTIME_DIR=/tmp/runtime-root
@@ -90,6 +84,7 @@ COPY check-status.sh /check-status.sh
 RUN chmod 755 check-status.sh
 # /bin/sh -> bash to source setup.bash as pre-update command
 RUN ln -sf bash /bin/sh
+
 
 #ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
 #CMD source /opt/ros/foxy/setup.bash && source ./install/setup.bash && ros2 launch yolov8_pkg yolov8_node.launch.py
