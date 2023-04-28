@@ -20,11 +20,14 @@ class Wp_record_node(Node):
         self.declare_parameters(
             namespace='',
             parameters=[
-                ('frequency', 10),
+                ('frequency', 2),
                 ('pose_topic', '/gnss_ekf'),
+                ('wp_path', None),
+                ('velocity', 2.0)
             ])
         self.freq = self.get_parameter('frequency').get_parameter_value().integer_value
         self.dt = 1/self.freq
+        self.v = self.get_parameter('velocity').get_parameter_value().double_value
         # subscribe and publish
         self.pose_sub = self.create_subscription(PoseWithCovarianceStamped, self.get_parameter('pose_topic').get_parameter_value().string_value, 
                                                  self.pose_cb,
@@ -39,4 +42,14 @@ class Wp_record_node(Node):
         self.y = pose_msg.pose.pose.position.y
 
     def record_wp(self):
-        return       
+        if self.x != 0.0 and self.y != 0.0:
+            with open(self.get_parameter('wp_path').get_parameter_value().string_value, 'a') as f:
+                f.write(str(self.x) + ',' + str(self.y) + ',' + str(self.v) + '\n')
+
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = Wp_record_node()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()

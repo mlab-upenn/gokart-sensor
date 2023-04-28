@@ -111,7 +111,7 @@ class Python_node(Node):
         curr_quat = pose_msg.pose.pose.orientation
         curr_yaw = math.atan2(2 * (curr_quat.w * curr_quat.z + curr_quat.x * curr_quat.y),
                               1 - 2 * (curr_quat.y ** 2 + curr_quat.z ** 2))
-        self.get_logger().info(f'curr_yaw: {curr_yaw * 180/pi}')
+        # self.get_logger().info(f'curr_yaw: {curr_yaw * 180/pi}')
         curr_pos_idx = np.argmin(np.linalg.norm(self.lane[0][:, :2] - curr_pos, axis=1))
         curr_lane_nearest_idx = np.argmin(np.linalg.norm(self.lane[self.last_lane][:, :2] - curr_pos, axis=1))
         traj_distances = np.linalg.norm(self.lane[self.last_lane][:, :2] - self.lane[self.last_lane][curr_lane_nearest_idx, :2], axis=1)
@@ -148,6 +148,7 @@ class Python_node(Node):
         message = AckermannDriveStamped()
         message.drive.speed = speed
         message.drive.steering_angle = steer
+        self.get_logger().info(f'speed: {speed}, steer: {steer}')
         self.drive_pub.publish(message)
 
     def odom_cb(self, odom: AckermannDriveStamped):
