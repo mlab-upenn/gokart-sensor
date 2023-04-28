@@ -179,8 +179,28 @@ ros2 launch lidarslam lidarslam.launch.py
 ```
 
 
+## Runnnig on Container
+### Create a file named 99-xlabgoKart.rules in /etc/udev/rules.d and add the followings in the host machine.
+```
+ACTION=="add", ATTRS{idVendor}=="152A", ATTRS{idProduct}=="85C0", SYMLINK+="docker/mosaicGNSS"
+ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK+="docker/mainBoard"
+ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", SYMLINK+="docker/IMUBoard"
 
+```
 
+### Building an image in the host environment
+```
+DOCKER_BUILDKIT=1 docker build . -t gokart-app:latest
+```
+
+### Pulling an image from the DockerHub
+```
+```
+
+### Running the container
+```
+docker run --name gokart --privileged -v=/dev/docker:/dev/docker -it gokart-app:latest bash
+```
 
 ## Reference Links
 
