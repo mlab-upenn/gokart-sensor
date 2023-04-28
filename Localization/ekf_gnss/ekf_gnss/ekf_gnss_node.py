@@ -111,7 +111,7 @@ class Ekf_gnss_node(Node):
         self.last_x_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, msg.pose.covariance[0])
         self.last_y_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, msg.pose.covariance[4])
         # self.get_logger().info("gnss covariance = %f" % msg.pose.covariance[0])
-        if(msg.pose.covariance[0] > 0.2 or msg.pose.covariance[4] > 0.2):
+        if(msg.pose.covariance[0] > 0.4 or msg.pose.covariance[4] > 0.4):
             self.get_logger().info("gnss covariance is large")
             # self.ekf.set_Q(50*msg.pose.covariance[0], 50*msg.pose.covariance[0])
             self.last_x_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, 50*msg.pose.covariance[0])
@@ -132,8 +132,8 @@ class Ekf_gnss_node(Node):
         if self.last_yaw is not None and self.last_x is not None and self.last_y is not None:
             self.initStatus_1 = True
         
-        # if self.curr_v is not None and self.curr_w is not None and self.wheel_v is not None:
-        if self.curr_v is not None and self.curr_w is not None:
+        if self.curr_v is not None and self.curr_w is not None and self.wheel_v is not None:
+        # if self.curr_v is not None and self.curr_w is not None:
             self.initStatus_2 = True
             self.X_est = X(self.last_x.sec, self.last_x.nanosec, self.last_x.val, self.last_y.val, self.last_yaw.val, self.curr_v.val, self.curr_w.val)
             self.get_logger().info("EKF initialized")
@@ -192,11 +192,11 @@ class Ekf_gnss_node(Node):
         xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
 
 
-        #Wheel speed UPDATE
-        # z_b = np.array([False, False, False, True, False]) #yaw, velo, yawvelo
-        # z_covar = np.diag([1e-5]) ** 2
-        # z = np.array([[self.wheel_v.val]]) 
-        # xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
+        # Wheel speed UPDATE
+        z_b = np.array([False, False, False, True, False]) #yaw, velo, yawvelo
+        z_covar = np.diag([1e-5]) ** 2
+        z = np.array([[self.wheel_v.val]]) 
+        xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
 
         quat_to_pub = transforms3d.euler.euler2quat(0,0,xEst[2][0])
 

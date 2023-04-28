@@ -1,7 +1,7 @@
 python_node:
   ros__parameters:
-    minL: 0.6
-    maxL: 0.6
+    minL: 1.0
+    maxL: 1.0
     Lscale: 4.0 
     minL_corner: 0.5
     maxL_corner: 0.5
@@ -15,7 +15,7 @@ python_node:
     Pscale_corner: 4.0
     max_steer: 0.7
     D: 1.0
-    vel_scale: 1.0
+    vel_scale: 0.8
     wp_delim: ','
     wp_skiprows: 1
 
