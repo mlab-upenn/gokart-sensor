@@ -44,6 +44,7 @@ class Python_node(Node):
         self.last_x = 0
         self.last_y = 0
         self.tolerance = 0.01
+        self.set_origin = False
     
     def init_ori(self):
         ori_x, ori_y = self.latlng2GlobalXY(self.ori.lat, self.ori.lng)
@@ -62,6 +63,11 @@ class Python_node(Node):
         return 1000*x, 1000*y
     
     def gnss_cb(self, msg:NavSatFix):
+        if self.set_origin:
+            self.ori = Point(msg.latitude, msg.longitude, 0, 0)
+            self.init_ori()
+            self.set_origin = False #set origin once and then never set origin again
+
         x, y = self.latlng2LocalXY(msg.latitude, msg.longitude)
         self.last_x = x
         self.last_y = y
