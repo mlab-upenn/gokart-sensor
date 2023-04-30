@@ -19,10 +19,10 @@ WHEEL_LENGTH = 0.0381  # (m)
 MAX_STEER = 0.36  # (rad)
 
 
-class Python_node(Node):
+class PurePursuit_node(Node):
     def __init__(self):
         # here, super().__init__(<node_name>), while the node_name should be the same as provided in launch yaml file
-        super().__init__("python_node")
+        super().__init__("purepursuit_node")
 
         self.declare_parameters(
             namespace='',
@@ -190,7 +190,7 @@ class Python_node(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = Python_node()
+    node = PurePursuit_node()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()

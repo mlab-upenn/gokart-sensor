@@ -42,9 +42,8 @@ class Wp_record_node(Node):
         self.y = pose_msg.pose.pose.position.y
 
     def record_wp(self):
-        if self.x != 0.0 and self.y != 0.0:
-            with open(self.get_parameter('wp_path').get_parameter_value().string_value, 'a') as f:
-                f.write(str(self.x) + ',' + str(self.y) + ',' + str(self.v) + '\n')
+        with open(self.get_parameter('wp_path').get_parameter_value().string_value, 'a') as f:
+            f.write(str(self.x) + ',' + str(self.y) + ',' + str(self.v) + '\n')
 
 
 def main(args=None):

@@ -1,4 +1,4 @@
-python_node:
+purepursuit_node:
   ros__parameters:
     minL: 1.0
     maxL: 1.0

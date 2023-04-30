@@ -9,6 +9,9 @@ from rclpy.node import Node
 from geometry_msgs.msg import Point
 from visualization_msgs.msg import Marker
 from std_msgs.msg import ColorRGBA, Int16
+from geometry_msgs.msg import PoseWithCovarianceStamped
+from ackermann_msgs.msg import AckermannDriveStamped
+
 
 """
 Constant Definition
@@ -45,6 +48,12 @@ class LaneVisualize(Node):
         self.timer = self.create_timer(1.0, self.timer_callback)
         traj_topic = "/global_path/optimal_trajectory"
         self.traj_pub_ = self.create_publisher(Marker, traj_topic, 10)
+        # self.pose_sub = self.create_subscription(PoseWithCovarianceStamped, self.get_parameter('pose_topic').get_parameter_value().string_value, 
+        #                                           self.pose_cb,
+        #                                          10)
+        # self.odom_sub = self.create_subscription(AckermannDriveStamped, self.get_parameter('odom_topic').get_parameter_value().string_value, 
+        #                                          self.odom_cb,
+        #                                          10)
 
     def load_wp(self, wp_path:str, delim:str, skiprow:int):
         waypoints = np.loadtxt(wp_path, delimiter=delim, skiprows=skiprow)

@@ -23,9 +23,9 @@ def generate_launch_description():
         'map.yaml'
         )
 
-    python_node = Node(
+    purepursuit_node = Node(
         package="pure_pursuit",
-        executable="python_node",
+        executable="purepursuit_node",
         output="screen",
         parameters=[config, {"wp_path": wp_path}],
     )
@@ -72,7 +72,7 @@ def generate_launch_description():
         # arguments=['-d', os.path.join(get_package_share_directory('f1tenth_gym_ros'), 'launch', 'gym_bridge.rviz')]
     )
 
-    ld.add_action(python_node)
+    ld.add_action(purepursuit_node)
     ld.add_action(visualize_node)
     ld.add_action(nav_lifecycle_node)
     ld.add_action(map_server_node)

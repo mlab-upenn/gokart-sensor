@@ -6,6 +6,7 @@ from vision_msgs.msg import Detection2DArray
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from math import cos, asin, sqrt, pi, radians
 from collections import namedtuple
+import numpy as np
 
 Point = namedtuple("Point", ["lat", "lng", "x", "y"])
 radius = 6371
@@ -19,7 +20,13 @@ class Python_node(Node):
         self.declare_parameters(
             namespace='',
             parameters=[
-                ('image_topic', None)
+                ('projection_center_latitude', 39.9416),
+                ('projection_center_longitude', -75.1993),
+                ('projection_lat_span', 0.0010),
+                ('projection_lon_span', 0.0016),
+                ('debug_mode', False),
+                ('set_origin', False),
+                ('map_ori_path', None)
             ])
 
         # subscribe and publish
@@ -32,19 +39,38 @@ class Python_node(Node):
         # |
         #  ------>x, East, lon
         self.get_logger().info("gnss_to_local node initialized")
-        self.ori = Point(39.9411, -75.2001, 0, 0) # bottom left
-        self.diag = Point(39.9421, -75.1985, 0, 0) # top right
+        # self.ori = Point(39.9411, -75.2001, 0, 0) # bottom left
+        # self.diag = Point(39.9421, -75.1985, 0, 0) # top right
+
+        #
+        self.centerlat = self.get_parameter('projection_center_latitude').get_parameter_value().double_value
+        self.centerlog = self.get_parameter('projection_center_longitude').get_parameter_value().double_value
+        ori_lat = self.centerlat - self.get_parameter('projection_lat_span').get_parameter_value().double_value/2
+        ori_lon = self.centerlog - self.get_parameter('projection_lon_span').get_parameter_value().double_value/2
         mid_lat_radian = radians((self.ori.lat + self.diag.lat)/2)
+        self.ori = Point(ori_lat, ori_lon, 0, 0)
+        #
+
         self.global_x_coff = radius*cos(mid_lat_radian)
         self.global_y_coff = radius
         self.init_ori()
-        self.get_logger().info(f"x_coff: {self.global_x_coff}, y_coff: {self.global_y_coff}, ori_x: {self.ori.x}, ori_y: {self.ori.y}")
-
+        # self.get_logger().info(f"x_coff: {self.global_x_coff}, y_coff: {self.global_y_coff}, ori_x: {self.ori.x}, ori_y: {self.ori.y}")
+        self.debug_mode = self.get_parameter('debug_mode').get_parameter_value().bool_value
+        if self.debug_mode:
+            self.get_logger().info("debug mode on")
+            self.get_logger().info(f"passed projection center latitude: {self.centerlat}")
 
         self.last_x = 0
         self.last_y = 0
         self.tolerance = 0.01
-        self.set_origin = False
+        self.set_origin = self.get_parameter('set_origin').get_parameter_value().bool_value
+
+        if(not self.set_origin):
+            self.get_logger().info("set origin to false, loading origin from file")
+            with open(self.get_parameter('map_ori_path').get_parameter_value().string_value, 'r') as f:
+                ori = np.loadtxt(f, delimiter=',')
+                self.ori = Point(ori[0], ori[1], 0, 0)
+                self.init_ori()
     
     def init_ori(self):
         ori_x, ori_y = self.latlng2GlobalXY(self.ori.lat, self.ori.lng)
@@ -65,6 +91,8 @@ class Python_node(Node):
     def gnss_cb(self, msg:NavSatFix):
         if self.set_origin:
             self.ori = Point(msg.latitude, msg.longitude, 0, 0)
+            with open(self.get_parameter('map_ori_path').get_parameter_value().string_value, 'a') as f:
+                f.write(str(self.x) + ',' + str(self.y) + ',' + '\n')
             self.init_ori()
             self.set_origin = False #set origin once and then never set origin again
 
