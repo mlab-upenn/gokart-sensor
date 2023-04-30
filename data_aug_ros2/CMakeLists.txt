@@ -31,8 +31,6 @@ include_directories( include ${PCL_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} /usr/loc
 
 add_executable(imu_listener src/imu_listener.cpp)
 ament_target_dependencies(imu_listener rclcpp std_msgs sensor_msgs)
-add_executable(tpub src/tpub.cpp)
-ament_target_dependencies(tpub rclcpp std_msgs sensor_msgs)
 add_executable(gnss_filter src/gnss_filter.cpp)
 ament_target_dependencies(gnss_filter rclcpp std_msgs sensor_msgs)
 add_executable(lidar_filter src/lidar_filter.cpp)
@@ -47,7 +45,6 @@ install(TARGETS
   imu_listener
   gnss_filter
   lidar_filter
-  tpub
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
