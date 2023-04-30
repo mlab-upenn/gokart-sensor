@@ -1,0 +1,31 @@
+gnss_to_local_node:
+  ros__parameters:
+    projection_center_latitude: 39.9416
+    projection_center_longitude: -75.1993
+    projection_lat_span: 0.0010
+    projection_lon_span: 0.0016
+    debug_mode: True
+    set_origin: False
+    map_ori_path: /template/path
+
+purepursuit_node:
+  ros__parameters:
+    wp_path: /template/path
+    minL: 1.0
+    maxL: 1.0
+    Lscale: 4.0 
+    minL_corner: 0.5
+    maxL_corner: 0.5
+    Lscale_corner: 4.0
+    interpScale: 20
+    minP: 1.0
+    maxP: 1.0
+    Pscale: 4.0
+    minP_corner: 0.3
+    maxP_corner: 0.3
+    Pscale_corner: 4.0
+    max_steer: 0.7
+    D: 1.0
+    vel_scale: 0.8
+    wp_delim: ','
+    wp_skiprows: 1

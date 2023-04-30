@@ -13,7 +13,7 @@ class MinimalSubscriber : public rclcpp::Node
     : Node("minimal_subscriber")
     {
       subscription_ = this->create_subscription<sensor_msgs::msg::PointCloud2>
-      ("/ouster/points", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
+      ("/ouster/points", rclcpp::SensorDataQoS(), std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
     }
 
   private:
@@ -28,8 +28,9 @@ class MinimalSubscriber : public rclcpp::Node
 
 int main(int argc, char * argv[])
 {
-  std::cout << "Inside main function now";
+  // std::cout << "Inside main function now";
   rclcpp::init(argc, argv);
+  RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Hello ROS 2");
   rclcpp::spin(std::make_shared<MinimalSubscriber>());
   rclcpp::shutdown();
   return 0;

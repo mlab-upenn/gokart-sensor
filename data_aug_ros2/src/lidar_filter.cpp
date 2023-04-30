@@ -26,25 +26,22 @@ using namespace std;
 class LidarFilter : public rclcpp::Node
 {
   public:
-    LidarFilter()
-    : Node("lidar_filter"), count_(0)
+    LidarFilter(): Node("lidar_filter"), count_(0)
     {
-      std::cout << "dscdsdscds" << std::endl;
-      RCLCPP_INFO(this->get_logger(), "I heard:'");
+      // std::cout << "dscdsdscds" << std::endl;
+      // RCLCPP_INFO(this->get_logger(), "I heard:'");
       publisher_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("/filtered_lidar", 10);
       // timer_ = this->create_wall_timer(10ms, std::bind(&LidarFilter::timer_callback, this));
       subscription_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-        "/ouster/points", 10, std::bind(&LidarFilter::topic_callback, this, _1));
+        "/ouster/points", rclcpp::SensorDataQoS(), std::bind(&LidarFilter::topic_callback, this, std::placeholders::_1));
     }
 
   private:
 
-
-
-
     void topic_callback(const sensor_msgs::msg::PointCloud2::SharedPtr msg)
     {
-      std::cout << "dscdsdscds" << std::endl;
+        // std::cout << "dscdsdscds" << std::endl;
+        RCLCPP_INFO(this->get_logger(), "I heard:'");
       // sensor_msgs::msg::PointCloud2 pmg = *msg;
         pcl::PointCloud<pcl::PointXYZ>::Ptr in_cloud(new pcl::PointCloud<pcl::PointXYZ>);
         pcl::fromROSMsg(*msg, *in_cloud);

@@ -4,9 +4,11 @@ from ament_index_python.packages import get_package_share_directory
 import os
 import yaml
 
+cwd = os.getcwd()
+
 # (70, 50)-(80, 70)
 def generate_launch_description():
-    ld = LaunchDescription()
+    ld = LaunchDescription([yaml_path])
     config = os.path.join(
         get_package_share_directory('pure_pursuit'),
         'config',
