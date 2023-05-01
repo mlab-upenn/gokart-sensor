@@ -67,6 +67,31 @@ def generate_launch_description():
         # arguments=['-d', os.path.join(get_package_share_directory('f1tenth_gym_ros'), 'launch', 'gym_bridge.rviz')]
     )
 
+    ekf_gnss_node = Node(
+        package="ekf_gnss",
+        executable="ekf_gnss_node",
+        output='screen',
+        parameters=[config],
+    )
+
+    gnss_local = Node(
+        package="gnss_to_local",
+        executable="gnss_to_local_node",
+        output='screen',
+        parameters=[config],
+    )
+
+    data_aug = Node(
+        package="data_aug_ros2",
+        executable="imu_listener",
+        output='screen',
+        parameters=[config],
+    )
+
+    ld.add_action(ekf_gnss_node)
+    ld.add_action(gnss_local)
+    ld.add_action(data_aug)
+
     ld.add_action(purepursuit_node)
     ld.add_action(visualize_node)
     ld.add_action(nav_lifecycle_node)

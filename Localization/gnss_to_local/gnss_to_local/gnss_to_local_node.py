@@ -68,7 +68,7 @@ class Python_node(Node):
         if(not self.set_origin):
             self.get_logger().info("set origin to false, loading origin from file")
             with open(self.get_parameter('map_ori_path').get_parameter_value().string_value, 'r') as f:
-                ori = np.loadtxt(f, delimiter=',')
+                ori = np.loadtxt(f, delimiter=',', skiprows=0)
                 self.ori = Point(ori[0], ori[1], 0, 0)
                 self.init_ori()
     
@@ -91,7 +91,7 @@ class Python_node(Node):
     def gnss_cb(self, msg:NavSatFix):
         if self.set_origin:
             self.ori = Point(msg.latitude, msg.longitude, 0, 0)
-            with open(self.get_parameter('map_ori_path').get_parameter_value().string_value, 'a') as f:
+            with open(self.get_parameter('map_ori_path').get_parameter_value().string_value, 'w') as f:
                 f.write(str(self.ori.lat) + ',' + str(self.ori.lng) + ',' + '\n')
             self.init_ori()
             self.set_origin = False #set origin once and then never set origin again

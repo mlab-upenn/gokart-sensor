@@ -100,7 +100,7 @@ class LaneVisualize(Node):
                 speed_ratio = (self.traj_v[i % self.num_traj_pts] - self.v_min) / (self.v_max - self.v_min)
                 this_color.a = 1.0
                 this_color.r = (1 - speed_ratio)
-            this_color.g = speed_ratio
+                this_color.g = speed_ratio
             marker.colors.append(this_color)
 
         this_scale = 0.1

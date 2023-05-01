@@ -25,7 +25,7 @@ class MinimalPublisher : public rclcpp::Node
     {
       publisher_ = this->create_publisher<sensor_msgs::msg::Imu>("/imu/use", 10);
       gps_publisher_ = this->create_publisher<sensor_msgs::msg::NavSatFix>("/navsatfix/use", 10);
-      timer_ = this->create_wall_timer(10ms, std::bind(&MinimalPublisher::timer_callback, this));
+      timer_ = this->create_wall_timer(1ms, std::bind(&MinimalPublisher::timer_callback, this));
       subscription_ = this->create_subscription<sensor_msgs::msg::Imu>(
         "/imu/data", 10, std::bind(&MinimalPublisher::topic_callback, this, _1));
       gps_subscription_ = this->create_subscription<sensor_msgs::msg::NavSatFix>(
@@ -130,11 +130,13 @@ class MinimalPublisher : public rclcpp::Node
         message.longitude = lon;
         message.position_covariance = gps_covar;
         publish_navsat_ = message;
+        gps_publisher_->publish(publish_navsat_);
+
     }
 
     void timer_callback()
     {
-      if(switch_) gps_publisher_->publish(publish_navsat_);
+      // if(switch_) gps_publisher_->publish(publish_navsat_);
     }
     rclcpp::TimerBase::SharedPtr timer_;
     sensor_msgs::msg::NavSatFix publish_navsat_;

@@ -36,6 +36,8 @@ class Wp_record_node(Node):
 
         self.x = 0.0
         self.y = 0.0
+        with open(self.get_parameter('wp_path').get_parameter_value().string_value, 'w') as f:
+            f.write(str(self.x) + ',' + str(self.y) + ',' + str(self.v) + '\n')
                                                
     def pose_cb(self, pose_msg: PoseWithCovarianceStamped):
         self.x = pose_msg.pose.pose.position.x
