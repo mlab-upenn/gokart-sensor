@@ -103,7 +103,7 @@ class Ekf_gnss_node(Node):
         self.last_x_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, msg.pose.covariance[0])
         self.last_y_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, msg.pose.covariance[4])
         # self.get_logger().info("gnss covariance = %f" % msg.pose.covariance[0])
-        if(msg.pose.covariance[0] > 0.2 or msg.pose.covariance[4] > 0.2 ):
+        if(msg.pose.covariance[0] > 0.2 or msg.pose.covariance[4] > 0.2):
             self.get_logger().info("gnss covariance is large")
             # self.ekf.set_Q(50*msg.pose.covariance[0], 50*msg.pose.covariance[0])
             self.last_x_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, 50*msg.pose.covariance[0])
@@ -154,20 +154,12 @@ class Ekf_gnss_node(Node):
 
         last_x_est_time = get_Time(self.X_est.sec, self.X_est.nanosec)
         curr_obs_time = get_Time(self.last_x.sec, self.last_x.nanosec)
-        # curr_w_time = get_Time(self.curr_w.sec, self.curr_w.nanosec)
+
         dt = curr_obs_time - last_x_est_time
-        # self.get_logger().info(f"last_x_est_time:{last_x_est_time}, curr_obs_time:{curr_obs_time}, curr_w_time:{curr_w_time},  dt: {dt}")
 
-        # self.get_logger().info(f"curr_v: {self.curr_v.val}, curr_w: {self.curr_w.val}")
         ud = np.array([[self.curr_v.val], [self.curr_w.val]])
-        # z = np.array([[self.last_x.val], [self.last_y.val], [self.last_yaw.val], [self.curr_v.val], [self.curr_w.val]])
-        # x_est = np.array([[self.X_est.x], [self.X_est.y], [self.X_est.yaw], [self.X_est.v]])
         x_est = np.array([[self.X_est.x], [self.X_est.y], [self.X_est.yaw], [self.X_est.v], [self.X_est.omega]])
-        # self.get_logger().info(f"last x_est: {x_est[0][0]}, {x_est[1][0]}, {x_est[2][0]}, {x_est[3][0]}")
-        # self.get_logger().info(f"yaw is {self.last_yaw.val}, v is {self.curr_v.val}")
 
-
-        # xEst, PEst = self.ekf.ekf_estimation(x_est, self.P_est, z, ud, dt, dead_reckoning=False)
         xEst, PEst = self.ekf.ekf_predict(x_est, self.P_est, ud, dt)
 
         #GNSS ONLY UPDATE
@@ -176,19 +168,15 @@ class Ekf_gnss_node(Node):
         z = np.array([[self.last_x.val], [self.last_y.val]]) 
         xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
 
-        # #IMU ONLY UPDATE
+        #IMU ONLY UPDATE
         z_b = np.array([False, False, True, True, True]) #yaw, velo, yawvelo
         z_covar = np.diag([1e-5, 0.1, 1e-5]) ** 2
         z = np.array([[self.last_yaw.val], [self.curr_v.val], [self.curr_w.val]]) 
         xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
 
-        #the time stamps are wrong here UPDATE IT TODO
+        #the time stamps are wrong here
         self.X_est = X(self.last_x.sec, self.last_x.nanosec, xEst[0][0], xEst[1][0], xEst[2][0], xEst[3][0], xEst[4][0])
         self.P_est = PEst
-
-        # self.update_measurements()
-
-        # self.get_logger().info(f"X_est: {self.X_est.x}, {self.X_est.y}, {self.X_est.yaw}, {self.X_est.v}")
          
         # publish the estimated position
         msg = PoseWithCovarianceStamped()
