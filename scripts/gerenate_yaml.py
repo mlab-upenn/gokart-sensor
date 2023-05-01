@@ -39,10 +39,13 @@ def generate_yaml(config_folder, location):
     with open(wpcollection_yaml_path, 'r') as file:
         wpcollection_yaml = yaml.load(file, Loader=yaml.FullLoader)
     
+    purepursuit_yaml['purepursuit_node']['ros__parameters']['config_path'] = os.path.join(config_folder, location)
     purepursuit_yaml['purepursuit_node']['ros__parameters']['wp_path'] = purepursuit_wp_path
     purepursuit_yaml['purepursuit_node']['ros__parameters']['debug_mode'] = DEBUG
     purepursuit_yaml['gnss_to_local_node']['ros__parameters']['map_ori_path'] = gnss_to_local_map_ori_path
     purepursuit_yaml['gnss_to_local_node']['ros__parameters']['debug_mode'] = DEBUG
+    purepursuit_yaml['visualize_node']['ros__parameters']['wp_path'] = purepursuit_wp_path
+    purepursuit_yaml['visualize_node']['ros__parameters']['config_path'] = os.path.join(config_folder, location)
 
     wpcollection_yaml['gnss_to_local_node']['ros__parameters']['map_ori_path'] = gnss_to_local_map_ori_path
     wpcollection_yaml['gnss_to_local_node']['ros__parameters']['debug_mode'] = DEBUG

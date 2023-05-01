@@ -49,6 +49,9 @@ class PurePursuit_node(Node):
                 ('wp_path', None),
                 ('wp_delim', None),
                 ('wp_skiprows', None),
+                ('config_path', None),
+                ('overtake_wp_name', None),
+                ('corner_wp_name', None),
                 # topics
                 ('pose_topic', '/gnss_ekf'),
                 ('drive_topic', '/automous_command_to_nucleo'),
@@ -56,7 +59,7 @@ class PurePursuit_node(Node):
             ])
         
         
-        self.get_logger().info("python node initialized")
+        self.get_logger().info("purepursuit node initialized")
         self.drive_pub = self.create_publisher(AckermannDriveStamped, self.get_parameter('drive_topic').get_parameter_value().string_value, 10)
         self.pose_sub = self.create_subscription(PoseWithCovarianceStamped, self.get_parameter('pose_topic').get_parameter_value().string_value, 
                                                   self.pose_cb,
@@ -93,14 +96,19 @@ class PurePursuit_node(Node):
         self.load_wp(wp_path=self.get_parameter('wp_path').get_parameter_value().string_value,
                      delim=self.get_parameter('wp_delim').get_parameter_value().string_value,
                      skiprow=self.get_parameter('wp_skiprows').get_parameter_value().integer_value)
+        self.corner_idx = np.load(self.get_parameter('config_path').get_parameter_value().string_value + '/' + self.get_parameter('corner_wp_name').get_parameter_value().string_value)
+        self.corner_idx = set(self.corner_idx)
+        self.get_logger().info("corner idx: {}".format(self.corner_idx))
+        # self.overtake_idx = np.load(self.get_parameter('config_path').get_parameter_value().string_value + '/' + self.get_parameter('overtake_wp_name').get_parameter_value().string_value)
+        # self.overtake_idx = set(self.overtake_idx)
+        # self.get_logger().info("overtake idx: {}".format(self.overtake_idx))
 
     def load_wp(self, wp_path:str, delim:str, skiprow:int):
+        self.get_logger().info("Loading waypoints from {}".format(wp_path))
         waypoints = np.loadtxt(wp_path, delimiter=delim, skiprows=skiprow)
         # 3 cols: x, y, v
         waypoints = np.vstack((waypoints[:, 0], waypoints[:, 1], waypoints[:, 2])).T
         self.lane = np.expand_dims(waypoints, axis=0)
-        print(self.lane)
-        print(self.lane.shape)
 
     def pose_cb(self, pose_msg: PoseWithCovarianceStamped):
         
@@ -117,7 +125,10 @@ class PurePursuit_node(Node):
         traj_distances = np.linalg.norm(self.lane[self.last_lane][:, :2] - self.lane[self.last_lane][curr_lane_nearest_idx, :2], axis=1)
         segment_end = np.argmin(traj_distances)
         num_lane_pts = len(self.lane[self.last_lane])
-        L = self.get_L_w_speed(cur_speed, False)
+        if (segment_end in self.corner_idx):
+            L = self.get_L_w_speed(cur_speed, corner=True)
+        else:
+            L = self.get_L_w_speed(cur_speed, False)
         # if curr_pos_idx in self.corner_wpIdx:
         #     L = self.get_L_w_speed(cur_speed, corner=True)
         # else:
@@ -143,7 +154,10 @@ class PurePursuit_node(Node):
         L = np.linalg.norm(curr_pos - target_global)
         gamma = 2 / L ** 2
         error = gamma * target_local_y
-        steer = self.get_steer_w_speed(cur_speed, error)
+        if(segment_end in self.corner_idx):
+            steer = self.get_steer_w_speed(cur_speed, error, corner=True)
+        else:
+            steer = self.get_steer_w_speed(cur_speed, error)
         
         message = AckermannDriveStamped()
         message.drive.speed = speed

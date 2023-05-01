@@ -47,7 +47,7 @@ class Python_node(Node):
         self.centerlog = self.get_parameter('projection_center_longitude').get_parameter_value().double_value
         ori_lat = self.centerlat - self.get_parameter('projection_lat_span').get_parameter_value().double_value/2
         ori_lon = self.centerlog - self.get_parameter('projection_lon_span').get_parameter_value().double_value/2
-        mid_lat_radian = radians((self.ori.lat + self.diag.lat)/2)
+        mid_lat_radian = radians(self.centerlat)
         self.ori = Point(ori_lat, ori_lon, 0, 0)
         #
 
@@ -92,7 +92,7 @@ class Python_node(Node):
         if self.set_origin:
             self.ori = Point(msg.latitude, msg.longitude, 0, 0)
             with open(self.get_parameter('map_ori_path').get_parameter_value().string_value, 'a') as f:
-                f.write(str(self.x) + ',' + str(self.y) + ',' + '\n')
+                f.write(str(self.ori.lat) + ',' + str(self.ori.lng) + ',' + '\n')
             self.init_ori()
             self.set_origin = False #set origin once and then never set origin again
 

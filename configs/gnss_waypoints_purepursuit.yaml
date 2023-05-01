@@ -10,22 +10,34 @@ gnss_to_local_node:
 
 purepursuit_node:
   ros__parameters:
+    config_path: /template/path
+    corner_wp_name: "corner_wp_idx.npy"
+    overtake_wp_name: "overtake_wp_idx.npy"
     wp_path: /template/path
-    minL: 1.0
-    maxL: 1.0
+    minL: 4.0
+    maxL: 5.0
     Lscale: 4.0 
-    minL_corner: 0.5
-    maxL_corner: 0.5
+    minL_corner: 4.0
+    maxL_corner: 4.0
     Lscale_corner: 4.0
     interpScale: 20
-    minP: 1.0
-    maxP: 1.0
+    minP: 0.6
+    maxP: 0.6
     Pscale: 4.0
-    minP_corner: 0.3
-    maxP_corner: 0.3
+    minP_corner: 0.8
+    maxP_corner: 0.8
     Pscale_corner: 4.0
-    max_steer: 0.7
+    max_steer: 0.87
     D: 1.0
     vel_scale: 0.8
+    wp_delim: ','
+    wp_skiprows: 1
+
+visualize_node:
+  ros__parameters:
+    config_path: /template/path
+    corner_wp_name: "corner_wp_idx.npy"
+    overtake_wp_name: "overtake_wp_idx.npy"
+    wp_path: /template/path
     wp_delim: ','
     wp_skiprows: 1

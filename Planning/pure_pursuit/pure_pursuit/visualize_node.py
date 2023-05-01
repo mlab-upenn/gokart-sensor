@@ -37,13 +37,17 @@ class LaneVisualize(Node):
                 ('wp_path', None),
                 ('wp_delim', None),
                 ('wp_skiprows', None),
+                ('config_path', None),
+                ('overtake_wp_name', None),
+                ('corner_wp_name', None),
             ])
 
         # load wp
         self.load_wp(wp_path=self.get_parameter('wp_path').get_parameter_value().string_value,
                      delim=self.get_parameter('wp_delim').get_parameter_value().string_value,
                      skiprow=self.get_parameter('wp_skiprows').get_parameter_value().integer_value)
-
+        self.corner_idx = np.load(self.get_parameter('config_path').get_parameter_value().string_value + '/' + self.get_parameter('corner_wp_name').get_parameter_value().string_value)
+        self.corner_idx = set(self.corner_idx)
         # Topics & Subs, Pubs
         self.timer = self.create_timer(1.0, self.timer_callback)
         traj_topic = "/global_path/optimal_trajectory"
@@ -88,9 +92,14 @@ class LaneVisualize(Node):
             marker.points.append(this_point)
 
             this_color = ColorRGBA()
-            speed_ratio = (self.traj_v[i % self.num_traj_pts] - self.v_min) / (self.v_max - self.v_min)
-            this_color.a = 1.0
-            this_color.r = (1 - speed_ratio)
+            if(i in self.corner_idx):
+                this_color.r = 0.0
+                this_color.g = 0.0
+                this_color.b = 1.0
+            else:
+                speed_ratio = (self.traj_v[i % self.num_traj_pts] - self.v_min) / (self.v_max - self.v_min)
+                this_color.a = 1.0
+                this_color.r = (1 - speed_ratio)
             this_color.g = speed_ratio
             marker.colors.append(this_color)
 

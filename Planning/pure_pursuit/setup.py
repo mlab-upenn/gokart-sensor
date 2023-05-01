@@ -28,7 +28,7 @@ setup(
     # Add new executable here
     entry_points={
         'console_scripts': [
-            f'python_node = {package_name}.python_node:main',
+            f'purepursuit_node = {package_name}.purepursuit_node:main',
             f'visualize_node = {package_name}.visualize_node:main',
             f'wp_record_node = {package_name}.wp_record_node:main',
         ],

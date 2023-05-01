@@ -4,21 +4,14 @@ from ament_index_python.packages import get_package_share_directory
 import os
 import yaml
 
+LOCATION = 'pennovation'
 cwd = os.getcwd()
 
-# (70, 50)-(80, 70)
 def generate_launch_description():
-    ld = LaunchDescription([yaml_path])
-    config = os.path.join(
-        get_package_share_directory('pure_pursuit'),
-        'config',
-        'config.yaml'
-        )
-    wp_path = os.path.join(
-        get_package_share_directory('pure_pursuit'),
-        'config',
-        'wp.csv'
-        )
+
+    ld = LaunchDescription()
+    config = os.path.join(cwd, "src", "gokart-sensor", "configs", LOCATION, "gnss_waypoints_purepursuit.yaml")
+    print(f"load config from {config}")
     map_path = os.path.join(
         get_package_share_directory('pure_pursuit'),
         'config',
@@ -29,14 +22,14 @@ def generate_launch_description():
         package="pure_pursuit",
         executable="purepursuit_node",
         output="screen",
-        parameters=[config, {"wp_path": wp_path}],
+        parameters=[config],
     )
 
     visualize_node = Node(
         package="pure_pursuit",
         executable="visualize_node",
         output="screen",
-        parameters=[config, {"wp_path": wp_path}],
+        parameters=[config],
     )
 
     map_server_node = Node(
