@@ -4,7 +4,7 @@ ekf_gnss_node:
 gnss_to_local_node:
   ros__parameters:
     debug_mode: true
-    map_ori_path: /home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation/map_ori.csv
+    map_ori_path: /home/ros/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation/map_ori.csv
     projection_center_latitude: 39.9416
     projection_center_longitude: -75.1993
     projection_lat_span: 0.001
@@ -15,4 +15,4 @@ wp_record_node:
     frequency: 2
     pose_topic: /gnss_ekf
     velocity: 2.0
-    wp_path: /home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation/wp.csv
+    wp_path: /home/ros/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation/wp.csv
