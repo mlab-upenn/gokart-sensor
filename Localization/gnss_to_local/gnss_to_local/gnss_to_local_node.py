@@ -95,7 +95,6 @@ class Python_node(Node):
                 f.write(str(self.ori.lat) + ',' + str(self.ori.lng) + ',' + '\n')
             self.init_ori()
             self.set_origin = False #set origin once and then never set origin again
-
         x, y = self.latlng2LocalXY(msg.latitude, msg.longitude)
         self.last_x = x
         self.last_y = y
