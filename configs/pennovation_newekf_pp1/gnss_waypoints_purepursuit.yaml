@@ -18,17 +18,17 @@ purepursuit_node:
     corner_wp_name: corner_wp_idx.npy
     debug_mode: true
     interpScale: 20
-    maxL: 5.0
-    maxL_corner: 4.0
-    maxP: 0.6
-    maxP_corner: 0.8
+    maxL: 4.0
+    maxL_corner: 3.0
+    maxP: 3.0
+    maxP_corner: 3.0
     max_steer: 0.87
     minL: 4.0
-    minL_corner: 4.0
-    minP: 0.6
-    minP_corner: 0.8
+    minL_corner: 3.0
+    minP: 3.0
+    minP_corner: 3.0
     overtake_wp_name: overtake_wp_idx.npy
-    vel_scale: 0.8
+    vel_scale: 1.0
     wp_delim: ','
     wp_path: /home/ros/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation/wp.csv
     wp_skiprows: 1

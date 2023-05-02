@@ -6,12 +6,12 @@ import os
 import yaml
 
 
-serial_port = "/dev/ttyUSB1"
+serial_port = "/dev/ttyUSB0"
 frame_id = "imu_link"
 operation_mode = "NDOF"
 oscillator = "INTERNAL"
 reset_orientation = True
-frequency = 50
+frequency = 100
 use_magnetometer = True
 use_temperature = False
 

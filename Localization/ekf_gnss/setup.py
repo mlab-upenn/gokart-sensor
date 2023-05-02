@@ -29,7 +29,7 @@ setup(
     # Add new executable here
     entry_points={
         'console_scripts': [
-            f'ekf_gnss_node = {package_name}.ekf_gnss_node:main',
+            f'ekf_gnss_node = {package_name}.ekf_gnss_node_test:main',
         ],
     },
 )

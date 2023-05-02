@@ -153,4 +153,5 @@ def visualize_curvature_for_wp(config_folder, location, ka_thres=0.05, corner_th
 if __name__ == "__main__":
     cmd = os.getcwd()
     config_folder = os.path.join(cmd, 'src', 'gokart-sensor', 'configs')
-    visualize_curvature_for_wp(config_folder, LOCATION)
+    # visualize_curvature_for_wp(config_folder, LOCATION)
+    show_wp(config_folder, LOCATION)
