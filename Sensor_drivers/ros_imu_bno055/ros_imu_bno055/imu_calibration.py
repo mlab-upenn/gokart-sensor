@@ -39,7 +39,8 @@ Author:  Robert Vasquez Zavaleta
 """
 
 
-import rospy
+import rclpy
+from rclpy.node import Node
 from ros_imu_bno055.imu_bno055_api import * 
 import time
 import os
@@ -47,29 +48,34 @@ import os
 NOT_CALIBRATED = 0x00
 FULL_CALIBRATION = 0x01
 
-class CalibrationIMU:
+class CalibrationIMU(Node):
 
     def __init__(self):
 
 
         # Init node
-        rospy.init_node('ros_imu_bno055_calibration_node', anonymous=False)
-
-        # Get node name
-        self.node_name = rospy.get_name()
+        super().__init__('ros_imu_bno055_node')
+        self.node_name = 'ros_imu_bno055_calibration_node'
 
         # Get ros params
+        self.declare_parameter('serial_port')
+        self.declare_parameter('operation_mode')
+        self.declare_parameter('config_folder')
         self.get_ros_params()
 
         # Create an IMU instance
         self.bno055 = BoschIMU(port = self.serial_port)
-
         self.calibration_full_counter = 0
+
+        # create timer
+        self.init_calibration() 
+        self.timer = self.create_timer(0, self.timer_callback)
+
 
     def get_ros_params(self):
 
-        self.serial_port = rospy.get_param(self.node_name + '/serial_port','/dev/ttyUSB0')
-        self.operation_mode_str = rospy.get_param(self.node_name + '/operation_mode', 'IMU')
+        self.serial_port = self.get_parameter('serial_port').value
+        self.operation_mode_str = self.get_parameter('operation_mode').value
 
         switcher = {
 
@@ -84,11 +90,7 @@ class CalibrationIMU:
 
 
     def init_calibration(self):
-
-        print("=============================================================")
-        rospy.loginfo("The IMU will be calibrated to work in %s mode", self.operation_mode_str)
-        print("=============================================================")
-
+        self.get_logger().info("The IMU will be calibrated to work in %s mode", self.operation_mode_str)
 
 
     def calibrate_imu(self):
@@ -108,10 +110,10 @@ class CalibrationIMU:
             # Calibration for NDOF_FMC_OFF and NDOF             
             if self.operation_mode == NDOF_FMC_OFF or self.operation_mode == NDOF:
 
-                print("[System: " + str(system_calibration_status) + "]", end = '')
-                print(" [Gyroscope: " + str(gyroscope_calibration_status) + "]", end = '' ) 
-                print(" [Accelerometer: " + str(accelerometer_calibration_status) + "]", end = '')
-                print(" [Magnetometer: " + str(magnetometer_calibration_status) + "]" )
+                self.get_logger().info("[System: " + str(system_calibration_status) + "]", end = '')
+                self.get_logger().info(" [Gyroscope: " + str(gyroscope_calibration_status) + "]", end = '' ) 
+                self.get_logger().info(" [Accelerometer: " + str(accelerometer_calibration_status) + "]", end = '')
+                self.get_logger().info(" [Magnetometer: " + str(magnetometer_calibration_status) + "]" )
 
                 if (system_calibration_status == 3 and gyroscope_calibration_status == 3
                 and accelerometer_calibration_status == 3 and magnetometer_calibration_status == 3) :
@@ -122,8 +124,8 @@ class CalibrationIMU:
             # Calibration for IMU
             if self.operation_mode == IMU:
 
-                print(" [Gyroscope: " + str(gyroscope_calibration_status) + "]", end = '' ) 
-                print(" [Accelerometer: " + str(accelerometer_calibration_status) + "]")
+                self.get_logger().info(" [Gyroscope: " + str(gyroscope_calibration_status) + "]", end = '' ) 
+                self.get_logger().info(" [Accelerometer: " + str(accelerometer_calibration_status) + "]")
 
                 if (gyroscope_calibration_status == 3 and accelerometer_calibration_status == 3) :
                     self.calibration_full_counter+=1
@@ -132,8 +134,8 @@ class CalibrationIMU:
             # Calibration for COMPASS  and M4G
             if self.operation_mode == COMPASS or self.operation_mode == M4G:
                 
-                print(" [Accelerometer: " + str(accelerometer_calibration_status) + "]", end = '')
-                print(" [Magnetometer: " + str(magnetometer_calibration_status) + "]" )
+                self.get_logger().info(" [Accelerometer: " + str(accelerometer_calibration_status) + "]", end = '')
+                self.get_logger().info(" [Magnetometer: " + str(magnetometer_calibration_status) + "]" )
 
                 if(accelerometer_calibration_status == 3 and magnetometer_calibration_status == 3) :
                     self.calibration_full_counter+=1
@@ -143,7 +145,7 @@ class CalibrationIMU:
             if self.calibration_full_counter >= 3:
 
                 is_imu_calibrated = FULL_CALIBRATION
-                rospy.loginfo("IMU successfully calibrated!")
+                self.get_logger().info("IMU successfully calibrated!")
 
 
             time.sleep(1)
@@ -156,11 +158,9 @@ class CalibrationIMU:
         calibration, status = self.bno055.get_calibration()
 
         if status == RESPONSE_OK:
-            #rospy.loginfo("The obtained calibration is: ")
-            #print(calibration)
             pass
         else:
-            rospy.logerr("Unable to read IMU calibration")
+            self.get_logger().warn("Unable to read IMU calibration")
 
         return calibration
 
@@ -171,11 +171,11 @@ class CalibrationIMU:
         status = self.bno055.set_calibration(calibration)
     
         if status == RESPONSE_OK:
-            rospy.loginfo("Calibration successfully written to the IMU")
+            self.get_logger().info("Calibration successfully written to the IMU")
             self.save_calibration_in_file(calibration)
 
         else:
-            rospy.logerr("Unable to calibrate the IMU")
+            self.get_logger().info("Unable to calibrate the IMU")
 
 
     def save_calibration_in_file(self, calibration):
@@ -184,16 +184,17 @@ class CalibrationIMU:
         dir_path = os.path.dirname(os.path.realpath(__file__))
 
         try: 
-
-            binary_file = open(str(dir_path) + "/" + str(self.operation_mode_str) + "_calibration", "wb")
+            binary_file = open(os.path.join(self.get_parameter("config_folder").value, 
+                                            self.operation_mode_str + "_calibration"), "wb")
+            # binary_file = open(str(dir_path) + "/" + str(self.operation_mode_str) + "_calibration", "wb")
             binary_file.write(calibration)
             binary_file.close()
 
-            rospy.loginfo("Calibration successfully saved in binary file 'calibration'")
+            self.get_logger().info("Calibration successfully saved in binary file 'calibration'")
 
         except: 
 
-            rospy.logerr("Error while saving calibration in file 'calibration'")
+            self.get_logger().info("Error while saving calibration in file 'calibration'")
         
         
 
@@ -207,48 +208,50 @@ class CalibrationIMU:
             calibration_data = binary_file.read()
             binary_file.close()
 
-            rospy.loginfo("The calibration read from the 'calibration' file is: ")
-            print(calibration_data)
+            self.get_logger().info("The calibration read from the 'calibration' file is: ")
+            self.get_logger().info(calibration_data)
         
         except:
             calibration_data = 0
-            rospy.logerr("The file does not exist or the file cannot be read")
+            self.get_logger().info("The file does not exist or the file cannot be read")
 
         return calibration_data
 
+    def timer_callback(self):
+        status = self.calibrate_imu()
+        if status == FULL_CALIBRATION:
+            calibration_data = self.read_calibration()
+            self.write_calibration(calibration_data)
+            self.get_logger().info("Calibration has finished successfully. Closing node...")
+            rclpy.shutdown()
 
-    def run(self):
+    # def run(self):
 
-        self.init_calibration()
+    #     self.init_calibration()
         
-        while not rospy.is_shutdown():
+    #     while not rospy.is_shutdown():
 
-            # IMU calibration
-            status = self.calibrate_imu()
+    #         # IMU calibration
+    #         status = self.calibrate_imu()
 
-            if status == FULL_CALIBRATION:
+    #         if status == FULL_CALIBRATION:
 
-                # Read calibration and show it by the terminal
-                calibration_data = self.read_calibration()
+    #             # Read calibration and show it by the terminal
+    #             calibration_data = self.read_calibration()
 
-                # Write the calibration to the IMU and save it to a binary file
-                self.write_calibration(calibration_data)
+    #             # Write the calibration to the IMU and save it to a binary file
+    #             self.write_calibration(calibration_data)
 
-                rospy.loginfo("Calibration has finished successfully. Closing node...")
-                rospy.signal_shutdown("")
+    #             rospy.loginfo("Calibration has finished successfully. Closing node...")
+    #             rospy.signal_shutdown("")
 
+
+def main():
+    rclpy.init(args=None)
+    imuNode = CalibrationIMU()
+    rclpy.spin(imuNode)
 
 
 if __name__ == '__main__':
-
-    imu_calibration = CalibrationIMU()
-
-    try:
-        
-        imu_calibration.run()
-        
-        # Uncomment to read the calibration data from the binary file 'calibration'. Comment run().
-        #imu_calibration.read_calibration_from_file()
-
-    except rospy.ROSInterruptException:
-        pass
+    # [ros2]
+    main()

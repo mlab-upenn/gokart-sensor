@@ -1,0 +1,14 @@
+gap_follow_node:
+  ros__parameters:
+    scan_topic: "/ouster/scan"
+    drive_topic: "/automous_command_to_nucleo"
+    safe_radius: 4
+    danger_thres: 1.0
+    safe_thres: 2.0
+    max_gap: 90
+    min_gap: 10
+    min_boundary: 30
+    max_boundary: 330
+    max_speed: 3.0
+    min_speed: 2.0
+    steer_speed_scale: 0.87

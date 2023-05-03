@@ -33,20 +33,23 @@ class LaneVisualize(Node):
         self.declare_parameters(
             namespace='',
             parameters=[
-                # wp
-                ('wp_path', None),
+              # wp
+                ('wp_filename', None),
                 ('wp_delim', None),
                 ('wp_skiprows', None),
                 ('config_path', None),
-                ('overtake_wp_name', None),
-                ('corner_wp_name', None),
+                ('wp_overtake_filename', None),
+                ('wp_corner_filename', None),
+                ('wp_x_idx', None),
+                ('wp_y_idx', None),
+                ('wp_v_idx', None),
             ])
 
         # load wp
-        self.load_wp(wp_path=self.get_parameter('wp_path').get_parameter_value().string_value,
+        self.load_wp(wp_path=os.path.join(self.get_parameter('config_path').value, self.get_parameter('wp_filename').value),
                      delim=self.get_parameter('wp_delim').get_parameter_value().string_value,
                      skiprow=self.get_parameter('wp_skiprows').get_parameter_value().integer_value)
-        self.corner_idx = np.load(self.get_parameter('config_path').get_parameter_value().string_value + '/' + self.get_parameter('corner_wp_name').get_parameter_value().string_value)
+        self.corner_idx = np.load(self.get_parameter('config_path').get_parameter_value().string_value + '/' + self.get_parameter('wp_corner_filename').get_parameter_value().string_value)
         self.corner_idx = set(self.corner_idx)
         # Topics & Subs, Pubs
         self.timer = self.create_timer(1.0, self.timer_callback)
@@ -62,14 +65,16 @@ class LaneVisualize(Node):
     def load_wp(self, wp_path:str, delim:str, skiprow:int):
         waypoints = np.loadtxt(wp_path, delimiter=delim, skiprows=skiprow)
         # 3 cols: x, y, v
-        waypoints = np.vstack((waypoints[:, 0], waypoints[:, 1], waypoints[:, 2])).T
+        waypoints = np.vstack((waypoints[:, self.get_parameter("wp_x_idx").get_parameter_value().integer_value], 
+                               waypoints[:, self.get_parameter("wp_y_idx").get_parameter_value().integer_value], 
+                               waypoints[:, self.get_parameter("wp_v_idx").get_parameter_value().integer_value])).T
         self.lane = np.expand_dims(waypoints, axis=0)
         self.traj_x = waypoints[:, 0]
         self.traj_y = waypoints[:, 1]
         self.traj_v = waypoints[:, 2]
         self.num_traj_pts = len(self.traj_x)
-        self.v_max = 6.0
-        self.v_min = 0.0
+        self.v_max = np.max(self.traj_v)
+        self.v_min = np.min(self.traj_v)
 
     def timer_callback(self):
         self.visualize_global_path()
@@ -92,15 +97,16 @@ class LaneVisualize(Node):
             marker.points.append(this_point)
 
             this_color = ColorRGBA()
-            if(i in self.corner_idx):
+            # if(i in self.corner_idx):
+            if False:
                 this_color.r = 0.0
                 this_color.g = 0.0
                 this_color.b = 1.0
             else:
                 speed_ratio = (self.traj_v[i % self.num_traj_pts] - self.v_min) / (self.v_max - self.v_min)
                 this_color.a = 1.0
-                this_color.r = (1 - speed_ratio)
-                this_color.g = speed_ratio
+                this_color.r = speed_ratio
+                this_color.g = 1-speed_ratio
             marker.colors.append(this_color)
 
         this_scale = 0.1

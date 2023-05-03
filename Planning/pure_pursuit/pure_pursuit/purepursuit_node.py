@@ -3,13 +3,13 @@ from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Image
 from vision_msgs.msg import Detection2DArray
-from geometry_msgs.msg import PoseWithCovarianceStamped
+from geometry_msgs.msg import PoseWithCovarianceStamped, PoseStamped, Pose
 from math import cos, asin, sqrt, pi
 import math
 from collections import namedtuple
 import numpy as np
 from ackermann_msgs.msg import AckermannDriveStamped
-
+import os
 
 """
 Constant Definition
@@ -46,12 +46,15 @@ class PurePursuit_node(Node):
                 ('D', None),
                 ('vel_scale', None),
                 # wp
-                ('wp_path', None),
+                ('wp_filename', None),
                 ('wp_delim', None),
                 ('wp_skiprows', None),
                 ('config_path', None),
-                ('overtake_wp_name', None),
-                ('corner_wp_name', None),
+                ('wp_overtake_filename', None),
+                ('wp_corner_filename', None),
+                ('wp_x_idx', None),
+                ('wp_y_idx', None),
+                ('wp_v_idx', None),
                 # topics
                 ('pose_topic', '/gnss_ekf'),
                 ('drive_topic', '/automous_command_to_nucleo'),
@@ -61,6 +64,7 @@ class PurePursuit_node(Node):
         
         self.get_logger().info("purepursuit node initialized")
         self.drive_pub = self.create_publisher(AckermannDriveStamped, self.get_parameter('drive_topic').get_parameter_value().string_value, 10)
+        self.target_pub = self.create_publisher(PoseStamped, '/purepursuit_target', 10)
         self.pose_sub = self.create_subscription(PoseWithCovarianceStamped, self.get_parameter('pose_topic').get_parameter_value().string_value, 
                                                   self.pose_cb,
                                                  10)
@@ -93,10 +97,10 @@ class PurePursuit_node(Node):
         self.kd = self.get_parameter('D').get_parameter_value().double_value
         self.vel_scale = self.get_parameter('vel_scale').get_parameter_value().double_value
 
-        self.load_wp(wp_path=self.get_parameter('wp_path').get_parameter_value().string_value,
+        self.load_wp(wp_path=os.path.join(self.get_parameter('config_path').value, self.get_parameter('wp_filename').value),
                      delim=self.get_parameter('wp_delim').get_parameter_value().string_value,
                      skiprow=self.get_parameter('wp_skiprows').get_parameter_value().integer_value)
-        self.corner_idx = np.load(self.get_parameter('config_path').get_parameter_value().string_value + '/' + self.get_parameter('corner_wp_name').get_parameter_value().string_value)
+        self.corner_idx = np.load(self.get_parameter('config_path').get_parameter_value().string_value + '/' + self.get_parameter('wp_corner_filename').get_parameter_value().string_value)
         self.corner_idx = set(self.corner_idx)
         self.get_logger().info("corner idx: {}".format(self.corner_idx))
         # self.overtake_idx = np.load(self.get_parameter('config_path').get_parameter_value().string_value + '/' + self.get_parameter('overtake_wp_name').get_parameter_value().string_value)
@@ -107,7 +111,9 @@ class PurePursuit_node(Node):
         self.get_logger().info("Loading waypoints from {}".format(wp_path))
         waypoints = np.loadtxt(wp_path, delimiter=delim, skiprows=skiprow)
         # 3 cols: x, y, v
-        waypoints = np.vstack((waypoints[:, 0], waypoints[:, 1], waypoints[:, 2])).T
+        waypoints = np.vstack((waypoints[:, self.get_parameter("wp_x_idx").get_parameter_value().integer_value], 
+                               waypoints[:, self.get_parameter("wp_y_idx").get_parameter_value().integer_value], 
+                               waypoints[:, self.get_parameter("wp_v_idx").get_parameter_value().integer_value])).T
         self.lane = np.expand_dims(waypoints, axis=0)
 
     def pose_cb(self, pose_msg: PoseWithCovarianceStamped):
@@ -129,10 +135,6 @@ class PurePursuit_node(Node):
             L = self.get_L_w_speed(cur_speed, corner=True)
         else:
             L = self.get_L_w_speed(cur_speed, False)
-        # if curr_pos_idx in self.corner_wpIdx:
-        #     L = self.get_L_w_speed(cur_speed, corner=True)
-        # else:
-        #     L = self.get_L_w_speed(cur_speed)
         while traj_distances[segment_end] <= L:
             segment_end = (segment_end + 1) % num_lane_pts
         segment_begin = (segment_end - 1 + num_lane_pts) % num_lane_pts
@@ -144,6 +146,11 @@ class PurePursuit_node(Node):
         i_interp = np.argmin(np.abs(dist_interp))
         target_global = np.array([x_array[i_interp], y_array[i_interp]])
         self.target_point = target_global
+        pub_target_point = PoseStamped()
+        pub_target_point.pose.position.x = self.target_point[0]
+        pub_target_point .pose.position.y = self.target_point[1]
+        pub_target_point.pose.position.z = 0
+        self.target_pub.publish(pub_target_point)
         target_v = v_array[i_interp]
         speed = target_v * self.vel_scale
 

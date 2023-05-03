@@ -1,7 +1,7 @@
 gnss_to_local_node:
   ros__parameters:
-    projection_center_latitude: 39.9416
-    projection_center_longitude: -75.1993
+    projection_center_latitude: /template/lat
+    projection_center_longitude: /template/lon
     projection_lat_span: 0.0010
     projection_lon_span: 0.0016
     debug_mode: True
@@ -11,7 +11,7 @@ gnss_to_local_node:
 
 wp_record_node:
   ros__parameters:
-    wp_path: /template/path
+    wp_filename: "wp.csv"
     pose_topic: /gnss_ekf
     velocity: 2.0
     frequency: 2

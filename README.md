@@ -59,10 +59,8 @@ We use Lidarslam package from this repo([link](https://github.com/rsasaki0109/li
 > ├── Slam
 >
 > │   └── lidarslam_ros2(link)
->
-> 
->
-> 
+
+
 
 ## Install
 
@@ -136,8 +134,6 @@ The Ouster and Velodyne LiDARs are connected to an Ethernet switcher, which keep
 
 
 
-
-
 ### Sensor drivers
 
 Run ros2 launch/run in different terminals for each driver(can use **tmux**, see [section link](#tmux-intro))
@@ -174,8 +170,6 @@ ros2 bag play <your_bag_name>
 rviz2
 ```
 
-
-
 ### Slam(lidarSlam)
 
 ```
@@ -189,6 +183,7 @@ You can show all the topic list and echo some specific topics to see if the driv
 ros2 topic list
 ros2 topic echo <topic name> --no-arr
 ```
+
 
 
 ## Reference Links

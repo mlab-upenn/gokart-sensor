@@ -45,15 +45,15 @@ class Python_node(Node):
         #
         self.centerlat = self.get_parameter('projection_center_latitude').get_parameter_value().double_value
         self.centerlog = self.get_parameter('projection_center_longitude').get_parameter_value().double_value
-        ori_lat = self.centerlat - self.get_parameter('projection_lat_span').get_parameter_value().double_value/2
-        ori_lon = self.centerlog - self.get_parameter('projection_lon_span').get_parameter_value().double_value/2
         mid_lat_radian = radians(self.centerlat)
-        self.ori = Point(ori_lat, ori_lon, 0, 0)
+        # ori_lat = self.centerlat - self.get_parameter('projection_lat_span').get_parameter_value().double_value/2
+        # ori_lon = self.centerlog - self.get_parameter('projection_lon_span').get_parameter_value().double_value/2
+        # self.ori = Point(ori_lat, ori_lon, 0, 0)
         #
 
         self.global_x_coff = radius*cos(mid_lat_radian)
         self.global_y_coff = radius
-        self.init_ori()
+        # self.init_ori()
         # self.get_logger().info(f"x_coff: {self.global_x_coff}, y_coff: {self.global_y_coff}, ori_x: {self.ori.x}, ori_y: {self.ori.y}")
         self.debug_mode = self.get_parameter('debug_mode').get_parameter_value().bool_value
         if self.debug_mode:
@@ -85,15 +85,15 @@ class Python_node(Node):
         x, y = self.latlng2GlobalXY(lat, lng)
         x -= self.ori.x
         y -= self.ori.y
-        # TODO: check the scale     
+        # TODO: check the scale
         return 1000*x, 1000*y
     
     def gnss_cb(self, msg:NavSatFix):
         if self.set_origin:
             self.ori = Point(msg.latitude, msg.longitude, 0, 0)
-            with open(self.get_parameter('map_ori_path').get_parameter_value().string_value, 'w') as f:
-                f.write(str(self.ori.lat) + ',' + str(self.ori.lng) + ',' + '\n')
             self.init_ori()
+            with open(self.get_parameter('map_ori_path').get_parameter_value().string_value, 'w') as f:
+                f.write(str(self.ori.lat) + ',' + str(self.ori.lng) + str(self.ori.x) + ',' + str(self.ori.y))
             self.set_origin = False #set origin once and then never set origin again
         x, y = self.latlng2LocalXY(msg.latitude, msg.longitude)
         self.last_x = x

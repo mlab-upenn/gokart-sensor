@@ -38,7 +38,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'imu_ros = ros_imu_bno055.imu_ros:main'
+            'imu_ros = ros_imu_bno055.imu_ros:main',
+            'imu_calibration = ros_imu_bno055.imu_calibration:main'
         ],
     },
 )

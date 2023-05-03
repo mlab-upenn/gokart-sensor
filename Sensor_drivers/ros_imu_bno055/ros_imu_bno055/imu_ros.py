@@ -74,7 +74,7 @@ class SensorIMU(Node):
         self.declare_parameter('frequency')
         self.declare_parameter('use_magnetometer')
         self.declare_parameter('use_temperature')
-
+        self.declare_parameter('config_folder')
 
         # Get ros params
         self.get_ros_params()
@@ -305,13 +305,16 @@ class SensorIMU(Node):
 
         # Read calibration from file
         try:
-            binary_file = open(str(dir_path) + "/" + self.operation_mode_str + "_calibration", "rb")
+            # binary_file = open(str(dir_path) + "/" + self.operation_mode_str + "_calibration", "rb")
+            binary_file = open(os.path.join(self.get_parameter("config_folder").value, 
+                                            self.operation_mode_str + "_calibration"), "rb")
             calibration_data = binary_file.read()
             binary_file.close()
             calibration_exists = True
         except:
             calibration_data = 0
             calibration_exists = False
+
 
 
         # Load calibration into the IMU    
