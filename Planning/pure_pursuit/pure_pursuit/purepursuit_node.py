@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Image
+from geometry_msgs.msg import Point
 from vision_msgs.msg import Detection2DArray
 from geometry_msgs.msg import PoseWithCovarianceStamped, PoseStamped, Pose
 from math import cos, asin, sqrt, pi
@@ -64,7 +65,7 @@ class PurePursuit_node(Node):
         
         self.get_logger().info("purepursuit node initialized")
         self.drive_pub = self.create_publisher(AckermannDriveStamped, self.get_parameter('drive_topic').get_parameter_value().string_value, 10)
-        self.target_pub = self.create_publisher(PoseStamped, '/purepursuit_target', 10)
+        self.target_pub = self.create_publisher(Point, '/pp_target', 10)
         self.pose_sub = self.create_subscription(PoseWithCovarianceStamped, self.get_parameter('pose_topic').get_parameter_value().string_value, 
                                                   self.pose_cb,
                                                  10)
@@ -146,10 +147,9 @@ class PurePursuit_node(Node):
         i_interp = np.argmin(np.abs(dist_interp))
         target_global = np.array([x_array[i_interp], y_array[i_interp]])
         self.target_point = target_global
-        pub_target_point = PoseStamped()
-        pub_target_point.pose.position.x = self.target_point[0]
-        pub_target_point .pose.position.y = self.target_point[1]
-        pub_target_point.pose.position.z = 0
+        pub_target_point = Point()
+        pub_target_point.x = target_global[0]
+        pub_target_point.y = target_global[1]
         self.target_pub.publish(pub_target_point)
         target_v = v_array[i_interp]
         speed = target_v * self.vel_scale

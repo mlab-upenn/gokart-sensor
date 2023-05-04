@@ -20,11 +20,11 @@ global_cfg_path = os.path.join(cwd, "src", "gokart-sensor", "configs", "global_c
 with open(global_cfg_path, 'r') as f:
     global_cfg = yaml.load(f, Loader=yaml.FullLoader)
 LOCATION = global_cfg["location"]
-WP_FILE_NAME = "wp.csv"
 TRACK_SPAN = global_cfg["track_width"]/2
 config_folder = os.path.join(cwd, "src", "gokart-sensor", "configs")
 ###### get config folder path from global config file #####
 
+WP_FILE_NAME = "wp.csv"
 
 def PJcurvature(x, y):
     """

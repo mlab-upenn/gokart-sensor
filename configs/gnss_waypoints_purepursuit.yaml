@@ -40,6 +40,8 @@ purepursuit_node:
 visualize_node:
   ros__parameters:
     config_path: /template/path
+    wp_track_width: 3.6
+    wp_centerline_filename: "wp.csv"
     wp_corner_filename: "corner_wp_idx.npy"
     wp_overtake_filename: "overtake_wp_idx.npy"
     wp_filename: "optim_traj.csv"

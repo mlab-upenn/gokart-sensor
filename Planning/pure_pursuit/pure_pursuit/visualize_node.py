@@ -11,6 +11,7 @@ from visualization_msgs.msg import Marker
 from std_msgs.msg import ColorRGBA, Int16
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from ackermann_msgs.msg import AckermannDriveStamped
+import trajectory_planning_helpers as tph
 
 
 """
@@ -33,7 +34,9 @@ class LaneVisualize(Node):
         self.declare_parameters(
             namespace='',
             parameters=[
-              # wp
+                # wp
+                ('wp_track_width', None),
+                ('wp_centerline_filename', None),
                 ('wp_filename', None),
                 ('wp_delim', None),
                 ('wp_skiprows', None),
@@ -55,12 +58,10 @@ class LaneVisualize(Node):
         self.timer = self.create_timer(1.0, self.timer_callback)
         traj_topic = "/global_path/optimal_trajectory"
         self.traj_pub_ = self.create_publisher(Marker, traj_topic, 10)
-        # self.pose_sub = self.create_subscription(PoseWithCovarianceStamped, self.get_parameter('pose_topic').get_parameter_value().string_value, 
-        #                                           self.pose_cb,
-        #                                          10)
-        # self.odom_sub = self.create_subscription(AckermannDriveStamped, self.get_parameter('odom_topic').get_parameter_value().string_value, 
-        #                                          self.odom_cb,
-        #                                          10)
+        self.bound1_pub_ = self.create_publisher(Marker, "/bound1", 10)
+        self.bound2_pub_ = self.create_publisher(Marker, "/bound2", 10)
+        self.purepusuit_sub_ = self.create_subscription(Point, "/pp_target", self.purepursuit_cb, 10)
+        self.purepursuit_target_pub_ = self.create_publisher(Marker, "/pp_target_marker", 10)
 
     def load_wp(self, wp_path:str, delim:str, skiprow:int):
         waypoints = np.loadtxt(wp_path, delimiter=delim, skiprows=skiprow)
@@ -68,6 +69,15 @@ class LaneVisualize(Node):
         waypoints = np.vstack((waypoints[:, self.get_parameter("wp_x_idx").get_parameter_value().integer_value], 
                                waypoints[:, self.get_parameter("wp_y_idx").get_parameter_value().integer_value], 
                                waypoints[:, self.get_parameter("wp_v_idx").get_parameter_value().integer_value])).T
+        centerline = np.loadtxt(os.path.join(self.get_parameter('config_path').value, self.get_parameter('wp_centerline_filename').value), delimiter=',', skiprows=0)
+        centerline = np.vstack((centerline[:, 0], centerline[:, 1])).T
+        centerline_close = np.vstack((centerline, centerline[0, :]))
+        _, _, _, normvec = tph.calc_splines.calc_splines(path=centerline_close)
+        track_span = self.get_parameter('wp_track_width').get_parameter_value().double_value/2
+        track_span_arr = np.ones((centerline.shape[0], 1)) * track_span
+        self.bound1 = centerline + normvec * track_span_arr
+        self.bound2 = centerline - normvec * track_span_arr
+
         self.lane = np.expand_dims(waypoints, axis=0)
         self.traj_x = waypoints[:, 0]
         self.traj_y = waypoints[:, 1]
@@ -75,6 +85,31 @@ class LaneVisualize(Node):
         self.num_traj_pts = len(self.traj_x)
         self.v_max = np.max(self.traj_v)
         self.v_min = np.min(self.traj_v)
+
+    def purepursuit_cb(self, msg:Point):
+        # Publish target waypoint
+        marker = Marker()
+        marker.header.frame_id = "/map"
+        marker.id = 0
+        marker.ns = "target_waypoint"
+        marker.type = 1
+        marker.action = 0
+        marker.pose.position.x = msg.x
+        marker.pose.position.y = msg.y
+
+        marker.color.a = 1.0
+        marker.color.r = 1.0
+        marker.color.g = 1.0
+        marker.color.b = 0.0
+
+        this_scale = 0.2
+        marker.scale.x = this_scale
+        marker.scale.y = this_scale
+        marker.scale.z = this_scale
+        marker.pose.orientation.w = 1.0
+        marker.lifetime.nanosec = int(1e8)
+        self.purepursuit_target_pub_.publish(marker)
+
 
     def timer_callback(self):
         self.visualize_global_path()
@@ -89,7 +124,6 @@ class LaneVisualize(Node):
         marker.action = 0
         marker.points = []
         marker.colors = []
-
         for i in range(self.num_traj_pts + 1):
             this_point = Point()
             this_point.x = self.traj_x[i % self.num_traj_pts]
@@ -117,6 +151,60 @@ class LaneVisualize(Node):
         marker.pose.orientation.w = 1.0
 
         self.traj_pub_.publish(marker)
+        
+        # Publish bound1
+        marker = Marker()
+        marker.header.frame_id = "/map"
+        marker.id = 0
+        marker.ns = "global_planner"
+        marker.type = 4
+        marker.action = 0
+        marker.points = []
+        marker.colors = []
+        for i in range(self.bound1.shape[0] + 1):
+            this_point = Point()
+            this_point.x = self.bound1[i % self.bound1.shape[0], 0]
+            this_point.y = self.bound1[i % self.bound1.shape[0], 1]
+            marker.points.append(this_point)
+            this_color = ColorRGBA()
+            this_color.a = 1.0
+            this_color.r = 1.0
+            this_color.g = 1.0
+            this_color.b = 1.0
+            marker.colors.append(this_color)
+            this_scale = 0.1
+            marker.scale.x = this_scale
+            marker.scale.y = this_scale
+            marker.scale.z = this_scale
+            marker.pose.orientation.w = 1.0
+        self.bound1_pub_.publish(marker)
+
+        # Publish bound2
+        marker = Marker()
+        marker.header.frame_id = "/map"
+        marker.id = 0
+        marker.ns = "global_planner"
+        marker.type = 4
+        marker.action = 0
+        marker.points = []
+        marker.colors = []
+        for i in range(self.bound2.shape[0] + 1):
+            this_point = Point()
+            this_point.x = self.bound2[i % self.bound2.shape[0], 0]
+            this_point.y = self.bound2[i % self.bound2.shape[0], 1]
+            marker.points.append(this_point)
+            this_color = ColorRGBA()
+            this_color.a = 1.0
+            this_color.r = 1.0
+            this_color.g = 1.0
+            this_color.b = 1.0
+            marker.colors.append(this_color)
+            this_scale = 0.1
+            marker.scale.x = this_scale
+            marker.scale.y = this_scale
+            marker.scale.z = this_scale
+            marker.pose.orientation.w = 1.0
+        self.bound2_pub_.publish(marker)
 
 
 def main(args=None):

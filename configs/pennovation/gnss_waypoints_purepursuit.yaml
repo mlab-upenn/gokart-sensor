@@ -38,11 +38,13 @@ purepursuit_node:
 visualize_node:
   ros__parameters:
     config_path: /home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation
+    wp_centerline_filename: wp.csv
     wp_corner_filename: corner_wp_idx.npy
     wp_delim: ;
     wp_filename: optim_traj.csv
     wp_overtake_filename: overtake_wp_idx.npy
     wp_skiprows: 4
+    wp_track_width: 3.6
     wp_v_idx: 5
     wp_x_idx: 1
     wp_y_idx: 2

@@ -23,7 +23,9 @@ The localization info is from an EKF filter which combined the imu reading, whee
 
 NOTE: For convenience, all the command should be invoked under the root directory of the workspace `user_name@pc_name:~/gokart_ws ` , to make the relative path is correct for finding all the config files.
 
-- Modify `global_config.yaml` with the location name and projection center. The followed example will use pennovation.
+### 1. Modify `global_config.yaml` with the location name and projection center
+
+The followed example will use pennovation.
 
 ```yaml
 # All the yaml files will be generated under this subfolder
@@ -37,7 +39,7 @@ track_width: 4.0
 
 [1] To convert the WGS84 coordinate to local x, y with meter as the unit, we use [equirectangular projection](http://en.wikipedia.org/wiki/Equirectangular_projection). A reference implementation is [here.](https://stackoverflow.com/questions/16266809/convert-from-latitude-longitude-to-x-y) 
 
-- Generate config folder and yaml files for new location
+### 2. Generate config folder and yaml files for new location
 
 ```
 python3 src/gokart-sensor/scripts/gerenate_yaml.py
@@ -45,7 +47,7 @@ python3 src/gokart-sensor/scripts/gerenate_yaml.py
 
 This script will create a sub-directory for the location from `global_config.yaml` (if not exist) and then copy all the yaml files with the new projection center into that folder.
 
-Example structure:
+**Example structure:**
 
 ```js
 ├── configs
@@ -59,7 +61,7 @@ Example structure:
 │       └── ouster_2d_gap_follow.yaml
 ```
 
-- IMU calibration
+### 3. IMU calibration
 
 In the localization pipeline we assume the IMU is working in ENU frame(x axis point to the east, yaw angle is given accordingly), so we depend on the magnetometer to give use the correct ENU-based yaw angle. 
 
@@ -155,6 +157,14 @@ If `set_origin` is false, during waypoint recording, `gnss_to_local_node` will l
 
 ### 2.(Optional) TUM global raceline optimization
 
+#### Prepare: install requirement
+
+TUM global raceline optimization requires numpy==1.18.1 and scipy==1.3.3 which are both outdated. However, installing them does not cause trouble for other scripts yet, so we will just keep those versions.
+
+```
+pip3 install -r src/gokart-sensor/scripts/trajectory_generator/requirements.txt
+```
+
 #### Visualize the recorded centerline
 
 We assume the waypoints collected in the first step are the centerline of the track, which can be scattered and discontinuous. To further optimize the waypoints, we use the global raceline optimization from TUM(link). All the related codes are under `/scripts/trajectory_generator`. It is a simplified version only contains the code related to min-curvature optimizaiton.
@@ -196,4 +206,10 @@ python3 src/gokart-sensor/scripts/visualize_optim_raceline.py
 ```
 
 ![image-20230503175424713](/home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/Planning/figures/optim_traj_pennovation3.png)
+
+
+
+### 3.(Optional) Lane generation for lane-switcher based obstacle avoidance
+
+
 
