@@ -13,6 +13,8 @@
 #include <pcl/common/eigen.h>
 #include <pcl/common/transforms.h>
 #include <pcl/filters/passthrough.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl/segmentation/extract_clusters.h>
 
 #include "geometry_msgs/msg/quaternion.hpp"
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
@@ -58,8 +60,41 @@ class LidarFilter : public rclcpp::Node
         pass_x.setFilterFieldName("x");
         pass_x.setFilterLimits(0, 5);
         pass_x.filter(*cloud_filtered_x);
+
+        //TRY
+        // Define the rotation matrix
+        Eigen::Affine3f transform = Eigen::Affine3f::Identity();
+        float theta = -M_PI/2;  // rotation angle in radians
+        transform.rotate (Eigen::AngleAxisf (theta, Eigen::Vector3f::UnitZ()));
+        // Apply the rotation to the point cloud
+        pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_rotated (new pcl::PointCloud<pcl::PointXYZ>);
+        pcl::transformPointCloud (*cloud_filtered_x, *cloud_rotated, transform);
+
+        // Create the Voxel Grid filter object
+        pcl::VoxelGrid<pcl::PointXYZ> voxel_filter;
+        voxel_filter.setInputCloud (cloud_rotated);
+        voxel_filter.setLeafSize (0.01f, 0.01f, 0.01f); // set the voxel size
+        pcl::PointCloud<pcl::PointXYZ>::Ptr voxel_cloud (new pcl::PointCloud<pcl::PointXYZ>);
+        voxel_filter.filter (*voxel_cloud);  // apply the filter and save the output to the original point cloud object
+
+
+        // Create the Euclidean Cluster Extraction object
+        pcl::EuclideanClusterExtraction<pcl::PointXYZ> cluster_extractor;
+        cluster_extractor.setInputCloud (voxel_cloud);
+        cluster_extractor.setClusterTolerance (0.1); // set the cluster tolerance to 0.1 meters
+        cluster_extractor.setMinClusterSize (50);   // set the minimum cluster size to 50 points
+        cluster_extractor.setMaxClusterSize (10000); // set the maximum cluster size to 10000 points
+        std::vector<pcl::PointIndices> cluster_indices;
+        cluster_extractor.extract (cluster_indices); // perform clustering and save the output to a vector of point indices
+
+        //TRY ENDS
+
+        // sensor_msgs::msg::PointCloud2 out_cloud_filter_x;
+        // pcl::toROSMsg(*cloud_filtered_x, out_cloud_filter_x);
+        // publisher_->publish(out_cloud_filter_x);
+
         sensor_msgs::msg::PointCloud2 out_cloud_filter_x;
-        pcl::toROSMsg(*cloud_filtered_x, out_cloud_filter_x);
+        pcl::toROSMsg(*voxel_cloud, out_cloud_filter_x);
         publisher_->publish(out_cloud_filter_x);
 
 
