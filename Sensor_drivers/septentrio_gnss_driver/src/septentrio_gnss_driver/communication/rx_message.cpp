@@ -3013,8 +3013,8 @@ bool io_comm_rx::RxMessage::read(std::string message_key, bool search)
                             std::to_string(gnss_major) + "." +
                             std::to_string(gnss_minor) + "." +
                             std::to_string(gnss_patch) + " or consult README.");
-                } else
-                    node_->log(LogLevel::ERROR, "gnss");
+                } //else
+                    // node_->log(LogLevel::ERROR, "gnss");
             }
         }
 

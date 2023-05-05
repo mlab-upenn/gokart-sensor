@@ -110,12 +110,10 @@ class Ekf_gnss_node(Node):
         self.last_y_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, msg.pose.covariance[4])
         # self.get_logger().info("gnss covariance = %f" % msg.pose.covariance[0])
         if(msg.pose.covariance[0] > 0.0025 or msg.pose.covariance[4] > 0.0025):
-            self.get_logger().info("gnss covariance is large")
+            # self.get_logger().info("gnss covariance is large")
             # self.ekf.set_Q(50*msg.pose.covariance[0], 50*msg.pose.covariance[0])
-            self.last_x_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, 1e9*msg.pose.covariance[0])
-            self.last_y_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, 1e9*msg.pose.covariance[4])
-    
-        # if(self.initStatus_1 and self.initStatus_2):
+            self.last_x_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, 100*msg.pose.covariance[0])
+            self.last_y_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, 100*msg.pose.covariance[4])
         #     #GNSS ONLY UPDATE
         #     z_b = np.array([True, True, False, False, False])
         #     z_covar = np.diag([self.last_x_covar.val, self.last_y_covar.val]) ** 2
@@ -177,7 +175,7 @@ class Ekf_gnss_node(Node):
         # self.get_logger().info(f"yaw is {self.last_yaw.val}, v is {self.curr_v.val}")
 
         # xEst, PEst = self.ekf.ekf_estimation(x_est, self.P_est, z, ud, dt, dead_reckoning=False)
-        xEst, PEst = self.ekf.ekf_predict(x_est, self.P_est, ud, dt)
+        xEst, PEst = self.ekf.ekf_predict(x_est, self.P_est, ud, self.dt)
 
         #GNSS ONLY UPDATE
         z_b = np.array([True, True, False, False, False])
@@ -186,10 +184,10 @@ class Ekf_gnss_node(Node):
         xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
 
         #IMU ONLY UPDATE
-        # z_b = np.array([False, False, True, False, False]) #yaw, velo, yawvelo
-        # z_covar = np.diag([1e-5, 0.1, 1e-5]) ** 2
-        # z = np.array([[self.last_yaw.val], [self.curr_v.val], [self.curr_w.val]]) 
-        # xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
+        z_b = np.array([False, False, True, False, False]) #yaw, velo, yawvelo
+        z_covar = np.diag([1e-2]) ** 2
+        z = np.array([[self.last_yaw.val]]) 
+        xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
 
         # Wheel speed UPDATE
         # z_b = np.array([False, False, False, True, False]) #yaw, velo, yawvelo

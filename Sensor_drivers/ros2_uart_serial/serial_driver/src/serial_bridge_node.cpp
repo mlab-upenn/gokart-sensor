@@ -238,15 +238,15 @@ void SerialBridgeNode::receive_callback(
 
     if(drive_ackermann[5] == "info"){
       drive_info_publisher->publish(ackermann_msg);
-      cout << "gokart drive info: " << endl;
+      // cout << "gokart drive info: " << endl;
     }
     else if (drive_ackermann[5] == "cmmd"){
       drive_command_publisher->publish(ackermann_msg);
-      cout << "gokart drive command: " << endl;
+      // cout << "gokart drive command: " << endl;
     }
 
-    cout << "steer " << ackermann_msg.drive.steering_angle << "radians" 
-    " speed " << ackermann_msg.drive.speed << "m/s" << endl << endl;
+    // cout << "steer " << ackermann_msg.drive.steering_angle << "radians" 
+    // " speed " << ackermann_msg.drive.speed << "m/s" << endl << endl;
   }
 
   // There is about 20% message corruption rate, in which message length will be different
