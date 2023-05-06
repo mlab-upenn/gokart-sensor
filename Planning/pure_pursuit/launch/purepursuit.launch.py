@@ -10,7 +10,8 @@ cwd = os.getcwd()
 def generate_launch_description():
 
     ld = LaunchDescription()
-    config = os.path.join(cwd, "src", "gokart-sensor", "configs", LOCATION, "gnss_waypoints_purepursuit.yaml")
+    # config = os.path.join(cwd, "src", "gokart-sensor", "configs", LOCATION, "gnss_waypoints_purepursuit.yaml")
+    config = os.path.join(cwd, "src", "gokart-sensor", "configs", LOCATION, "gnss_waypoints_purepursuit_optim.yaml")
     print(f"load config from {config}")
     map_path = os.path.join(
         get_package_share_directory('pure_pursuit'),

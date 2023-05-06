@@ -10,8 +10,8 @@ gnss_to_local_node:
 purepursuit_node:
   ros__parameters:
     D: 1.0
-    Lscale: 6.0
-    Lscale_corner: 6.0
+    Lscale: 3.0
+    Lscale_corner: 3.0
     Pscale: 6.0
     Pscale_corner: 6.0
     config_path: /home/ros/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation
@@ -22,8 +22,8 @@ purepursuit_node:
     maxP: 4.0
     maxP_corner: 4.0
     max_steer: 0.95
-    minL: 4.0
-    minL_corner: 4.0
+    minL: 3.0
+    minL_corner: 3.0
     minP: 4.0
     minP_corner: 4.0
     vel_scale: 0.4
