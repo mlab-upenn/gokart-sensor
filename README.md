@@ -42,7 +42,7 @@ We use Lidarslam package from this repo([link](https://github.com/rsasaki0109/li
 
 ## Install
 
-- Install dependency
+Install dependency
 
 ```
 # for yolov8
@@ -55,9 +55,7 @@ sudo apt install ros-humble-depthai-ros
 pip install pyserial
 ```
 
-
-
-- Make a ros2 workspace under your home directory and git clone the source code to /src
+Make a ros2 workspace under your home directory and git clone the source code to /src
 
 ```bash
 mkdir -p gokart_ws/src
@@ -82,9 +80,7 @@ source install/setup.bash
 
 **Ethernet**
 
-The Ouster and Velodyne LiDARs are connected to an Ethernet switcher, which keeps them under the same network gate. The Wired setting of the host ubuntu should be:
-
-> Choose Manual under IPv4 Method, set Address to 192.0.2.200, set Netmask to 255.255.255.0
+The Ouster is connected to the laptop through ethernet cable. After connecting, choose manual configuration and under IPv4, set Address to 192.0.2.200 and Netmask to 255.255.255.0. Restart your system and ping 192.0.2.100 to verify succesful connection.
 
 
 
