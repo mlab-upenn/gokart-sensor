@@ -16,23 +16,9 @@ Currently the sensor system of GoKart includes:
 
 (2) Ouster OS1 LiDAR ([manual](https://data.ouster.io/downloads/software-user-manual/software-user-manual-v2p0.pdf) + [GitHub](https://github.com/ouster-lidar/ouster-ros/tree/ros2-foxy))
 
-(3) OAK-D camera ([manual](https://docs.luxonis.com/projects/hardware/en/latest/pages/BW1098OAK.html))
+(3) OAK-D camera ([manual](https://docs.luxonis.com/projects/hardware/en/latest/pages/BW1098OAK.html) + [GitHub](https://github.com/luxonis/depthai-ros))
 
-(4) Bno055 IMU ([datasheet](https://cdn-shop.adafruit.com/datasheets/BST_BNO055_DS000_12.pdf))
-
-> ├── Sensor_drivers
->
-> │   ├── ouster-ros ([link](https://github.com/ouster-lidar/ouster-ros/tree/ros2-foxy))
->
-> │   ├── ros_imu_bno055 (ros2 wrapper of [link]())
->
-> │   └── septentrio_gnss_driver([link]())
-
-Note:  
-
-OAK-D camera ros2 driver([github link](https://github.com/luxonis/depthai-ros)) can be installed directly in CLI as ros2 internal driver packages. So they are not listed inside the Sensor_drivers, but in the install dependency part.
-
-
+(4) Bno055 IMU ([manual](https://cdn-shop.adafruit.com/datasheets/BST_BNO055_DS000_12.pdf))
 
 ### Object_detection
 
