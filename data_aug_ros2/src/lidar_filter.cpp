@@ -68,9 +68,21 @@ class LidarFilter : public rclcpp::Node
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_rotated (new pcl::PointCloud<pcl::PointXYZ>);
         pcl::transformPointCloud (*in_cloud, *cloud_rotated, transform);
 
+        //translate point cloud in z direction
+
+        float translation_z = 0.0;
+        // Create the transformation matrix
+        Eigen::Affine3f transform_z = Eigen::Affine3f::Identity();
+        transform_z.translation() << 0.0, 0.0, translation_z;
+        // Apply the translation
+        pcl::PointCloud<pcl::PointXYZ>::Ptr transformed_cloud(new pcl::PointCloud<pcl::PointXYZ>);
+        pcl::transformPointCloud(*cloud_rotated, *transformed_cloud, transform_z);
+
+
+
         // Create the Voxel Grid filter object
         pcl::VoxelGrid<pcl::PointXYZ> voxel_filter;
-        voxel_filter.setInputCloud (cloud_rotated);
+        voxel_filter.setInputCloud (transformed_cloud);
         voxel_filter.setLeafSize (0.05f, 0.05f, 0.05f); // set the voxel size
         pcl::PointCloud<pcl::PointXYZ>::Ptr voxel_cloud (new pcl::PointCloud<pcl::PointXYZ>);
         voxel_filter.filter (*voxel_cloud);  // apply the filter and save the output to the original point cloud object
@@ -87,7 +99,7 @@ class LidarFilter : public rclcpp::Node
         pcl::PassThrough<pcl::PointXYZ> pass_z;
         pass_z.setInputCloud(cloud_filtered_x);
         pass_z.setFilterFieldName("z");
-        pass_z.setFilterLimits(-3, 1.0);
+        pass_z.setFilterLimits(-3+translation_z, 1.0 +translation_z);
         pass_z.filter(*cloud_filtered_z);
 
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered_y(new pcl::PointCloud<pcl::PointXYZ>);
@@ -193,7 +205,11 @@ class LidarFilter : public rclcpp::Node
           double x = centroid[0];
           double y = centroid[1];
           // double z = centroid[2];
-          if(abs(y)< 0.8 && x<2.3) std::cout << "TERRAIN, TERRAIN, PULLUP!!!" << std::endl;
+          ct_+=1;
+          if(abs(y)< 0.8 && x<3) 
+          {
+            std::cout << "TERRAIN, TERRAIN, PULLUP!!!" <<  ct_ << "x" << x << "y" << y <<std::endl;
+          }
         }
 
 
