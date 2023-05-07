@@ -63,14 +63,11 @@ We use Lidarslam package from this repo([link](https://github.com/rsasaki0109/li
 - Install dependency
 
 ```
-# common libs
-sudo apt install camke libboost-all-dev libpcap-dev libssl-dev
-
 # for yolov8(ultralytics)
 pip install ultralytics
 
 # for OAK-D camera:
-sudo apt install ros-foxy-depthai-ros
+sudo apt install ros-humble-depthai-ros
 
 # for IMU driver:
 pip install pyserial
