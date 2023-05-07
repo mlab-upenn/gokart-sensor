@@ -55,7 +55,7 @@ sudo apt install ros-humble-depthai-ros
 pip install pyserial
 ```
 
-Make a ros2 workspace under your home directory and git clone the source code to /src
+Make a ROS2 workspace under your home directory and git clone the source code to /src
 
 ```bash
 mkdir -p gokart_ws/src
@@ -115,7 +115,7 @@ ros2 bag play <your_bag_name>
 rviz2
 ```
 
-### Slam(lidarSlam)
+### LiDAR Slam
 
 ```
 ros2 launch lidarslam lidarslam.launch.py
