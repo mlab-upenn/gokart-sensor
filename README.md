@@ -1,6 +1,6 @@
 # GoKart-Sensor-Ros2
 
-This is the latest ROS2 Humble repo for gokart applications.
+This is the latest ros2 Humble repo for gokart applications.
 
 
 
@@ -10,7 +10,7 @@ This is the latest ROS2 Humble repo for gokart applications.
 
 (1) Senpentrio Mosaic-H Dev Kit ([Manual](https://www.septentrio.com/en/products/gps/gnss-receiver-modules/mosaichdevkit)) + Swift Navigation RTK ([Link](https://www.swiftnav.com/skylark))
 
-(2) Ouster OS1 LiDAR ([Manual](https://data.ouster.io/downloads/software-user-manual/software-user-manual-v2p0.pdf) + [GitHub](https://github.com/ouster-lidar/ouster-ros/tree/ros2-foxy))
+(2) Ouster OS1 LiDAR ([Manual](https://data.ouster.io/downloads/software-user-manual/software-user-manual-v2p0.pdf) + [GitHub](https://github.com/ouster-lidar/ouster-ros/tree/ros2))
 
 (3) OAK-D camera ([Manual](https://docs.luxonis.com/projects/hardware/en/latest/pages/BW1098OAK.html) + [GitHub](https://github.com/luxonis/depthai-ros))
 
@@ -55,7 +55,7 @@ sudo apt install ros-humble-depthai-ros
 pip install pyserial
 ```
 
-Make a ROS2 workspace under your home directory and git clone the source code to /src
+Make a ros2 workspace under your home directory and git clone the source code to /src
 
 ```bash
 mkdir -p gokart_ws/src
