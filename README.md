@@ -86,7 +86,7 @@ The Ouster is connected to the laptop through ethernet cable. After connecting, 
 
 ### Sensor Drivers
 
-Run ros2 launch/run in different terminals for each driver(for **tmux**, see [section link](#tmux-intro))
+Run ros2 launch/run in different terminals for each driver(see [tmux](#tmux-intro))
 
 ```bash
 # under the workspace folder, source
