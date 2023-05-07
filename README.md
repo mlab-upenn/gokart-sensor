@@ -6,7 +6,7 @@ This is the latest ROS2 Humble repo for gokart applications.
 
 ## Overview
 
-### Sensor drivers
+### Sensor Drivers
 
 (1) Senpentrio Mosaic-H Dev Kit ([Manual](https://www.septentrio.com/en/products/gps/gnss-receiver-modules/mosaichdevkit)) + Swift Navigation RTK ([Link](https://www.swiftnav.com/skylark))
 
@@ -84,9 +84,9 @@ The Ouster is connected to the laptop through ethernet cable. After connecting, 
 
 
 
-### Sensor drivers
+### Sensor Drivers
 
-Run ros2 launch/run in different terminals for each driver(can use **tmux**, see [section link](#tmux-intro))
+Run ros2 launch/run in different terminals for each driver(for **tmux**, see [section link](#tmux-intro))
 
 ```bash
 # under the workspace folder, source
@@ -105,7 +105,7 @@ ros2 launch ros_imu_bno055 imu_launch.py
 ros2 launch depthai_examples rgb_publisher.launch.py
 ```
 
-### Object detection(yolov8)
+### Perception (yolov8)
 
 Run the following commands in three different terminals.
 
@@ -115,7 +115,7 @@ ros2 bag play <your_bag_name>
 rviz2
 ```
 
-### LiDAR Slam
+### LiDAR SLAM
 
 ```
 ros2 launch lidarslam lidarslam.launch.py
