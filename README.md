@@ -1,6 +1,6 @@
 # GoKart-Sensor-Ros2
 
-This repo is the source code for ros2 go-kart application.
+This is the latest ROS2 Humble repo for gokart applications.
 
 
 
@@ -16,9 +16,9 @@ This repo is the source code for ros2 go-kart application.
 
 (4) BNO055 IMU ([Manual](https://cdn-shop.adafruit.com/datasheets/BST_BNO055_DS000_12.pdf)) + LC231X UART to Serial Module ([Manual](https://www.digikey.com/en/products/detail/ftdi-future-technology-devices-international-ltd/LC231X/6823712))
 
-### Object_detection
+### Perception
 
-We use yolov8([ultralytics](https://docs.ultralytics.com/)) for camera object detection. Apart from the standard VOC mode, we also have a cone-detect model.
+We use yolov8 ([ultralytics](https://docs.ultralytics.com/)) for camera object detection. Apart from the standard VOC mode, we also have a cone-detect model.
 
 > ├── Object_detection
 >
@@ -36,7 +36,7 @@ We use Lidarslam package from this repo([link](https://github.com/rsasaki0109/li
 >
 > ├── Slam
 >
-> │   └── lidarslam_ros2(link)
+> │   └── lidarslam_ros2
 
 
 
@@ -45,7 +45,7 @@ We use Lidarslam package from this repo([link](https://github.com/rsasaki0109/li
 - Install dependency
 
 ```
-# for yolov8(ultralytics)
+# for yolov8
 pip install ultralytics
 
 # for OAK-D camera:
