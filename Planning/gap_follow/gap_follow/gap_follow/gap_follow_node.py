@@ -83,7 +83,7 @@ class Gap_follow_node(Node):
         ranges = scan_msg.ranges
         n = len(ranges)
         proc_ranges = np.array(ranges)
-
+        # self.get_logger().info(f"len(ranges):{n}")
         target_idx = self.find_best_point(0, n, proc_ranges)
         steer = angle_min + target_idx * angle_increment
         steer = np.clip(steer, -self.steer_speed_scale, self.steer_speed_scale)

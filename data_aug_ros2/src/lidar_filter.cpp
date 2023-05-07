@@ -42,7 +42,7 @@ class LidarFilter : public rclcpp::Node
     {
       // std::cout << "dscdsdscds" << std::endl;
       // RCLCPP_INFO(this->get_logger(), "I heard:'");
-      publisher_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("/filtered_lidar", 10);
+      publisher_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("/filtered_lidar", rclcpp::SensorDataQoS());
       // timer_ = this->create_wall_timer(10ms, std::bind(&LidarFilter::timer_callback, this));
       subscription_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
         "/ouster/points", rclcpp::SensorDataQoS(), std::bind(&LidarFilter::topic_callback, this, std::placeholders::_1));
@@ -66,6 +66,12 @@ class LidarFilter : public rclcpp::Node
         // Apply the rotation to the point cloud
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_rotated (new pcl::PointCloud<pcl::PointXYZ>);
         pcl::transformPointCloud (*in_cloud, *cloud_rotated, transform);
+
+        // sensor_msgs::msg::PointCloud2 out_cloud_msg;
+        // pcl::toROSMsg(*cloud_rotated, out_cloud_msg);
+        // out_cloud_msg.header = (*msg).header;
+        // publisher_->publish(out_cloud_msg);
+        
 
         // Create the Voxel Grid filter object
         pcl::VoxelGrid<pcl::PointXYZ> voxel_filter;
