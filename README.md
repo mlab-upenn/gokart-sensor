@@ -16,17 +16,13 @@ Currently the sensor system of GoKart includes:
 
 (2) Ouster OS1 LiDAR ([manual](https://data.ouster.io/downloads/software-user-manual/software-user-manual-v2p0.pdf))
 
-(3) Velodyne M1600 solid-state LiDAR ([internal resource link](https://drive.google.com/drive/folders/1519wXv9WTFysgB52GzT6PCQ7rEGvB3O7?usp=share_link))
+(3) OAK-D camera ([manual](https://docs.luxonis.com/projects/hardware/en/latest/pages/BW1098OAK.html))
 
-(4) OAK-D camera ([manual](https://docs.luxonis.com/projects/hardware/en/latest/pages/BW1098OAK.html))
-
-(5) Bno055 IMU ([datasheet](https://cdn-shop.adafruit.com/datasheets/BST_BNO055_DS000_12.pdf))
+(4) Bno055 IMU ([datasheet](https://cdn-shop.adafruit.com/datasheets/BST_BNO055_DS000_12.pdf))
 
 > ├── Sensor_drivers
 >
 > │   ├── ouster-ros ([link](https://github.com/ouster-lidar/ouster-ros/tree/ros2-foxy))
->
-> │   ├── ros2_velodyne_driver_debs (download from official debs)
 >
 > │   ├── ros_imu_bno055 (ros2 wrapper of [link]())
 >
@@ -34,7 +30,7 @@ Currently the sensor system of GoKart includes:
 
 Note:  
 
-Velodyne Lidar ros2 driver and OAK-D camera ros2 driver([github link](https://github.com/luxonis/depthai-ros)) can be installed directly in CLI as ros2 internal driver packages. So they are not listed inside the Sensor_drivers, but in the install dependency part.
+OAK-D camera ros2 driver([github link](https://github.com/luxonis/depthai-ros)) can be installed directly in CLI as ros2 internal driver packages. So they are not listed inside the Sensor_drivers, but in the install dependency part.
 
 
 
@@ -95,7 +91,7 @@ git clone -b ros2_humble_purepursuit --recursive git@github.com:mlab-upenn/gokar
 # go back to the workspace dir
 cd ..
 # use rosdep to install all the dependency needed by the ros2 packages
-source /opt/ros/foxy/setup.bash
+source /opt/ros/humble/setup.bash
 rosdep install --from-paths src --ignore-src -r -y
 # build, the Release flag is required by the ouster driver
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
