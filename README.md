@@ -12,7 +12,7 @@ There are several different modules in the GoKart application. It is still under
 
 Currently the sensor system of GoKart includes:
 
-(1) GNSS+RTK with Septentrio receiver board ([internel resource link](https://drive.google.com/drive/folders/1cNY-N6_Q-Gh8M3gbirDXrJNdaiElLbfh?usp=share_link))
+(1) GNSS+RTK with Septentrio receiver board ([link](https://drive.google.com/drive/folders/1cNY-N6_Q-Gh8M3gbirDXrJNdaiElLbfh?usp=share_link))
 
 (2) Ouster OS1 LiDAR ([manual](https://data.ouster.io/downloads/software-user-manual/software-user-manual-v2p0.pdf))
 
