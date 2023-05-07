@@ -1,18 +1,30 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
+import sys
 import os
 import yaml
 
-LOCATION = 'pennovation'
 cwd = os.getcwd()
 
-def generate_launch_description():
+LOCATION = 'pennovation'
+OPTIMIZE = False
 
+for arg in sys.argv:
+    if arg.startswith("optimize:="):
+        OPTIMIZE = eval(arg.split(":=")[1])
+
+def generate_launch_description():
     ld = LaunchDescription()
-    # config = os.path.join(cwd, "src", "gokart-sensor", "configs", LOCATION, "gnss_waypoints_purepursuit.yaml")
-    config = os.path.join(cwd, "src", "gokart-sensor", "configs", LOCATION, "gnss_waypoints_purepursuit_optim.yaml")
+
+    if OPTIMIZE:
+        FILENAME = 'gnss_waypoints_purepursuit_optimal.yaml'
+    else:
+        FILENAME = 'gnss_waypoints_purepursuit_original.yaml'
+
+    config = os.path.join(cwd, "src", "gokart-sensor", "configs", LOCATION, FILENAME)
     print(f"load config from {config}")
+
     map_path = os.path.join(
         get_package_share_directory('pure_pursuit'),
         'config',
