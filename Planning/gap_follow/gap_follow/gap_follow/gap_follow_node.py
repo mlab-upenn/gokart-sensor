@@ -88,7 +88,7 @@ class Gap_follow_node(Node):
         steer = angle_min + target_idx * angle_increment
         steer = np.clip(steer, -self.steer_speed_scale, self.steer_speed_scale)
         speed = self.max_speed - (self.max_speed - self.min_speed) * abs(steer)/ self.steer_speed_scale
-        # self.get_logger().info('target_idx:{}, steer:{}, speed:{}'.format(target_idx, steer, speed))
+        self.get_logger().info('target_idx:{}, steer:{}, speed:{}'.format(target_idx, steer, speed))
         ackerman_msg = AckermannDriveStamped()
         ackerman_msg.header.stamp = self.get_clock().now().to_msg()
         ackerman_msg.drive.steering_angle = steer
