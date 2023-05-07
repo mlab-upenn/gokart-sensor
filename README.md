@@ -16,7 +16,7 @@ Currently the sensor system of GoKart includes:
 
 (3) OAK-D camera ([Manual](https://docs.luxonis.com/projects/hardware/en/latest/pages/BW1098OAK.html) + [GitHub](https://github.com/luxonis/depthai-ros))
 
-(4) Bno055 IMU ([Manual](https://cdn-shop.adafruit.com/datasheets/BST_BNO055_DS000_12.pdf)) + LC231X UART to Serial Module ((Link)[https://www.digikey.com/en/products/detail/ftdi-future-technology-devices-international-ltd/LC231X/6823712])
+(4) Bno055 IMU ([Manual](https://cdn-shop.adafruit.com/datasheets/BST_BNO055_DS000_12.pdf)) + LC231X UART to Serial Module ([Manual](https://www.digikey.com/en/products/detail/ftdi-future-technology-devices-international-ltd/LC231X/6823712))
 
 ### Object_detection
 
