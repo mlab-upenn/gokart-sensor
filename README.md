@@ -76,24 +76,6 @@ pip install ultralytics
 # for OAK-D camera:
 sudo apt install ros-foxy-depthai-ros
 
-# for GNSS drivers:
-sudo apt install ros-foxy-nmea-msgs ros-foxy-gps-msgs
-sudo apt install libgeographic-dev
-
-# for Ouster driver:
-sudo apt install -y         \
-	ros-foxy-pcl-ros        \
-	ros-foxy-tf2-eigen      \
-	ros-foxy-rviz2          \
-sudo apt install -y         \
-    build-essential         \
-    libeigen3-dev           \
-    libjsoncpp-dev          \
-    libspdlog-dev           \
-    libcurl4-openssl-dev    \
-    cmake                   \
-    python3-colcon-common-extensions
-
 # for Velodyne driver:
 cd Sensor_drivers/ros2_velodyne, then do as the README said.
 
