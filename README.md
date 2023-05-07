@@ -14,7 +14,7 @@ Currently the sensor system of GoKart includes:
 
 (1) GNSS+RTK with Septentrio receiver board ([link](https://drive.google.com/drive/folders/1cNY-N6_Q-Gh8M3gbirDXrJNdaiElLbfh?usp=share_link))
 
-(2) Ouster OS1 LiDAR ([manual](https://data.ouster.io/downloads/software-user-manual/software-user-manual-v2p0.pdf) + [GitHub](www.google.com))
+(2) Ouster OS1 LiDAR ([manual](https://data.ouster.io/downloads/software-user-manual/software-user-manual-v2p0.pdf) + [GitHub](https://github.com/ouster-lidar/ouster-ros/tree/ros2-foxy))
 
 (3) OAK-D camera ([manual](https://docs.luxonis.com/projects/hardware/en/latest/pages/BW1098OAK.html))
 
