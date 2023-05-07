@@ -14,7 +14,7 @@
 
 #include <sensor_msgs/msg/imu.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
-#include <tf2_ros/transform_broadcaster.h>
+#include <tf2_ros/static_transform_broadcaster.h>
 #include <pcl_conversions/pcl_conversions.h>
 
 #include <algorithm>
@@ -29,7 +29,6 @@
 
 namespace sensor = ouster::sensor;
 using ouster_msgs::msg::PacketMsg;
-using ouster_srvs::srv::GetMetadata;
 
 namespace {
 
@@ -86,29 +85,23 @@ class OusterCloud : public OusterProcessingNodeBase {
     void on_init() {
         declare_parameters();
         parse_parameters();
-        auto metadata = get_metadata();
-        info = sensor::parse_metadata(metadata);
-        n_returns = get_n_returns();
-        create_lidarscan_objects();
-        compute_scan_ts = [this](const auto& ts_v) {
-            return compute_scan_ts_0(ts_v);
-        };
-        create_publishers();
-        create_subscriptions();
+        create_metadata_subscriber(
+            [this](const auto& msg) { metadata_handler(msg); });
+        RCLCPP_INFO(get_logger(), "OusterCloud: node initialized!");
     }
 
     void declare_parameters() {
-        declare_parameter("tf_prefix");
-        declare_parameter("timestamp_mode");
+        declare_parameter<std::string>("sensor_frame");
+        declare_parameter<std::string>("lidar_frame");
+        declare_parameter<std::string>("imu_frame");
+        declare_parameter<std::string>("timestamp_mode");
     }
 
     void parse_parameters() {
-        auto tf_prefix = get_parameter("tf_prefix").as_string();
-        if (is_arg_set(tf_prefix) && tf_prefix.back() != '/')
-            tf_prefix.append("/");
-        sensor_frame = tf_prefix + "os_sensor";
-        imu_frame = tf_prefix + "os_imu";
-        lidar_frame = tf_prefix + "os_lidar";
+        sensor_frame = get_parameter("sensor_frame").as_string();
+        lidar_frame = get_parameter("lidar_frame").as_string();
+        imu_frame = get_parameter("imu_frame").as_string();
+
         auto timestamp_mode_arg = get_parameter("timestamp_mode").as_string();
         use_ros_time = timestamp_mode_arg == "TIME_FROM_ROS_TIME";
     }
@@ -118,6 +111,28 @@ class OusterCloud : public OusterProcessingNodeBase {
         const auto scan_frequency = sensor::frequency_of_lidar_mode(ld_mode);
         const double one_sec_in_ns = 1e+9;
         return one_sec_in_ns / (scan_width * scan_frequency);
+    }
+
+    void metadata_handler(
+        const std_msgs::msg::String::ConstSharedPtr& metadata_msg) {
+        RCLCPP_INFO(get_logger(),
+                    "OusterCloud: retrieved new sensor metadata!");
+        info = sensor::parse_metadata(metadata_msg->data);
+        send_static_transforms();
+        n_returns = get_n_returns();
+        create_lidarscan_objects();
+        compute_scan_ts = [this](const auto& ts_v) {
+            return compute_scan_ts_0(ts_v);
+        };
+        create_publishers();
+        create_subscriptions();
+    }
+
+    void send_static_transforms() {
+        tf_bcast.sendTransform(ouster_ros::transform_to_tf_msg(
+            info.lidar_to_sensor_transform, sensor_frame, lidar_frame, now()));
+        tf_bcast.sendTransform(ouster_ros::transform_to_tf_msg(
+            info.imu_to_sensor_transform, sensor_frame, imu_frame, now()));
     }
 
     void create_lidarscan_objects() {
@@ -174,9 +189,8 @@ class OusterCloud : public OusterProcessingNodeBase {
     void pcl_toROSMsg(const ouster_ros::Cloud& pcl_cloud,
                       sensor_msgs::msg::PointCloud2& cloud) {
         // TODO: remove the staging step in the future
-        static pcl::PCLPointCloud2 pcl_pc2;
-        pcl::toPCLPointCloud2(pcl_cloud, pcl_pc2);
-        pcl_conversions::moveFromPCL(pcl_pc2, cloud);
+        pcl::toPCLPointCloud2(pcl_cloud, staging_pcl_pc2);
+        pcl_conversions::moveFromPCL(staging_pcl_pc2, cloud);
     }
 
     void convert_scan_to_pointcloud_publish(uint64_t scan_ts,
@@ -189,9 +203,6 @@ class OusterCloud : public OusterProcessingNodeBase {
             pc_msg.header.frame_id = sensor_frame;
             lidar_pubs[i]->publish(pc_msg);
         }
-
-        tf_bcast.sendTransform(ouster_ros::transform_to_tf_msg(
-            info.lidar_to_sensor_transform, sensor_frame, lidar_frame, msg_ts));
     }
 
     uint64_t impute_value(int last_scan_last_nonzero_idx,
@@ -288,13 +299,18 @@ class OusterCloud : public OusterProcessingNodeBase {
     void lidar_handler_ros_time(const PacketMsg::ConstPtr& packet) {
         auto packet_receive_time = rclcpp::Clock(RCL_ROS_TIME).now();
         const uint8_t* packet_buf = packet->buf.data();
-        static auto frame_ts = extrapolate_frame_ts(
-            packet_buf, packet_receive_time);  // first point cloud time
+        if (!lidar_handler_ros_time_frame_ts_initialized) {
+            lidar_handler_ros_time_frame_ts = extrapolate_frame_ts(
+                packet_buf, packet_receive_time);  // first point cloud time
+            lidar_handler_ros_time_frame_ts_initialized = true;
+        }
         if (!(*scan_batcher)(packet_buf, *lidar_scan)) return;
         auto scan_ts = compute_scan_ts(lidar_scan->timestamp());
-        convert_scan_to_pointcloud_publish(scan_ts, frame_ts);
+        convert_scan_to_pointcloud_publish(scan_ts,
+                                           lidar_handler_ros_time_frame_ts);
         // set time for next point cloud msg
-        frame_ts = extrapolate_frame_ts(packet_buf, packet_receive_time);
+        lidar_handler_ros_time_frame_ts =
+            extrapolate_frame_ts(packet_buf, packet_receive_time);
     }
 
     void imu_handler(const PacketMsg::ConstSharedPtr packet) {
@@ -305,8 +321,6 @@ class OusterCloud : public OusterProcessingNodeBase {
         auto imu_msg =
             ouster_ros::packet_to_imu_msg(*packet, msg_ts, imu_frame, pf);
         imu_pub->publish(imu_msg);
-        tf_bcast.sendTransform(ouster_ros::transform_to_tf_msg(
-            info.imu_to_sensor_transform, sensor_frame, imu_frame, msg_ts));
     };
 
     static inline rclcpp::Time to_ros_time(uint64_t ts) {
@@ -335,7 +349,7 @@ class OusterCloud : public OusterProcessingNodeBase {
     std::string imu_frame;
     std::string lidar_frame;
 
-    tf2_ros::TransformBroadcaster tf_bcast;
+    tf2_ros::StaticTransformBroadcaster tf_bcast;
 
     bool use_ros_time;
 
@@ -345,6 +359,13 @@ class OusterCloud : public OusterProcessingNodeBase {
         compute_scan_ts;
     double scan_col_ts_spacing_ns;  // interval or spacing between columns of a
                                     // scan
+
+    pcl::PCLPointCloud2
+        staging_pcl_pc2;  // a buffer used for staging during the conversion
+                          // from a PCL point cloud to a ros point cloud message
+
+    bool lidar_handler_ros_time_frame_ts_initialized = false;
+    rclcpp::Time lidar_handler_ros_time_frame_ts;
 };
 
 }  // namespace ouster_ros

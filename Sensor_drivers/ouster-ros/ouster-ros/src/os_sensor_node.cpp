@@ -63,7 +63,9 @@ class OusterSensor : public OusterSensorNodeBase {
             sensor_client = create_sensor_client(sensor_hostname, config);
             if (!sensor_client)
                 return LifecycleNodeInterface::CallbackReturn::FAILURE;
+            create_metadata_publisher();
             update_config_and_metadata(*sensor_client);
+            publish_metadata();
             save_metadata();
             create_reset_service();
             create_get_metadata_service();
@@ -86,9 +88,7 @@ class OusterSensor : public OusterSensorNodeBase {
         const rclcpp_lifecycle::State& state) {
         RCLCPP_DEBUG(get_logger(), "on_activate() is called.");
         LifecycleNode::on_activate(state);
-        lidar_packet_pub->on_activate();
-        imu_packet_pub->on_activate();
-       
+
         allocate_buffers();
         if (!connection_loop_timer) {
             // TOOD: replace with a thread instead?
@@ -168,16 +168,16 @@ class OusterSensor : public OusterSensorNodeBase {
 
    private:
     void declare_parameters() {
-        declare_parameter("sensor_hostname");
-        declare_parameter("metadata");
-        declare_parameter("udp_dest");
-        declare_parameter("mtp_dest");
-        declare_parameter("mtp_main", false);
-        declare_parameter("lidar_port", 0);
-        declare_parameter("imu_port", 0);
-        declare_parameter("lidar_mode");
-        declare_parameter("timestamp_mode");
-        declare_parameter("udp_profile_lidar");
+        declare_parameter<std::string>("sensor_hostname");
+        declare_parameter<std::string>("metadata");
+        declare_parameter<std::string>("udp_dest");
+        declare_parameter<std::string>("mtp_dest");
+        declare_parameter<bool>("mtp_main");
+        declare_parameter<int>("lidar_port", 0);
+        declare_parameter<int>("imu_port", 0);
+        declare_parameter<std::string>("lidar_mode");
+        declare_parameter<std::string>("timestamp_mode");
+        declare_parameter<std::string>("udp_profile_lidar");
     }
 
     std::string get_sensor_hostname() {
@@ -342,6 +342,7 @@ class OusterSensor : public OusterSensorNodeBase {
         connection_loop_timer->cancel();
         reset_last_init_id = init_id_reset;
         update_config_and_metadata(*sensor_client);
+        publish_metadata();
         save_metadata();
         auto request_transitions = std::vector<uint8_t>{
             lifecycle_msgs::msg::Transition::TRANSITION_DEACTIVATE,
@@ -696,7 +697,10 @@ class OusterSensor : public OusterSensorNodeBase {
     bool init_id_changed(const sensor::packet_format& pf,
                          const uint8_t* lidar_buf) {
         uint32_t current_init_id = pf.init_id(lidar_buf);
-        static uint32_t last_init_id = current_init_id + 1;
+        if (!last_init_id_initialized) {
+            last_init_id = current_init_id + 1;
+            last_init_id_initialized = true;
+        }
         if (reset_last_init_id && last_init_id != current_init_id) {
             last_init_id = current_init_id;
             reset_last_init_id = false;
@@ -806,8 +810,8 @@ class OusterSensor : public OusterSensorNodeBase {
     std::shared_ptr<sensor::client> sensor_client;
     PacketMsg lidar_packet;
     PacketMsg imu_packet;
-    rclcpp_lifecycle::LifecyclePublisher<PacketMsg>::SharedPtr lidar_packet_pub;
-    rclcpp_lifecycle::LifecyclePublisher<PacketMsg>::SharedPtr imu_packet_pub;
+    rclcpp::Publisher<PacketMsg>::SharedPtr lidar_packet_pub;
+    rclcpp::Publisher<PacketMsg>::SharedPtr imu_packet_pub;
     rclcpp::Service<std_srvs::srv::Empty>::SharedPtr reset_srv;
     rclcpp::Service<GetConfig>::SharedPtr get_config_srv;
     rclcpp::Service<SetConfig>::SharedPtr set_config_srv;
@@ -817,6 +821,9 @@ class OusterSensor : public OusterSensorNodeBase {
     bool force_sensor_reinit = false;
     bool reset_last_init_id = true;
     std::atomic<bool> reset_in_progress = {false};
+
+    bool last_init_id_initialized = false;
+    uint32_t last_init_id;
 
     // TODO: add as a ros parameter
     const int max_poll_client_error_count = 10;

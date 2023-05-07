@@ -38,8 +38,8 @@ dual return and it was configured to use this capability, then another topic wil
 name `/ouster/points2` which corresponds to the second point cloud.
 
 ## Requirements
-This driver only supports **Foxy** ROS 2 distro. Please refer to ROS 2 online documentation on how to
-setup ros on your machine before proceeding with the remainder of this guide.
+This driver only supports **Rolling** and **Humble** ROS 2 distros. Please refer to ROS 2 online
+documentation on how to setup ros on your machine before proceeding with the remainder of this guide.
 
 > **Note**  
 > If you have _rosdep_ tool installed on your system you can then use the following command to get all
@@ -57,7 +57,7 @@ sudo apt install -y             \
     ros-$ROS_DISTRO-tf2-eigen   \
     ros-$ROS_DISTRO-rviz2
 ```
-where `$ROS_DISTRO` is ``foxy``.
+where `$ROS_DISTRO` is either ``rolling`` or ``humble``.
 
 > **Note**  
 > Installing `ros-$ROS_DISTRO-rviz` package is optional in case you didn't need to visualize the
@@ -94,12 +94,12 @@ workspace as shown below:
 
 ```bash
 mkdir -p ros2_ws/src && cd ros2_ws/src
-git clone -b ros2-foxy --recurse-submodules https://github.com/ouster-lidar/ouster-ros.git
+git clone -b ros2 --recurse-submodules https://github.com/ouster-lidar/ouster-ros.git
 ```
 
 Next to compile the driver you need to source the ROS environemt into the active termainl:
 ```bash
-source /opt/ros/<ros-distro>/setup.bash # replace ros-distro with 'foxy'
+source /opt/ros/<ros-distro>/setup.bash # replace ros-distro with 'rolling' or 'humble'
 ```
 
 Finally, invoke `colcon build` command from within the catkin workspace as shown below:
@@ -129,18 +129,25 @@ ros2 launch ouster_ros sensor.launch.xml    \
 ```
 
 #### Recording Mode
+> Note
+> As of package version 8.1, specifiying metadata file is optional since the introduction of the
+> metadata topic
 ```bash
 ros2 launch ouster_ros record.launch.xml    \
     sensor_hostname:=<sensor host name>     \
-    metadata:=<json file name>              \
-    bag_file:=<optional bag file name>
+    bag_file:=<optional bag file name>      \
+    metadata:=<json file name>              # optional
 ```
 
 #### Replay Mode
+> Note
+> As of package version 8.1, specifiying metadata file is optional if the bag file being replayed
+> already contains the metadata topic
+
 ```bash
 ros2 launch ouster_ros replay.launch.xml    \
-    metadata:=<json file name>              \
-    bag_file:=<path to rosbag file>
+    bag_file:=<path to rosbag file>         \
+    metadata:=<json file name>              # optional if bag file has /metadata topic
 ```
 
 #### Multicast Mode (experimental)

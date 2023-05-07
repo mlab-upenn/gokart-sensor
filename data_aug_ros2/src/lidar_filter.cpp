@@ -9,7 +9,6 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
-// #include <pcl_ros/point_cloud.hpp>
 #include <pcl/common/eigen.h>
 #include <pcl/common/transforms.h>
 #include <pcl/filters/passthrough.h>
@@ -27,7 +26,6 @@
 #include <pcl/filters/statistical_outlier_removal.h>
 
 #include "geometry_msgs/msg/quaternion.hpp"
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <math.h>
 using namespace std::chrono_literals;
 using std::placeholders::_1;

@@ -41,25 +41,34 @@
     description="whether to run a rviz"/>
   <arg name="rviz_config" default="$(find-pkg-share ouster_ros)/config/viz.rviz"
     description="optional rviz config file"/>
-  <arg name="tf_prefix" default="" description="namespace for tf transforms"/>
+
+  <arg name="sensor_frame" default="os_sensor" description="value can not be empty"/>
+  <arg name="lidar_frame" default="os_lidar" description="value can not be empty"/>
+  <arg name="imu_frame" default="os_imu" description="value can not be empty"/>
 
   <group>
     <push-ros-namespace namespace="$(var ouster_ns)"/>
-    <node pkg="ouster_ros" exec="os_sensor" name="os_sensor" output="screen">
-      <param name="sensor_hostname" value="$(var sensor_hostname)"/>
-      <param name="udp_dest" value="$(var udp_dest)"/>
-      <param name="lidar_port" value="$(var lidar_port)"/>
-      <param name="imu_port" value="$(var imu_port)"/>
-      <param name="udp_profile_lidar" value="$(var udp_profile_lidar)"/>
-      <param name="lidar_mode" value="$(var lidar_mode)"/>
-      <param name="timestamp_mode" value="$(var timestamp_mode)"/>
-      <param name="metadata" value="$(var metadata)"/>
-    </node>
-    <node pkg="ouster_ros" exec="os_cloud" name="os_cloud" output="screen">
-      <param name="tf_prefix" value="$(var tf_prefix)"/>
-      <param name="timestamp_mode" value="$(var timestamp_mode)"/>
-    </node>
-    <node pkg="ouster_ros" exec="os_image" name="os_image" output="screen"/>
+    <node_container pkg="rclcpp_components" exec="component_container_mt" name="os_container" output="screen" namespace="">
+      <composable_node pkg="ouster_ros" plugin="ouster_ros::OusterSensor" name="os_sensor">
+        <param name="sensor_hostname" value="$(var sensor_hostname)"/>
+        <param name="udp_dest" value="$(var udp_dest)"/>
+        <param name="mtp_dest" value=""/>
+        <param name="mtp_main" value="false"/>
+        <param name="lidar_port" value="$(var lidar_port)"/>
+        <param name="imu_port" value="$(var imu_port)"/>
+        <param name="udp_profile_lidar" value="$(var udp_profile_lidar)"/>
+        <param name="lidar_mode" value="$(var lidar_mode)"/>
+        <param name="timestamp_mode" value="$(var timestamp_mode)"/>
+        <param name="metadata" value="$(var metadata)"/>
+      </composable_node>
+      <composable_node pkg="ouster_ros" plugin="ouster_ros::OusterCloud" name="os_cloud">
+        <param name="sensor_frame" value="$(var sensor_frame)"/>
+        <param name="lidar_frame" value="$(var lidar_frame)"/>
+        <param name="imu_frame" value="$(var imu_frame)"/>
+        <param name="timestamp_mode" value="$(var timestamp_mode)"/>
+      </composable_node>
+      <composable_node pkg="ouster_ros" plugin="ouster_ros::OusterImage" name="os_image"/>
+    </node_container>
   </group>
 
   <!-- HACK: configure and activate the sensor node via a process execute since state
@@ -72,7 +81,9 @@
   <include if="$(var viz)" file="$(find-pkg-share ouster_ros)/launch/rviz.launch.xml">
     <arg name="ouster_ns" value="$(var ouster_ns)"/>
     <arg name="rviz_config" value="$(var rviz_config)"/>
-    <arg name="_enable_static_tf_publishers" value="true"/>
+    <arg name="sensor_frame" value="$(var sensor_frame)"/>
+    <arg name="lidar_frame" value="$(var lidar_frame)"/>
+    <arg name="imu_frame" value="$(var imu_frame)"/>
   </include>
 
   <let name="_use_bag_file_name" value="$(eval '\'$(var bag_file)\' != \'b\'')"/>
@@ -81,9 +92,14 @@
 
   <executable if="$(var _use_bag_file_name)" output="screen"
     cmd="ros2 bag record --output $(var bag_file)
-         /$(var ouster_ns)/imu_packets /$(var ouster_ns)/lidar_packets"/>
+      /$(var ouster_ns)/imu_packets
+      /$(var ouster_ns)/lidar_packets
+      /$(var ouster_ns)/metadata"/>
 
   <executable unless="$(var _use_bag_file_name)" output="screen"
-    cmd="ros2 bag record /$(var ouster_ns)/imu_packets /$(var ouster_ns)/lidar_packets"/>
+    cmd="ros2 bag record
+      /$(var ouster_ns)/imu_packets
+      /$(var ouster_ns)/lidar_packets
+      /$(var ouster_ns)/metadata"/>
 
 </launch>
