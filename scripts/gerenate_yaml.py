@@ -18,9 +18,9 @@ You still need to change the control parameters such as lookahead_distance and t
 """
 
 ############ fixed settings of config yaml name ###########
-PUREPURSUIT_YAML_NAME = 'gnss_waypoints_purepursuit.yaml'
-WPCOLLECTION_YAML_NAME = 'gnss_waypoints_collection.yaml'
-GAPFOLLOW_YAML_NAME = 'ouster_2d_gap_follow.yaml'
+PUREPURSUIT_YAML_NAME = 'template/gnss_waypoints_purepursuit.yaml'
+WPCOLLECTION_YAML_NAME = 'template/gnss_waypoints_collection.yaml'
+GAPFOLLOW_YAML_NAME = 'template/ouster_2d_gap_follow.yaml'
 WP_FILE_NAME = 'wp.csv'
 MAP_ORI_FILE_NAME = 'map_ori.csv'
 DEBUG = True

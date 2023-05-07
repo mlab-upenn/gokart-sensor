@@ -7,7 +7,7 @@ The planning module currently has implemented two algorithms in Python:
 
 #### Configuration Management
 
-All the config files for ros2 launch file are stored under `/configs` in the root directory of this repo. We provided the templates of those yaml files in `/config` for corresponding launch files. 
+All the config files for ros2 launch files are stored under `/configs` in the root directory of this repo. We provided the templates of those yaml files in `/config` for corresponding launch files. 
 
 You need to adjust the `global_config.yaml` accordingly before you start to test in a new location. Then you can create different folders for different locations and deal with them separate by the scripts under `/scripts`. During testing, you can fine-tune the controller parameters in the yaml file under the location directory, no need to rebuild the ros package.
 
@@ -19,9 +19,9 @@ The details of how to use those script can be found in the pipeline section as f
 
 The localization info is from an EKF filter which combined the imu reading, wheel odometry and GNSS correction. The waypoints can be recorded by driving the go-kart manually.
 
-## GNSS Projection Center defination and Sensor Calibration
+## GNSS Projection Center Definition and Sensor Calibration
 
-NOTE: For convenience, all the command should be invoked under the root directory of the workspace `user_name@pc_name:~/gokart_ws ` , to make the relative path is correct for finding all the config files.
+NOTE: For convenience, all the commands should be invoked under the root directory of the workspace `user_name@pc_name:~/gokart_ws ` , to make the relative path is correct for finding all the config files.
 
 ### 1. Modify `global_config.yaml` with the location name and projection center
 
@@ -63,7 +63,7 @@ This script will create a sub-directory for the location from `global_config.yam
 
 ### 3. IMU calibration
 
-In the localization pipeline we assume the IMU is working in ENU frame(x axis point to the east, yaw angle is given accordingly), so we depend on the magnetometer to give use the correct ENU-based yaw angle. 
+In the localization pipeline we assume the IMU is working in ENU frame(x axis point to the east, yaw angle is given accordingly), so we depend on the magnetometer to give us the correct ENU-based yaw angle. 
 
 So, we need to do the calibration in NDOF mode for different location.
 
@@ -147,11 +147,9 @@ gnss_to_local_node:
     ...
 ```
 
-If `set_origin` is true, during waypoint recording, `gnss_to_local_node` will take the first GNSS msg published by `ekf_gnss` node and save it into 
+If `set_origin` is true, during waypoint recording, `gnss_to_local_node` will take the first GNSS msg published by `ekf_gnss` node and save it into `map_ori_path`. This waypoint will be used as the origin of the global map.
 
-map_ori_path. This waypoint will be used as the origin of the map.
-
-If `set_origin` is false, during waypoint recording, `gnss_to_local_node` will load the map origin from map_ori_path and use it as the origin of the map.
+If `set_origin` is false, during waypoint recording, `gnss_to_local_node` will load the map origin from `map_ori_path` and use it as the origin of the map.
 
 
 
@@ -198,8 +196,6 @@ And you should see the following figures of the optimized trajectory with veloci
 ![image-20230503171222179](./figures/optim_traj_pennovation2.png)
 
 ![image-20230503171028344](./figures/optim_traj_pennovation.png)
-
-
 
 ```
 python3 src/gokart-sensor/scripts/visualize_optim_raceline.py
