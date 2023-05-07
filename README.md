@@ -72,9 +72,6 @@ pip install ultralytics
 # for OAK-D camera:
 sudo apt install ros-foxy-depthai-ros
 
-# for Velodyne driver:
-cd Sensor_drivers/ros2_velodyne, then do as the README said.
-
 # for IMU driver:
 pip install pyserial
 ```
