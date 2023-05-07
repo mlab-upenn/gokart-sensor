@@ -6,8 +6,6 @@ This repo is the source code for ros2 go-kart application.
 
 ## Overview
 
-There are several different modules in the GoKart application. It is still under development, so the structure  might be changed time to time.
-
 ### Sensor drivers
 
 Currently the sensor system of GoKart includes:
