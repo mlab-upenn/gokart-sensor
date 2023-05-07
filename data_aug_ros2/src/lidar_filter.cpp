@@ -15,6 +15,7 @@
 #include <pcl/filters/passthrough.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/segmentation/extract_clusters.h>
+#include <pcl/segmentation/region_growing.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/filters/extract_indices.h>
@@ -70,7 +71,7 @@ class LidarFilter : public rclcpp::Node
         // Create the Voxel Grid filter object
         pcl::VoxelGrid<pcl::PointXYZ> voxel_filter;
         voxel_filter.setInputCloud (cloud_rotated);
-        voxel_filter.setLeafSize (0.06f, 0.06f, 0.06f); // set the voxel size
+        voxel_filter.setLeafSize (0.05f, 0.05f, 0.05f); // set the voxel size
         pcl::PointCloud<pcl::PointXYZ>::Ptr voxel_cloud (new pcl::PointCloud<pcl::PointXYZ>);
         voxel_filter.filter (*voxel_cloud);  // apply the filter and save the output to the original point cloud object
 
@@ -79,21 +80,21 @@ class LidarFilter : public rclcpp::Node
         pcl::PassThrough<pcl::PointXYZ> pass_x;
         pass_x.setInputCloud(voxel_cloud);
         pass_x.setFilterFieldName("x");
-        pass_x.setFilterLimits(1.5, 4);
+        pass_x.setFilterLimits(1.5, 6);
         pass_x.filter(*cloud_filtered_x);
 
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered_z(new pcl::PointCloud<pcl::PointXYZ>);
         pcl::PassThrough<pcl::PointXYZ> pass_z;
         pass_z.setInputCloud(cloud_filtered_x);
         pass_z.setFilterFieldName("z");
-        pass_z.setFilterLimits(-3, -0.0);
+        pass_z.setFilterLimits(-3, 1.0);
         pass_z.filter(*cloud_filtered_z);
 
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered_y(new pcl::PointCloud<pcl::PointXYZ>);
         pcl::PassThrough<pcl::PointXYZ> pass_y;
         pass_y.setInputCloud(cloud_filtered_z);
         pass_y.setFilterFieldName("y");
-        pass_y.setFilterLimits(-3, 3);
+        pass_y.setFilterLimits(-5, 5);
         pass_y.filter(*cloud_filtered_y);
 
         /// Plane Segmentation
@@ -115,6 +116,8 @@ class LidarFilter : public rclcpp::Node
         // sor.setStddevMulThresh (1);
         // sor.filter (*plane_filtered);
 
+        if(inliers_indicies.size()==0) return;
+
         /// Extract non-inliers to get the remaining points
         pcl::PointIndices::Ptr inliers(new pcl::PointIndices);
         inliers->indices = inliers_indicies;
@@ -126,24 +129,71 @@ class LidarFilter : public rclcpp::Node
         extract.filter(*remaining);
 
         // Euclidean cluster extraction
-        std::vector<pcl::PointIndices> cluster_indices;
-        pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
-        tree->setInputCloud(remaining);
-        pcl::EuclideanClusterExtraction<pcl::PointXYZ> ec;
-        ec.setClusterTolerance(0.02);
-        ec.setMinClusterSize(1);
-        ec.setMaxClusterSize(10);
-        ec.setSearchMethod(tree);
-        ec.setInputCloud(remaining);
-        ec.extract(cluster_indices);
-        std::cout << cluster_indices.size() << std::endl; 
+        // std::vector<pcl::PointIndices> cluster_indices;
+        // pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
+        // tree->setInputCloud(remaining);
+        // pcl::EuclideanClusterExtraction<pcl::PointXYZ> ec;
+        // ec.setClusterTolerance(0.02);
+        // ec.setMinClusterSize(1);
+        // ec.setMaxClusterSize(10);
+        // ec.setSearchMethod(tree);
+        // ec.setInputCloud(remaining);
+        // ec.extract(cluster_indices);
+        // // std::cout << cluster_indices.size() << std::endl; 
+
+        // pcl::PointCloud<pcl::PointXYZ>::Ptr cluster_cloud (new pcl::PointCloud<pcl::PointXYZ>);
+
+        // for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin (); it != cluster_indices.end (); ++it)
+        // {
+        //   for (std::vector<int>::const_iterator pit = it->indices.begin (); pit != it->indices.end (); ++pit)
+        //     cluster_cloud->points.push_back (remaining->points[*pit]);
+        // }
+
+        pcl::search::Search<pcl::PointXYZ>::Ptr tree = boost::shared_ptr<pcl::search::Search<pcl::PointXYZ>> (new pcl::search::KdTree<pcl::PointXYZ>);
+        pcl::PointCloud <pcl::Normal>::Ptr normals (new pcl::PointCloud <pcl::Normal>);
+        pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimator;
+        normal_estimator.setSearchMethod (tree);
+        normal_estimator.setInputCloud (remaining);
+        normal_estimator.setKSearch (50);
+        normal_estimator.compute (*normals);
+
+        pcl::RegionGrowing<pcl::PointXYZ, pcl::Normal> reg;
+        reg.setMinClusterSize (10);
+        reg.setMaxClusterSize (150);
+        reg.setSearchMethod (tree);
+        reg.setNumberOfNeighbours (30);
+        reg.setInputCloud (remaining);
+        reg.setInputNormals (normals);
+        reg.setSmoothnessThreshold (5.0 / 180.0 * M_PI);
+        reg.setCurvatureThreshold (1.0);
+
+        std::vector<pcl::PointIndices> clusters;
+        reg.extract (clusters);
+        // std::cout << clusters.size() << std::endl; 
+        if(clusters.size()==0) return;
+
+
 
         pcl::PointCloud<pcl::PointXYZ>::Ptr cluster_cloud (new pcl::PointCloud<pcl::PointXYZ>);
 
-        for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin (); it != cluster_indices.end (); ++it)
+        for (std::vector<pcl::PointIndices>::const_iterator it = clusters.begin (); it != clusters.end (); ++it)
         {
           for (std::vector<int>::const_iterator pit = it->indices.begin (); pit != it->indices.end (); ++pit)
             cluster_cloud->points.push_back (remaining->points[*pit]);
+
+          Eigen::Vector4f centroid;
+          const std::vector<int>& indices = it->indices;
+          pcl::compute3DCentroid(*remaining, indices, centroid);
+          // std::cout << "x" <<std::endl;
+          // std::cout << centroid[0] <<std::endl;
+          // std::cout << "y" <<std::endl;
+          // std::cout << centroid[1] <<std::endl;
+          // std::cout << "z" <<std::endl;
+          // std::cout << centroid[2] <<std::endl;
+          double x = centroid[0];
+          double y = centroid[1];
+          // double z = centroid[2];
+          if(abs(y)< 0.8 && x<2.3) std::cout << "TERRAIN, TERRAIN, PULLUP!!!" << std::endl;
         }
 
 
