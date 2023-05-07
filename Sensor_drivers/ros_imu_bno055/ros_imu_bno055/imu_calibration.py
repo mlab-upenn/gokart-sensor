@@ -90,7 +90,7 @@ class CalibrationIMU(Node):
 
 
     def init_calibration(self):
-        self.get_logger().info("The IMU will be calibrated to work in %s mode", self.operation_mode_str)
+        self.get_logger().info(f"The IMU will be calibrated to work in {self.operation_mode_str} mode")
 
 
     def calibrate_imu(self):
@@ -110,9 +110,9 @@ class CalibrationIMU(Node):
             # Calibration for NDOF_FMC_OFF and NDOF             
             if self.operation_mode == NDOF_FMC_OFF or self.operation_mode == NDOF:
 
-                self.get_logger().info("[System: " + str(system_calibration_status) + "]", end = '')
-                self.get_logger().info(" [Gyroscope: " + str(gyroscope_calibration_status) + "]", end = '' ) 
-                self.get_logger().info(" [Accelerometer: " + str(accelerometer_calibration_status) + "]", end = '')
+                self.get_logger().info("[System: " + str(system_calibration_status) + "]")
+                self.get_logger().info(" [Gyroscope: " + str(gyroscope_calibration_status) + "]") 
+                self.get_logger().info(" [Accelerometer: " + str(accelerometer_calibration_status) + "]")
                 self.get_logger().info(" [Magnetometer: " + str(magnetometer_calibration_status) + "]" )
 
                 if (system_calibration_status == 3 and gyroscope_calibration_status == 3
@@ -124,7 +124,7 @@ class CalibrationIMU(Node):
             # Calibration for IMU
             if self.operation_mode == IMU:
 
-                self.get_logger().info(" [Gyroscope: " + str(gyroscope_calibration_status) + "]", end = '' ) 
+                self.get_logger().info(" [Gyroscope: " + str(gyroscope_calibration_status) + "]") 
                 self.get_logger().info(" [Accelerometer: " + str(accelerometer_calibration_status) + "]")
 
                 if (gyroscope_calibration_status == 3 and accelerometer_calibration_status == 3) :

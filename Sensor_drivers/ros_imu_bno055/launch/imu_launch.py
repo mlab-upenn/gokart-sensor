@@ -20,7 +20,7 @@ frame_id = "imu_link"
 operation_mode = "NDOF"
 oscillator = "EXTERNAL"
 reset_orientation = True
-frequency = 100
+frequency = 50
 use_magnetometer = True
 use_temperature = False
 

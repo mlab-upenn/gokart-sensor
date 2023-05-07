@@ -169,7 +169,7 @@ class PurePursuit_node(Node):
         message = AckermannDriveStamped()
         message.drive.speed = speed
         message.drive.steering_angle = steer
-        self.get_logger().info(f'speed: {speed}, steer: {steer}')
+        # self.get_logger().info(f'speed: {speed}, steer: {steer}')
         self.drive_pub.publish(message)
 
     def odom_cb(self, odom: AckermannDriveStamped):

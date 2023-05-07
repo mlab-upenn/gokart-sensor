@@ -37,7 +37,7 @@ ant_aux1_type: "Unknown"
 ant_aux1_serial_nr: "Unknown"
 
 polling_period:
-  pvt: 0
+  pvt: 50
   rest: 500
 
 use_gnss_time: false
@@ -72,21 +72,21 @@ rtk_settings:
 publish:
   # For both GNSS and INS Rxs
   navsatfix: true
-  gpsfix: true
-  gpgga: true
-  gprmc: true
-  gpst: true
-  measepoch: true
+  gpsfix: false
+  gpgga: false
+  gprmc: false
+  gpst: false
+  measepoch: false
   pvtcartesian: true
   pvtgeodetic: true
   basevectorcart: false
   basevectorgeod: false
   poscovcartesian: true
   poscovgeodetic: true
-  velcovgeodetic: true
-  atteuler: true
-  attcoveuler: true
-  pose: true
+  velcovgeodetic: false
+  atteuler: false
+  attcoveuler: false
+  pose: false
   twist: false
   diagnostics: true
   # For GNSS Rx only
@@ -134,7 +134,7 @@ ant_aux1_type: "Unknown"
 ant_aux1_serial_nr: "Unknown"
 
 polling_period:
-  pvt: 0
+  pvt: 50
   rest: 500
 
 use_gnss_time: false
@@ -169,10 +169,10 @@ rtk_settings:
 publish:
   # For both GNSS and INS Rxs
   navsatfix: true
-  gpsfix: true
-  gpgga: true
-  gprmc: true
-  gpst: true
+  gpsfix: false
+  gpgga: false
+  gprmc: false
+  gpst: false
   measepoch: true
   pvtcartesian: true
   pvtgeodetic: true
@@ -180,10 +180,10 @@ publish:
   basevectorgeod: false
   poscovcartesian: true
   poscovgeodetic: true
-  velcovgeodetic: true
-  atteuler: true
-  attcoveuler: true
-  pose: true
+  velcovgeodetic: false
+  atteuler: false
+  attcoveuler: false
+  pose: false
   twist: false
   diagnostics: true
   # For GNSS Rx only

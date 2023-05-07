@@ -20,7 +20,3 @@ wp_record_node:
 ekf_gnss_node:
   ros__parameters:
     frequency: 50
-
-
-# ekf_gnss
-# data_aug
