@@ -112,15 +112,10 @@ Run ros2 launch/run in different terminals for each driver(can use **tmux**, see
 
 ```bash
 # under the workspace folder, source
-source /opt/ros/foxy/setup.bash && source install/setup.bash
+source /opt/ros/humble/setup.bash && source install/setup.bash
 
 # launch Ouster driver
 ros2 launch ouster_ros sensor.launch.xml sensor_hostname:=192.0.2.100 timestamp_mode:=TIME_FROM_ROS_TIME
-
-# source Velodyne driver
-source /opt/velodyne/velodyne-lidar-driver-ros2/setup.bash
-# launch Velodyne driver
-ros2 run lidar_driver_ros2 lidar_driver_ros2 --ros-args -p config_file:=/opt/velodyne/velodyne-lidar-driver/config/lidar_driver_velarray_m1600.cfg
 
 # launch gnss driver(default config is set to gnss.yaml)
 ros2 launch septentrio_gnss_driver rover.py
