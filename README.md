@@ -28,7 +28,7 @@ We use yolov8 ([ultralytics](https://docs.ultralytics.com/)) for camera object d
 
 ### Mapping & Localization
 
-We use Lidarslam package from this repo([link](https://github.com/rsasaki0109/lidarslam_ros2)) to do the 3D slam. 
+We use Lidarslam package ([link](https://github.com/rsasaki0109/lidarslam_ros2)) to perform the 3D slam. 
 
 > ├── Localization **[under dev]**
 >
