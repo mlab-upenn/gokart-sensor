@@ -1,0 +1,52 @@
+gnss_to_local_node:
+  ros__parameters:
+    projection_center_latitude: /template/lat
+    projection_center_longitude: /template/lon
+    projection_lat_span: 0.0010
+    projection_lon_span: 0.0016
+    debug_mode: True
+    set_origin: False
+    map_ori_path: /template/path
+
+purepursuit_node:
+  ros__parameters:
+    config_path: /template/path
+    wp_corner_filename: "corner_wp_idx.npy"
+    wp_overtake_filename: "overtake_wp_idx.npy"
+    wp_filename: "optim_traj.csv"
+    wp_delim: ';'
+    wp_skiprows: 4
+    wp_x_idx: 1
+    wp_y_idx: 2
+    wp_v_idx: 5
+    minL: 4.0
+    maxL: 4.0
+    Lscale: 6.0 
+    minL_corner: 4.0
+    maxL_corner: 4.0
+    Lscale_corner: 6.0
+    interpScale: 20
+    minP: 4.0
+    maxP: 4.0
+    Pscale: 6.0
+    minP_corner: 4.0
+    maxP_corner: 4.0
+    Pscale_corner: 6.0
+    max_steer: 0.87
+    D: 1.0
+    vel_scale: 0.8
+
+
+visualize_node:
+  ros__parameters:
+    config_path: /template/path
+    wp_track_width: 3.6
+    wp_centerline_filename: "wp.csv"
+    wp_corner_filename: "corner_wp_idx.npy"
+    wp_overtake_filename: "overtake_wp_idx.npy"
+    wp_filename: "optim_traj.csv"
+    wp_delim: ';'
+    wp_skiprows: 4
+    wp_x_idx: 1
+    wp_y_idx: 2
+    wp_v_idx: 5
