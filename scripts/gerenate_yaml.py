@@ -18,7 +18,8 @@ You still need to change the control parameters such as lookahead_distance and t
 """
 
 ############ fixed settings of config yaml name ###########
-PUREPURSUIT_YAML_NAME = 'gnss_waypoints_purepursuit.yaml'
+PUREPURSUIT_YAML_NAME = 'gnss_waypoints_purepursuit_original.yaml'
+PUREPURSUIT_YAML_OPTIM_NAME = 'gnss_waypoints_purepursuit_optimal.yaml'
 WPCOLLECTION_YAML_NAME = 'gnss_waypoints_collection.yaml'
 GAPFOLLOW_YAML_NAME = 'ouster_2d_gap_follow.yaml'
 WP_FILE_NAME = 'wp.csv'
@@ -28,9 +29,10 @@ DEBUG = True
 
 
 def generate_yaml(config_folder, global_cfg_path):
-    purepursuit_yaml_path = os.path.join(config_folder, PUREPURSUIT_YAML_NAME)
-    wpcollection_yaml_path = os.path.join(config_folder, WPCOLLECTION_YAML_NAME)
-    gapfollow_yaml_path = os.path.join(config_folder, GAPFOLLOW_YAML_NAME)
+    purepursuit_yaml_path = os.path.join(config_folder, 'template', PUREPURSUIT_YAML_NAME)
+    wpcollection_yaml_path = os.path.join(config_folder, 'template', WPCOLLECTION_YAML_NAME)
+    gapfollow_yaml_path = os.path.join(config_folder,'template', GAPFOLLOW_YAML_NAME)
+    purepursuit_yaml_optim_path = os.path.join(config_folder, 'template', PUREPURSUIT_YAML_OPTIM_NAME)
     
     with open(global_cfg_path, 'r') as f:
         global_cfg = yaml.load(f, Loader=yaml.FullLoader)
@@ -44,6 +46,8 @@ def generate_yaml(config_folder, global_cfg_path):
 
     with open(purepursuit_yaml_path, 'r') as file:
         purepursuit_yaml = yaml.load(file, Loader=yaml.FullLoader)
+    with open(purepursuit_yaml_optim_path, 'r') as file:
+        purepursuit_optim_yaml = yaml.load(file, Loader=yaml.FullLoader)
     with open(wpcollection_yaml_path, 'r') as file:
         wpcollection_yaml = yaml.load(file, Loader=yaml.FullLoader)
     with open(gapfollow_yaml_path, 'r') as file:
@@ -58,6 +62,14 @@ def generate_yaml(config_folder, global_cfg_path):
     purepursuit_yaml['gnss_to_local_node']['ros__parameters']['projection_center_longitude'] = projection_center_longitude
     purepursuit_yaml['visualize_node']['ros__parameters']['config_path'] = os.path.join(config_folder, location)
 
+    purepursuit_optim_yaml['purepursuit_node']['ros__parameters']['config_path'] = os.path.join(config_folder, location)
+    purepursuit_optim_yaml['purepursuit_node']['ros__parameters']['debug_mode'] = DEBUG
+    purepursuit_optim_yaml['gnss_to_local_node']['ros__parameters']['map_ori_path'] = gnss_to_local_map_ori_path
+    purepursuit_optim_yaml['gnss_to_local_node']['ros__parameters']['debug_mode'] = DEBUG
+    purepursuit_optim_yaml['gnss_to_local_node']['ros__parameters']['projection_center_latitude'] = projection_center_latitude
+    purepursuit_optim_yaml['gnss_to_local_node']['ros__parameters']['projection_center_longitude'] = projection_center_longitude
+    purepursuit_optim_yaml['visualize_node']['ros__parameters']['config_path'] = os.path.join(config_folder, location)
+
     wpcollection_yaml['gnss_to_local_node']['ros__parameters']['map_ori_path'] = gnss_to_local_map_ori_path
     wpcollection_yaml['gnss_to_local_node']['ros__parameters']['debug_mode'] = DEBUG
     wpcollection_yaml['gnss_to_local_node']['ros__parameters']['projection_center_latitude'] = projection_center_latitude
@@ -70,6 +82,8 @@ def generate_yaml(config_folder, global_cfg_path):
         yaml.dump(wpcollection_yaml, file)
     with open(os.path.join(config_folder, location, GAPFOLLOW_YAML_NAME), 'w') as file:
         yaml.dump(gapfollow_yaml, file)
+    with open(os.path.join(config_folder, location, PUREPURSUIT_YAML_OPTIM_NAME), 'w') as file:
+        yaml.dump(purepursuit_optim_yaml, file)
 
 
 if __name__ == "__main__":

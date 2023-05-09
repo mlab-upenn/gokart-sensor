@@ -31,18 +31,18 @@ class PurePursuit_node(Node):
                 # control
                 ('minL', None),
                 ('maxL', None),
-                ('Lscale', None),
+                # ('Lscale', None),
                 ('minL_corner', None),
                 ('maxL_corner', None),
-                ('Lscale_corner', None),
+                # ('Lscale_corner', None),
                 ('interpScale', None),
 
                 ('minP', None),
                 ('maxP', None),
-                ('Pscale', None),
+                # ('Pscale', None),
                 ('minP_corner', None),
                 ('maxP_corner', None),
-                ('Pscale_corner', None),
+                # ('Pscale_corner', None),
                 ('max_steer', None),
                 ('D', None),
                 ('vel_scale', None),
@@ -82,18 +82,18 @@ class PurePursuit_node(Node):
         # control parameters
         self.maxL = self.get_parameter('maxL').get_parameter_value().double_value
         self.minL = self.get_parameter('minL').get_parameter_value().double_value
-        self.Lscale = self.get_parameter('Lscale').get_parameter_value().double_value
+        # self.Lscale = self.get_parameter('Lscale').get_parameter_value().double_value
         self.maxL_corner = self.get_parameter('maxL_corner').get_parameter_value().double_value
         self.minL_corner = self.get_parameter('minL_corner').get_parameter_value().double_value
-        self.Lscale_corner = self.get_parameter('Lscale_corner').get_parameter_value().double_value
+        # self.Lscale_corner = self.get_parameter('Lscale_corner').get_parameter_value().double_value
         self.interpScale = self.get_parameter('interpScale').get_parameter_value().integer_value
 
         self.maxP = self.get_parameter('maxP').get_parameter_value().double_value
         self.minP = self.get_parameter('minP').get_parameter_value().double_value
-        self.Pscale = self.get_parameter('Pscale').get_parameter_value().double_value
+        # self.Pscale = self.get_parameter('Pscale').get_parameter_value().double_value
         self.maxP_corner = self.get_parameter('maxP_corner').get_parameter_value().double_value
         self.minP_corner = self.get_parameter('minP_corner').get_parameter_value().double_value
-        self.Pscale_corner = self.get_parameter('Pscale_corner').get_parameter_value().double_value
+        # self.Pscale_corner = self.get_parameter('Pscale_corner').get_parameter_value().double_value
         self.max_steer = self.get_parameter('max_steer').get_parameter_value().double_value
         self.kd = self.get_parameter('D').get_parameter_value().double_value
         self.vel_scale = self.get_parameter('vel_scale').get_parameter_value().double_value
@@ -103,7 +103,7 @@ class PurePursuit_node(Node):
                      skiprow=self.get_parameter('wp_skiprows').get_parameter_value().integer_value)
         self.corner_idx = np.load(self.get_parameter('config_path').get_parameter_value().string_value + '/' + self.get_parameter('wp_corner_filename').get_parameter_value().string_value)
         self.corner_idx = set(self.corner_idx)
-        self.get_logger().info("corner idx: {}".format(self.corner_idx))
+        # self.get_logger().info("corner idx: {}".format(self.corner_idx))
         # self.overtake_idx = np.load(self.get_parameter('config_path').get_parameter_value().string_value + '/' + self.get_parameter('overtake_wp_name').get_parameter_value().string_value)
         # self.overtake_idx = set(self.overtake_idx)
         # self.get_logger().info("overtake idx: {}".format(self.overtake_idx))
@@ -115,6 +115,12 @@ class PurePursuit_node(Node):
         waypoints = np.vstack((waypoints[:, self.get_parameter("wp_x_idx").get_parameter_value().integer_value], 
                                waypoints[:, self.get_parameter("wp_y_idx").get_parameter_value().integer_value], 
                                waypoints[:, self.get_parameter("wp_v_idx").get_parameter_value().integer_value])).T
+        max_v = np.max(waypoints[:, 2]) * self.vel_scale
+        self.Pscale = max_v
+        self.Lscale = max_v
+        self.Pscale_corner = max_v * 0.8
+        self.Lscale_corner = max_v * 0.8
+        self.get_logger().info("max_v: {}".format(max_v))
         self.lane = np.expand_dims(waypoints, axis=0)
 
     def pose_cb(self, pose_msg: PoseWithCovarianceStamped):

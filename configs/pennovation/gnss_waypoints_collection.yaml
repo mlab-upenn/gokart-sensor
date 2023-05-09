@@ -14,5 +14,5 @@ wp_record_node:
   ros__parameters:
     frequency: 2
     pose_topic: /gnss_ekf
-    velocity: 2.0
+    velocity: 1.0
     wp_filename: wp.csv

@@ -1,7 +1,7 @@
 gnss_to_local_node:
   ros__parameters:
     debug_mode: true
-    map_ori_path: /home/ros/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation/map_ori.csv
+    map_ori_path: /home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation/map_ori.csv
     projection_center_latitude: 39.9416
     projection_center_longitude: -75.1993
     projection_lat_span: 0.001
@@ -10,41 +10,37 @@ gnss_to_local_node:
 purepursuit_node:
   ros__parameters:
     D: 1.0
-    Lscale: 6.0
-    Lscale_corner: 6.0
-    Pscale: 6.0
-    Pscale_corner: 6.0
-    config_path: /home/ros/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation
+    config_path: /home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation
     debug_mode: true
     interpScale: 20
     maxL: 4.0
     maxL_corner: 4.0
     maxP: 4.0
     maxP_corner: 4.0
-    max_steer: 0.95
+    max_steer: 0.87
     minL: 4.0
     minL_corner: 4.0
     minP: 4.0
     minP_corner: 4.0
-    vel_scale: 0.4
+    vel_scale: 0.8
     wp_corner_filename: corner_wp_idx.npy
-    wp_delim: ';'
-    wp_filename: optim_traj.csv
+    wp_delim: ','
+    wp_filename: wp.csv
     wp_overtake_filename: overtake_wp_idx.npy
-    wp_skiprows: 4
-    wp_v_idx: 5
-    wp_x_idx: 1
-    wp_y_idx: 2
+    wp_skiprows: 1
+    wp_v_idx: 2
+    wp_x_idx: 0
+    wp_y_idx: 1
 visualize_node:
   ros__parameters:
-    config_path: /home/ros/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation
+    config_path: /home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/configs/pennovation
     wp_centerline_filename: wp.csv
     wp_corner_filename: corner_wp_idx.npy
-    wp_delim: ';'
-    wp_filename: optim_traj.csv
+    wp_delim: ','
+    wp_filename: wp.csv
     wp_overtake_filename: overtake_wp_idx.npy
-    wp_skiprows: 4
+    wp_skiprows: 1
     wp_track_width: 3.6
-    wp_v_idx: 5
-    wp_x_idx: 1
-    wp_y_idx: 2
+    wp_v_idx: 2
+    wp_x_idx: 0
+    wp_y_idx: 1
