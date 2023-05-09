@@ -1,1 +1,0 @@
-/home/autoware/gokart_ws/src/gokart-sensor/build/septentrio_gnss_driver/rosidl_generator_c/septentrio_gnss_driver/msg/ext_sensor_meas.h

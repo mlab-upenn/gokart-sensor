@@ -1,1 +1,0 @@
-/home/autoware/gokart_ws/src/gokart-sensor/build/septentrio_gnss_driver/rosidl_typesupport_introspection_c/septentrio_gnss_driver/msg/detail/pvt_cartesian__rosidl_typesupport_introspection_c.h

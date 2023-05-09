@@ -1,1 +1,0 @@
-/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs/ament_cmake_python/ouster_srvs/ouster_srvs.egg-info/SOURCES.txt

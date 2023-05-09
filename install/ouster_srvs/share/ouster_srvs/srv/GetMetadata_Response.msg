@@ -1,1 +1,0 @@
-/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs/rosidl_cmake/srv/GetMetadata_Response.msg

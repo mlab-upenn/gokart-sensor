@@ -1,1 +1,0 @@
-/home/autoware/gokart_ws/src/gokart-sensor/Sensor_drivers/ouster-ros/ouster-ros/ouster-sdk/ouster_client/include/ouster/sensor_http.h

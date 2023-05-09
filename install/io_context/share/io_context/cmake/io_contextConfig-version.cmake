@@ -1,1 +1,0 @@
-/home/autoware/gokart_ws/src/gokart-sensor/build/io_context/ament_cmake_core/io_contextConfig-version.cmake

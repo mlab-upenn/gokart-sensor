@@ -1,1 +1,0 @@
-/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs/rosidl_generator_py/ouster_srvs/_ouster_srvs_s.ep.rosidl_typesupport_introspection_c.c

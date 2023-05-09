@@ -1,1 +1,0 @@
-/home/autoware/gokart_ws/src/gokart-sensor/Sensor_drivers/ros2_uart_serial/io_context/include/io_context/common.hpp

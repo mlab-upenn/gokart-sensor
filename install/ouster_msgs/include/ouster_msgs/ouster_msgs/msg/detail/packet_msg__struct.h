@@ -1,1 +1,0 @@
-/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_msgs/rosidl_generator_c/ouster_msgs/msg/detail/packet_msg__struct.h

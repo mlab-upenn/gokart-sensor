@@ -1,3 +1,0 @@
-gnss_to_local_node:
-  ros__parameters:
-    image_topic: /color/image
