@@ -6,7 +6,11 @@ from ament_index_python.packages import get_package_share_directory
 import os
 import yaml
 
-LOCATION = 'pennovation'
+cwd = os.getcwd()
+global_cfg_path = os.path.join(cwd, "src", "gokart-sensor", "configs", "global_config.yaml")
+with open(global_cfg_path, 'r') as f:
+    global_cfg = yaml.load(f, Loader=yaml.FullLoader)
+LOCATION = global_cfg["location"]
 cwd = os.getcwd()
 
 def generate_launch_description():
