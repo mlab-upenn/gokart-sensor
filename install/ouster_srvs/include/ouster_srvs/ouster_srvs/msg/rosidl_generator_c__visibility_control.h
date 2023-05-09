@@ -1,0 +1,1 @@
+/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs/rosidl_generator_c/ouster_srvs/msg/rosidl_generator_c__visibility_control.h

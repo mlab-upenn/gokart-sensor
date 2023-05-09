@@ -1,0 +1,30 @@
+[1.393s] Invoking command in '/home/autoware/gokart_ws/src/gokart-sensor/build/ros_imu_bno055': PYTHONPATH=/home/autoware/gokart_ws/src/gokart-sensor/build/ros_imu_bno055/prefix_override:/home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/autoware/gokart_ws/src/gokart-sensor/build/ros_imu_bno055/build --no-deps install_data
+[1.700s] running develop
+[1.852s] running egg_info
+[1.852s] creating ros_imu_bno055.egg-info
+[1.852s] writing ros_imu_bno055.egg-info/PKG-INFO
+[1.852s] writing dependency_links to ros_imu_bno055.egg-info/dependency_links.txt
+[1.853s] writing entry points to ros_imu_bno055.egg-info/entry_points.txt
+[1.853s] writing requirements to ros_imu_bno055.egg-info/requires.txt
+[1.853s] writing top-level names to ros_imu_bno055.egg-info/top_level.txt
+[1.853s] writing manifest file 'ros_imu_bno055.egg-info/SOURCES.txt'
+[1.854s] reading manifest file 'ros_imu_bno055.egg-info/SOURCES.txt'
+[1.855s] writing manifest file 'ros_imu_bno055.egg-info/SOURCES.txt'
+[1.856s] running build_ext
+[1.856s] Creating /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/lib/python3.10/site-packages/ros-imu-bno055.egg-link (link to .)
+[1.857s] Installing imu_calibration script to /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/lib/ros_imu_bno055
+[1.857s] Installing imu_ros script to /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/lib/ros_imu_bno055
+[1.857s] 
+[1.857s] Installed /home/autoware/gokart_ws/src/gokart-sensor/build/ros_imu_bno055
+[1.858s] running install_data
+[1.858s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/share/ament_index
+[1.858s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/share/ament_index/resource_index
+[1.858s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/share/ament_index/resource_index/packages
+[1.858s] copying resource/ros_imu_bno055 -> /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/share/ament_index/resource_index/packages
+[1.858s] copying package.xml -> /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/share/ros_imu_bno055
+[1.858s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/share/ros_imu_bno055/launch
+[1.858s] copying launch/imu_launch.py -> /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/share/ros_imu_bno055/launch
+[1.858s] copying launch/view_imu_launch.py -> /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/share/ros_imu_bno055/launch
+[1.859s] copying launch/imu_calibration_launch.py -> /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/share/ros_imu_bno055/launch
+[1.859s] copying launch/view_imu_default.rviz -> /home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/share/ros_imu_bno055/launch
+[1.889s] Invoked command in '/home/autoware/gokart_ws/src/gokart-sensor/build/ros_imu_bno055' returned '0': PYTHONPATH=/home/autoware/gokart_ws/src/gokart-sensor/build/ros_imu_bno055/prefix_override:/home/autoware/gokart_ws/src/gokart-sensor/install/ros_imu_bno055/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/autoware/gokart_ws/src/gokart-sensor/build/ros_imu_bno055/build --no-deps install_data

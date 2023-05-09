@@ -1,0 +1,1 @@
+/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_msgs/ament_cmake_python/ouster_msgs/ouster_msgs.egg-info/top_level.txt

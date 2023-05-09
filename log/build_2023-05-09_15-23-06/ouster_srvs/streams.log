@@ -1,0 +1,252 @@
+[0.370s] Invoking command in '/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/autoware/gokart_ws/install/ros_imu_bno055:/home/autoware/gokart_ws/install/pure_pursuit:/home/autoware/gokart_ws/install/gap_follow:/home/autoware/gokart_ws/install/kart_interface:/home/autoware/gokart_ws/install/gnss_to_local:/home/autoware/gokart_ws/install/ekf_gnss:/opt/ros/humble /usr/bin/cmake /home/autoware/gokart_ws/src/gokart-sensor/Sensor_drivers/ouster-ros/ouster-srvs -DCMAKE_BUILD_TYPE=Release -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs
+[0.809s] -- The C compiler identification is GNU 11.3.0
+[0.809s] -- The CXX compiler identification is GNU 11.3.0
+[0.809s] -- Detecting C compiler ABI info
+[0.809s] -- Detecting C compiler ABI info - done
+[0.809s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.809s] -- Detecting C compile features
+[0.809s] -- Detecting C compile features - done
+[0.809s] -- Detecting CXX compiler ABI info
+[0.809s] -- Detecting CXX compiler ABI info - done
+[0.809s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.810s] -- Detecting CXX compile features
+[0.810s] -- Detecting CXX compile features - done
+[0.810s] -- Found ament_cmake: 1.3.4 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.810s] -- Found Python3: /usr/bin/python3.10 (found version "3.10.6") found components: Interpreter 
+[0.810s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.810s] -- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+[0.813s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.813s] -- Found rosidl_adapter: 3.1.4 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.847s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.138s] -- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+[1.359s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.617s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.644s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.6", minimum required is "3.6") 
+[1.647s] -- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+[1.674s] -- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.10.so (found suitable version "3.10.6", minimum required is "3.5") 
+[1.674s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[1.674s] -- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+[1.674s] -- Using PYTHON_LIBRARIES: /usr/lib/x86_64-linux-gnu/libpython3.10.so
+[1.695s] -- Found PythonExtra: .so  
+[1.737s] -- Configuring done
+[1.778s] -- Generating done
+[1.781s] -- Build files have been written to: /home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs
+[1.787s] Invoked command in '/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/autoware/gokart_ws/install/ros_imu_bno055:/home/autoware/gokart_ws/install/pure_pursuit:/home/autoware/gokart_ws/install/gap_follow:/home/autoware/gokart_ws/install/kart_interface:/home/autoware/gokart_ws/install/gnss_to_local:/home/autoware/gokart_ws/install/ekf_gnss:/opt/ros/humble /usr/bin/cmake /home/autoware/gokart_ws/src/gokart-sensor/Sensor_drivers/ouster-ros/ouster-srvs -DCMAKE_BUILD_TYPE=Release -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs
+[1.789s] Invoking command in '/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/autoware/gokart_ws/install/ros_imu_bno055:/home/autoware/gokart_ws/install/pure_pursuit:/home/autoware/gokart_ws/install/gap_follow:/home/autoware/gokart_ws/install/kart_interface:/home/autoware/gokart_ws/install/gnss_to_local:/home/autoware/gokart_ws/install/ekf_gnss:/opt/ros/humble /usr/bin/cmake --build /home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs -- -j20 -l20
+[1.832s] [  2%] [34m[1mGenerating C code for ROS interfaces[0m
+[1.837s] [  4%] [34m[1mGenerating C++ code for ROS interfaces[0m
+[1.854s] [  4%] Built target ament_cmake_python_symlink_ouster_srvs
+[2.113s] running egg_info
+[2.113s] creating ouster_srvs.egg-info
+[2.113s] writing ouster_srvs.egg-info/PKG-INFO
+[2.114s] writing dependency_links to ouster_srvs.egg-info/dependency_links.txt
+[2.114s] writing top-level names to ouster_srvs.egg-info/top_level.txt
+[2.114s] writing manifest file 'ouster_srvs.egg-info/SOURCES.txt'
+[2.116s] reading manifest file 'ouster_srvs.egg-info/SOURCES.txt'
+[2.116s] writing manifest file 'ouster_srvs.egg-info/SOURCES.txt'
+[2.139s] [  4%] Built target ament_cmake_python_build_ouster_srvs_egg
+[2.170s] [  4%] Built target ouster_srvs__cpp
+[2.178s] [  6%] [34m[1mGenerating C++ introspection for ROS interfaces[0m
+[2.181s] [  8%] [34m[1mGenerating C++ type support dispatch for ROS interfaces[0m
+[2.181s] [ 10%] [34m[1mGenerating C++ type support for eProsima Fast-RTPS[0m
+[2.246s] [ 12%] [32mBuilding C object CMakeFiles/ouster_srvs__rosidl_generator_c.dir/rosidl_generator_c/ouster_srvs/srv/detail/get_config__functions.c.o[0m
+[2.260s] [ 14%] [32mBuilding C object CMakeFiles/ouster_srvs__rosidl_generator_c.dir/rosidl_generator_c/ouster_srvs/srv/detail/set_config__functions.c.o[0m
+[2.267s] [ 17%] [32mBuilding C object CMakeFiles/ouster_srvs__rosidl_generator_c.dir/rosidl_generator_c/ouster_srvs/srv/detail/get_metadata__functions.c.o[0m
+[2.459s] [ 19%] [32m[1mLinking C shared library libouster_srvs__rosidl_generator_c.so[0m
+[2.501s] [ 19%] Built target ouster_srvs__rosidl_generator_c
+[2.512s] [ 21%] [34m[1mGenerating C introspection for ROS interfaces[0m
+[2.512s] [ 25%] [34m[1mGenerating C type support for eProsima Fast-RTPS[0m
+[2.512s] [ 25%] [34m[1mGenerating C type support dispatch for ROS interfaces[0m
+[2.661s] [ 27%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/ouster_srvs/srv/get_config__type_support.cpp.o[0m
+[2.661s] [ 29%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/ouster_srvs/srv/set_config__type_support.cpp.o[0m
+[2.662s] [ 31%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/ouster_srvs/srv/get_metadata__type_support.cpp.o[0m
+[2.741s] [ 34%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/ouster_srvs/srv/detail/get_config__type_support.cpp.o[0m
+[2.752s] [ 36%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/ouster_srvs/srv/detail/get_metadata__type_support.cpp.o[0m
+[2.763s] [ 38%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/ouster_srvs/srv/detail/set_config__type_support.cpp.o[0m
+[2.941s] [ 40%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/ouster_srvs/srv/detail/dds_fastrtps/get_config__type_support.cpp.o[0m
+[2.950s] [ 42%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/ouster_srvs/srv/detail/dds_fastrtps/set_config__type_support.cpp.o[0m
+[2.973s] [ 44%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/ouster_srvs/srv/detail/dds_fastrtps/get_metadata__type_support.cpp.o[0m
+[3.074s] [ 46%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_c.dir/rosidl_typesupport_c/ouster_srvs/srv/get_config__type_support.cpp.o[0m
+[3.083s] [ 48%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_c.dir/rosidl_typesupport_c/ouster_srvs/srv/set_config__type_support.cpp.o[0m
+[3.087s] [ 51%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_c.dir/rosidl_typesupport_c/ouster_srvs/srv/get_metadata__type_support.cpp.o[0m
+[3.178s] [ 53%] [32mBuilding C object CMakeFiles/ouster_srvs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/ouster_srvs/srv/detail/get_config__type_support.c.o[0m
+[3.184s] [ 55%] [32mBuilding C object CMakeFiles/ouster_srvs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/ouster_srvs/srv/detail/set_config__type_support.c.o[0m
+[3.188s] [ 59%] [32mBuilding C object CMakeFiles/ouster_srvs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/ouster_srvs/srv/detail/get_metadata__type_support.c.o[0m
+[3.189s] [ 59%] [32m[1mLinking CXX shared library libouster_srvs__rosidl_typesupport_c.so[0m
+[3.258s] [ 61%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/ouster_srvs/srv/detail/set_config__type_support_c.cpp.o[0m
+[3.258s] [ 61%] Built target ouster_srvs__rosidl_typesupport_c
+[3.261s] [ 63%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/ouster_srvs/srv/detail/get_config__type_support_c.cpp.o[0m
+[3.281s] [ 65%] [32mBuilding CXX object CMakeFiles/ouster_srvs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/ouster_srvs/srv/detail/get_metadata__type_support_c.cpp.o[0m
+[3.295s] [ 68%] [32m[1mLinking C shared library libouster_srvs__rosidl_typesupport_introspection_c.so[0m
+[3.366s] [ 70%] [32m[1mLinking CXX shared library libouster_srvs__rosidl_typesupport_cpp.so[0m
+[3.396s] [ 70%] Built target ouster_srvs__rosidl_typesupport_introspection_c
+[3.434s] [ 70%] Built target ouster_srvs__rosidl_typesupport_cpp
+[3.511s] [ 72%] [32m[1mLinking CXX shared library libouster_srvs__rosidl_typesupport_introspection_cpp.so[0m
+[3.606s] [ 72%] Built target ouster_srvs__rosidl_typesupport_introspection_cpp
+[3.747s] [ 74%] [32m[1mLinking CXX shared library libouster_srvs__rosidl_typesupport_fastrtps_cpp.so[0m
+[3.842s] [ 74%] Built target ouster_srvs__rosidl_typesupport_fastrtps_cpp
+[4.027s] [ 76%] [32m[1mLinking CXX shared library libouster_srvs__rosidl_typesupport_fastrtps_c.so[0m
+[4.123s] [ 76%] Built target ouster_srvs__rosidl_typesupport_fastrtps_c
+[4.146s] [ 76%] Built target ouster_srvs
+[4.169s] [ 78%] [34m[1mGenerating Python code for ROS interfaces[0m
+[4.848s] [ 78%] Built target ouster_srvs__py
+[4.863s] [ 80%] [32mBuilding C object CMakeFiles/ouster_srvs__rosidl_generator_py.dir/rosidl_generator_py/ouster_srvs/srv/_get_config_s.c.o[0m
+[4.866s] [ 82%] [32mBuilding C object CMakeFiles/ouster_srvs__rosidl_generator_py.dir/rosidl_generator_py/ouster_srvs/srv/_set_config_s.c.o[0m
+[4.866s] [ 85%] [32mBuilding C object CMakeFiles/ouster_srvs__rosidl_generator_py.dir/rosidl_generator_py/ouster_srvs/srv/_get_metadata_s.c.o[0m
+[5.049s] [ 87%] [32m[1mLinking C shared library rosidl_generator_py/ouster_srvs/libouster_srvs__rosidl_generator_py.so[0m
+[5.078s] [ 87%] Built target ouster_srvs__rosidl_generator_py
+[5.094s] [ 91%] [32mBuilding C object CMakeFiles/ouster_srvs__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/ouster_srvs/_ouster_srvs_s.ep.rosidl_typesupport_c.c.o[0m
+[5.094s] [ 91%] [32mBuilding C object CMakeFiles/ouster_srvs__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/ouster_srvs/_ouster_srvs_s.ep.rosidl_typesupport_introspection_c.c.o[0m
+[5.098s] [ 93%] [32mBuilding C object CMakeFiles/ouster_srvs__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/ouster_srvs/_ouster_srvs_s.ep.rosidl_typesupport_fastrtps_c.c.o[0m
+[5.239s] [ 95%] [32m[1mLinking C shared library rosidl_generator_py/ouster_srvs/ouster_srvs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so[0m
+[5.246s] [ 97%] [32m[1mLinking C shared library rosidl_generator_py/ouster_srvs/ouster_srvs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so[0m
+[5.268s] [ 97%] Built target ouster_srvs__rosidl_typesupport_introspection_c__pyext
+[5.279s] [ 97%] Built target ouster_srvs__rosidl_typesupport_fastrtps_c__pyext
+[5.296s] [100%] [32m[1mLinking C shared library rosidl_generator_py/ouster_srvs/ouster_srvs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so[0m
+[5.323s] [100%] Built target ouster_srvs__rosidl_typesupport_c__pyext
+[5.336s] Invoked command in '/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/autoware/gokart_ws/install/ros_imu_bno055:/home/autoware/gokart_ws/install/pure_pursuit:/home/autoware/gokart_ws/install/gap_follow:/home/autoware/gokart_ws/install/kart_interface:/home/autoware/gokart_ws/install/gnss_to_local:/home/autoware/gokart_ws/install/ekf_gnss:/opt/ros/humble /usr/bin/cmake --build /home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs -- -j20 -l20
+[5.416s] Invoking command in '/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/autoware/gokart_ws/install/ros_imu_bno055:/home/autoware/gokart_ws/install/pure_pursuit:/home/autoware/gokart_ws/install/gap_follow:/home/autoware/gokart_ws/install/kart_interface:/home/autoware/gokart_ws/install/gnss_to_local:/home/autoware/gokart_ws/install/ekf_gnss:/opt/ros/humble /usr/bin/cmake --install /home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs
+[5.424s] -- Install configuration: "Release"
+[5.425s] -- Execute custom install script
+[5.425s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ament_index/resource_index/rosidl_interfaces/ouster_srvs
+[5.435s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/msg/rosidl_generator_c__visibility_control.h
+[5.444s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_config__functions.h
+[5.453s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_config__struct.h
+[5.460s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_config__type_support.h
+[5.467s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_metadata__functions.h
+[5.477s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_metadata__struct.h
+[5.486s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_metadata__type_support.h
+[5.496s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/set_config__functions.h
+[5.506s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/set_config__struct.h
+[5.515s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/set_config__type_support.h
+[5.525s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/get_config.h
+[5.535s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/get_metadata.h
+[5.545s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/set_config.h
+[5.556s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/environment/library_path.sh
+[5.566s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/environment/library_path.dsv
+[5.577s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[5.588s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_config__rosidl_typesupport_fastrtps_c.h
+[5.599s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_metadata__rosidl_typesupport_fastrtps_c.h
+[5.609s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/set_config__rosidl_typesupport_fastrtps_c.h
+[5.620s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[5.630s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_config__rosidl_typesupport_introspection_c.h
+[5.640s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_metadata__rosidl_typesupport_introspection_c.h
+[5.650s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/set_config__rosidl_typesupport_introspection_c.h
+[5.657s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_config__builder.hpp
+[5.665s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_config__struct.hpp
+[5.672s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_config__traits.hpp
+[5.682s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_metadata__builder.hpp
+[5.690s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_metadata__struct.hpp
+[5.697s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_metadata__traits.hpp
+[5.704s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/set_config__builder.hpp
+[5.714s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/set_config__struct.hpp
+[5.724s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/set_config__traits.hpp
+[5.734s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/get_config.hpp
+[5.744s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/get_metadata.hpp
+[5.754s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/set_config.hpp
+[5.765s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[5.775s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_config__rosidl_typesupport_fastrtps_cpp.hpp
+[5.785s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_metadata__rosidl_typesupport_fastrtps_cpp.hpp
+[5.795s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/set_config__rosidl_typesupport_fastrtps_cpp.hpp
+[5.806s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_config__rosidl_typesupport_introspection_cpp.hpp
+[5.816s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/get_metadata__rosidl_typesupport_introspection_cpp.hpp
+[5.826s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/include/ouster_srvs/ouster_srvs/srv/detail/set_config__rosidl_typesupport_introspection_cpp.hpp
+[5.837s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/environment/pythonpath.sh
+[5.847s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/environment/pythonpath.dsv
+[5.859s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs-0.1.0-py3.10.egg-info/PKG-INFO
+[5.869s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs-0.1.0-py3.10.egg-info/SOURCES.txt
+[5.878s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs-0.1.0-py3.10.egg-info/dependency_links.txt
+[5.888s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs-0.1.0-py3.10.egg-info/top_level.txt
+[5.899s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/__init__.py
+[5.908s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/_ouster_srvs_s.ep.rosidl_typesupport_c.c
+[5.918s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/_ouster_srvs_s.ep.rosidl_typesupport_fastrtps_c.c
+[5.929s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/_ouster_srvs_s.ep.rosidl_typesupport_introspection_c.c
+[5.939s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/libouster_srvs__rosidl_generator_py.so
+[5.949s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/ouster_srvs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[5.959s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/ouster_srvs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[5.970s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/ouster_srvs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[5.980s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/srv/__init__.py
+[5.987s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/srv/_get_config.py
+[5.994s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/srv/_get_config_s.c
+[6.004s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/srv/_get_metadata.py
+[6.014s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/srv/_get_metadata_s.c
+[6.023s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/srv/_set_config.py
+[6.033s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/srv/_set_config_s.c
+[6.043s] -- Up-to-date symlink: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/ouster_srvs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[6.043s] -- Up-to-date symlink: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/ouster_srvs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[6.044s] -- Up-to-date symlink: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/ouster_srvs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[6.044s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/srv/GetConfig.idl
+[6.054s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/srv/SetConfig.idl
+[6.065s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/srv/GetMetadata.idl
+[6.075s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/srv/GetConfig.srv
+[6.086s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/srv/GetConfig_Request.msg
+[6.096s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/srv/GetConfig_Response.msg
+[6.105s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/srv/SetConfig.srv
+[6.115s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/srv/SetConfig_Request.msg
+[6.125s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/srv/SetConfig_Response.msg
+[6.135s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/srv/GetMetadata.srv
+[6.146s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/srv/GetMetadata_Request.msg
+[6.156s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/srv/GetMetadata_Response.msg
+[6.167s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ament_index/resource_index/package_run_dependencies/ouster_srvs
+[6.177s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ament_index/resource_index/parent_prefix_path/ouster_srvs
+[6.188s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/environment/ament_prefix_path.sh
+[6.198s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/environment/ament_prefix_path.dsv
+[6.208s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/environment/path.sh
+[6.219s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/environment/path.dsv
+[6.229s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/local_setup.bash
+[6.238s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/local_setup.sh
+[6.248s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/local_setup.zsh
+[6.258s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/local_setup.dsv
+[6.267s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/package.dsv
+[6.277s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ament_index/resource_index/packages/ouster_srvs
+[6.287s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/rosidl_cmake-extras.cmake
+[6.296s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ament_cmake_export_include_directories-extras.cmake
+[6.306s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ament_cmake_export_libraries-extras.cmake
+[6.315s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ament_cmake_export_targets-extras.cmake
+[6.325s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[6.335s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ament_cmake_export_dependencies-extras.cmake
+[6.344s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[6.353s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ouster_srvsConfig.cmake
+[6.363s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ouster_srvsConfig-version.cmake
+[6.372s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/package.xml
+[6.381s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_generator_c.so
+[6.382s] -- Set runtime path of "/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_generator_c.so" to ""
+[6.382s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_typesupport_fastrtps_c.so
+[6.382s] -- Set runtime path of "/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_typesupport_fastrtps_c.so" to ""
+[6.382s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_typesupport_introspection_c.so
+[6.383s] -- Set runtime path of "/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_typesupport_introspection_c.so" to ""
+[6.383s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_typesupport_c.so
+[6.383s] -- Set runtime path of "/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_typesupport_c.so" to ""
+[6.383s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_typesupport_fastrtps_cpp.so
+[6.384s] -- Set runtime path of "/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_typesupport_fastrtps_cpp.so" to ""
+[6.384s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_typesupport_introspection_cpp.so
+[6.384s] -- Set runtime path of "/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_typesupport_introspection_cpp.so" to ""
+[6.384s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_typesupport_cpp.so
+[6.385s] -- Set runtime path of "/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_typesupport_cpp.so" to ""
+[6.442s] Listing '/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs'...
+[6.442s] Compiling '/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/__init__.py'...
+[6.442s] Listing '/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/srv'...
+[6.442s] Compiling '/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/srv/__init__.py'...
+[6.442s] Compiling '/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/srv/_get_config.py'...
+[6.442s] Compiling '/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/srv/_get_metadata.py'...
+[6.442s] Compiling '/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/local/lib/python3.10/dist-packages/ouster_srvs/srv/_set_config.py'...
+[6.447s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_generator_py.so
+[6.448s] -- Set runtime path of "/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/lib/libouster_srvs__rosidl_generator_py.so" to ""
+[6.448s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/export_ouster_srvs__rosidl_generator_cExport.cmake
+[6.448s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/export_ouster_srvs__rosidl_generator_cExport-release.cmake
+[6.448s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/export_ouster_srvs__rosidl_typesupport_fastrtps_cExport.cmake
+[6.449s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/export_ouster_srvs__rosidl_typesupport_fastrtps_cExport-release.cmake
+[6.449s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ouster_srvs__rosidl_typesupport_introspection_cExport.cmake
+[6.449s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ouster_srvs__rosidl_typesupport_introspection_cExport-release.cmake
+[6.449s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ouster_srvs__rosidl_typesupport_cExport.cmake
+[6.449s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ouster_srvs__rosidl_typesupport_cExport-release.cmake
+[6.449s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/export_ouster_srvs__rosidl_generator_cppExport.cmake
+[6.450s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/export_ouster_srvs__rosidl_typesupport_fastrtps_cppExport.cmake
+[6.450s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/export_ouster_srvs__rosidl_typesupport_fastrtps_cppExport-release.cmake
+[6.450s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ouster_srvs__rosidl_typesupport_introspection_cppExport.cmake
+[6.450s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ouster_srvs__rosidl_typesupport_introspection_cppExport-release.cmake
+[6.450s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ouster_srvs__rosidl_typesupport_cppExport.cmake
+[6.451s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/ouster_srvs__rosidl_typesupport_cppExport-release.cmake
+[6.451s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/export_ouster_srvs__rosidl_generator_pyExport.cmake
+[6.451s] -- Installing: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake/export_ouster_srvs__rosidl_generator_pyExport-release.cmake
+[6.457s] Invoked command in '/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/autoware/gokart_ws/install/ros_imu_bno055:/home/autoware/gokart_ws/install/pure_pursuit:/home/autoware/gokart_ws/install/gap_follow:/home/autoware/gokart_ws/install/kart_interface:/home/autoware/gokart_ws/install/gnss_to_local:/home/autoware/gokart_ws/install/ekf_gnss:/opt/ros/humble /usr/bin/cmake --install /home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs

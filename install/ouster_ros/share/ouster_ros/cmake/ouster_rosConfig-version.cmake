@@ -1,0 +1,1 @@
+/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_ros/ament_cmake_core/ouster_rosConfig-version.cmake

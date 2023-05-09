@@ -1,0 +1,1 @@
+/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs/rosidl_cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake

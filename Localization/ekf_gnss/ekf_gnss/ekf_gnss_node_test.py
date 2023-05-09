@@ -14,7 +14,6 @@ import transforms3d
 
 X = namedtuple('X', ['sec', 'nanosec', 'x', 'y', 'yaw', 'v','omega'])
 Stamped = namedtuple('Stamped', ['sec', 'nanosec', 'val'])
-# Measurement = namedtuple('Measurement', ['sec', 'nanosec', 'meas', 'meas_bool', 'meas_covar'])
 
 
 def get_Time(sec, nanosec):
@@ -28,7 +27,7 @@ class Ekf_gnss_node(Node):
         self.declare_parameters(
             namespace='',
             parameters=[
-                ('frequency', 200),
+                ('frequency', 20),
             ])
         self.freq = self.get_parameter('frequency').get_parameter_value().integer_value
         self.dt = 1/self.freq
@@ -81,17 +80,6 @@ class Ekf_gnss_node(Node):
         self.curr_w = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, yaw_vel)
         self.curr_v = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, v)
 
-        # if(self.initStatus_1 and self.initStatus_2):
-        #     #IMU ONLY UPDATE
-        #     z_b = np.array([False, False, True, True, True]) #yaw, velo, yawvelo
-        #     z_covar = np.diag([1e-5, 1e-4, 1e-5]) ** 2
-        #     z = np.array([yaw, v, yaw_vel]) 
-        #     self.measurement_vec.append(Measurement(msg.header.stamp.sec, msg.header.stamp.nanosec, z, z_b, z_covar))
-        #     xEst = np.array([[self.X_est.x], [self.X_est.y], [self.X_est.yaw], [self.X_est.v], [self.X_est.omega]])
-        #     xEst, self.P_est = self.ekf.ekf_partial_update(xEst, self.P_est, z, z_b ,z_covar)
-        #     self.X_est = X(self.last_x.sec, self.last_x.nanosec, xEst[0][0], xEst[1][0], xEst[2][0], xEst[3][0], xEst[4][0])
-
-
     def wheel_cb(self, msg: AckermannDriveStamped):
         # calculate the current yaw from orientation quaternion
         speed = msg.drive.speed
@@ -105,76 +93,36 @@ class Ekf_gnss_node(Node):
         self.last_x = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, x)
         self.last_y = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, y)
 
-        # self.ekf.set_Q(msg.pose.covariance[0], msg.pose.covariance[4])
         self.last_x_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, msg.pose.covariance[0])
         self.last_y_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, msg.pose.covariance[4])
-        # self.get_logger().info("gnss covariance = %f" % msg.pose.covariance[0])
-        if(msg.pose.covariance[0] > 0.0025 or msg.pose.covariance[4] > 0.0025):
-            # self.get_logger().info("gnss covariance is large")
-            # self.ekf.set_Q(50*msg.pose.covariance[0], 50*msg.pose.covariance[0])
-            self.last_x_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, 100*msg.pose.covariance[0])
-            self.last_y_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, 100*msg.pose.covariance[4])
-        #     #GNSS ONLY UPDATE
-        #     z_b = np.array([True, True, False, False, False])
-        #     z_covar = np.diag([self.last_x_covar.val, self.last_y_covar.val]) ** 2
-        #     z = np.array([[self.last_x.val], [self.last_y.val]]) 
-        #     self.measurement_vec.append(Measurement(msg.header.stamp.sec, msg.header.stamp.nanosec, z, z_b, z_covar))
-        #     xEst = np.array([[self.X_est.x], [self.X_est.y], [self.X_est.yaw], [self.X_est.v], [self.X_est.omega]])
-        #     xEst, self.P_est = self.ekf.ekf_partial_update(xEst, self.P_est, z, z_b ,z_covar)
-        #     self.X_est = X(self.last_x.sec, self.last_x.nanosec, xEst[0][0], xEst[1][0], xEst[2][0], xEst[3][0], xEst[4][0])
 
+        if(msg.pose.covariance[0] > 0.0025 or msg.pose.covariance[4] > 0.0025):
+            self.last_x_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, 1e5*msg.pose.covariance[0])
+            self.last_y_covar = Stamped(msg.header.stamp.sec, msg.header.stamp.nanosec, 1e5*msg.pose.covariance[4])
 
     def checkStatus(self):
         if self.last_yaw is not None and self.last_x is not None and self.last_y is not None:
             self.initStatus_1 = True
         
         if self.curr_v is not None and self.curr_w is not None and self.wheel_v is not None:
-        # if self.curr_v is not None and self.curr_w is not None:
             self.initStatus_2 = True
             self.X_est = X(self.last_x.sec, self.last_x.nanosec, self.last_x.val, self.last_y.val, self.last_yaw.val, self.curr_v.val, self.curr_w.val)
             self.get_logger().info("EKF initialized")
-        
-    
-    # def update_measurements(self):
-    #     # print("sdc")
-    #     xEst = np.array([[self.X_est.x], [self.X_est.y], [self.X_est.yaw], [self.X_est.v], [self.X_est.omega]])
-    #     # print(len(self.measurement_vec))
-    #     self.get_logger().info('My log message %d' % (len(self.measurement_vec)))
-
-    #     while(len(self.measurement_vec) >0):
-    #         curr_meas = self.measurement_vec[0]
-    #         self.measurement_vec.pop(0)
-    #         xEst, self.P_est = self.ekf.ekf_partial_update(xEst, self.P_est, curr_meas.meas, curr_meas.meas_bool ,curr_meas.meas_covar)
-                
-    #     self.X_est = X(self.last_x.sec, self.last_x.nanosec, xEst[0][0], xEst[1][0], xEst[2][0], xEst[3][0], xEst[4][0])
-      
     
     def ekf_update(self):
-
         if(not self.initStatus_1 or not self.initStatus_2):
            self.checkStatus()
            return
         
         # get current time in sec and nanosec
-
         last_x_est_time = get_Time(self.X_est.sec, self.X_est.nanosec)
         curr_obs_time = get_Time(self.last_x.sec, self.last_x.nanosec)
-        # curr_w_time = get_Time(self.curr_w.sec, self.curr_w.nanosec)
+
         dt = curr_obs_time - last_x_est_time
-        # self.get_logger().info(f"last_x_est_time:{last_x_est_time}, curr_obs_time:{curr_obs_time}, curr_w_time:{curr_w_time},  dt: {dt}")
 
-        # self.get_logger().info(f"curr_v: {self.curr_v.val}, curr_w: {self.curr_w.val}")
-
-        # ud = np.array([[self.wheel_v.val], [self.curr_w.val]])
         ud = np.array([[self.wheel_v.val], [self.curr_w.val]])
-        
-        # z = np.array([[self.last_x.val], [self.last_y.val], [self.last_yaw.val], [self.curr_v.val], [self.curr_w.val]])
-        # x_est = np.array([[self.X_est.x], [self.X_est.y], [self.X_est.yaw], [self.X_est.v]])
         x_est = np.array([[self.X_est.x], [self.X_est.y], [self.X_est.yaw], [self.X_est.v], [self.X_est.omega]])
-        # self.get_logger().info(f"last x_est: {x_est[0][0]}, {x_est[1][0]}, {x_est[2][0]}, {x_est[3][0]}")
-        # self.get_logger().info(f"yaw is {self.last_yaw.val}, v is {self.curr_v.val}")
 
-        # xEst, PEst = self.ekf.ekf_estimation(x_est, self.P_est, z, ud, dt, dead_reckoning=False)
         xEst, PEst = self.ekf.ekf_predict(x_est, self.P_est, ud, self.dt)
 
         #GNSS ONLY UPDATE
@@ -189,21 +137,11 @@ class Ekf_gnss_node(Node):
         z = np.array([[self.last_yaw.val]]) 
         xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
 
-        # Wheel speed UPDATE
-        # z_b = np.array([False, False, False, True, False]) #yaw, velo, yawvelo
-        # z_covar = np.diag([1e-5]) ** 2
-        # z = np.array([[self.wheel_v.val]]) 
-        # xEst, PEst = self.ekf.ekf_partial_update(xEst, PEst, z, z_b ,z_covar)
-
         quat_to_pub = transforms3d.euler.euler2quat(0,0,xEst[2][0])
 
         #the time stamps are wrong here UPDATE IT TODO
         self.X_est = X(self.last_x.sec, self.last_x.nanosec, xEst[0][0], xEst[1][0], xEst[2][0], xEst[3][0], xEst[4][0])
         self.P_est = PEst
-
-        # self.update_measurements()
-
-        # self.get_logger().info(f"X_est: {self.X_est.x}, {self.X_est.y}, {self.X_est.yaw}, {self.X_est.v}")
          
         # publish the estimated position
         msg = PoseWithCovarianceStamped()

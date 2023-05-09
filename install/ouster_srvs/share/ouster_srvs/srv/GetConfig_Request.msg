@@ -1,0 +1,1 @@
+/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs/rosidl_cmake/srv/GetConfig_Request.msg

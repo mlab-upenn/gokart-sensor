@@ -1,0 +1,35 @@
+[1.114s] Invoking command in '/home/autoware/gokart_ws/src/gokart-sensor/build/pure_pursuit': AMENT_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/gnss_to_local:/home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss:/home/autoware/gokart_ws/src/gokart-sensor/install/data_aug_ros2:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/data_aug_ros2:${CMAKE_PREFIX_PATH} PYTHONPATH=/home/autoware/gokart_ws/src/gokart-sensor/build/pure_pursuit/prefix_override:/home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/lib/python3.10/site-packages:/home/autoware/gokart_ws/src/gokart-sensor/build/gnss_to_local:/home/autoware/gokart_ws/src/gokart-sensor/install/gnss_to_local/lib/python3.10/site-packages:/home/autoware/gokart_ws/src/gokart-sensor/build/ekf_gnss:/home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/autoware/gokart_ws/src/gokart-sensor/build/pure_pursuit/build --no-deps install_data
+[1.571s] running develop
+[1.875s] running egg_info
+[1.875s] creating pure_pursuit.egg-info
+[1.875s] writing pure_pursuit.egg-info/PKG-INFO
+[1.875s] writing dependency_links to pure_pursuit.egg-info/dependency_links.txt
+[1.875s] writing entry points to pure_pursuit.egg-info/entry_points.txt
+[1.875s] writing requirements to pure_pursuit.egg-info/requires.txt
+[1.876s] writing top-level names to pure_pursuit.egg-info/top_level.txt
+[1.876s] writing manifest file 'pure_pursuit.egg-info/SOURCES.txt'
+[1.881s] reading manifest file 'pure_pursuit.egg-info/SOURCES.txt'
+[1.881s] writing manifest file 'pure_pursuit.egg-info/SOURCES.txt'
+[1.884s] running build_ext
+[1.884s] Creating /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/lib/python3.10/site-packages/pure-pursuit.egg-link (link to .)
+[1.885s] Installing purepursuit_node script to /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/lib/pure_pursuit
+[1.885s] Installing visualize_node script to /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/lib/pure_pursuit
+[1.886s] Installing wp_record_node script to /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/lib/pure_pursuit
+[1.886s] 
+[1.886s] Installed /home/autoware/gokart_ws/src/gokart-sensor/build/pure_pursuit
+[1.886s] running install_data
+[1.886s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/ament_index
+[1.886s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/ament_index/resource_index
+[1.886s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/ament_index/resource_index/packages
+[1.887s] copying resource/pure_pursuit -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/ament_index/resource_index/packages
+[1.887s] copying package.xml -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit
+[1.887s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/launch
+[1.887s] copying launch/wp_collection.launch.py -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/launch
+[1.887s] copying launch/purepursuit.launch.py -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/launch
+[1.887s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/config
+[1.887s] copying config/wp.csv -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/config
+[1.888s] copying config/wp copy.csv -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/config
+[1.888s] copying config/config.yaml -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/config
+[1.888s] copying config/map.png -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/config
+[1.888s] copying config/map.yaml -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/config
+[1.947s] Invoked command in '/home/autoware/gokart_ws/src/gokart-sensor/build/pure_pursuit' returned '0': AMENT_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/gnss_to_local:/home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss:/home/autoware/gokart_ws/src/gokart-sensor/install/data_aug_ros2:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/data_aug_ros2:${CMAKE_PREFIX_PATH} PYTHONPATH=/home/autoware/gokart_ws/src/gokart-sensor/build/pure_pursuit/prefix_override:/home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/lib/python3.10/site-packages:/home/autoware/gokart_ws/src/gokart-sensor/build/gnss_to_local:/home/autoware/gokart_ws/src/gokart-sensor/install/gnss_to_local/lib/python3.10/site-packages:/home/autoware/gokart_ws/src/gokart-sensor/build/ekf_gnss:/home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/autoware/gokart_ws/src/gokart-sensor/build/pure_pursuit/build --no-deps install_data

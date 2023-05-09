@@ -1,0 +1,91 @@
+[0.009s] Invoking command in '/home/autoware/gokart_ws/src/gokart-sensor/build/io_context': AMENT_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/asio_cmake_module:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/asio_cmake_module:/home/autoware/gokart_ws/install/serial_driver:/home/autoware/gokart_ws/install/septentrio_gnss_driver:/home/autoware/gokart_ws/install/pointcloud_to_laserscan:/home/autoware/gokart_ws/install/ouster_ros:/home/autoware/gokart_ws/install/ouster_srvs:/home/autoware/gokart_ws/install/ouster_msgs:/home/autoware/gokart_ws/install/io_context:/home/autoware/gokart_ws/install/data_aug_ros2:/home/autoware/gokart_ws/install/asio_cmake_module:/home/autoware/gokart_ws/install/ros_imu_bno055:/home/autoware/gokart_ws/install/pure_pursuit:/home/autoware/gokart_ws/install/gap_follow:/home/autoware/gokart_ws/install/kart_interface:/home/autoware/gokart_ws/install/gnss_to_local:/home/autoware/gokart_ws/install/ekf_gnss:/opt/ros/humble /usr/bin/cmake /home/autoware/gokart_ws/src/gokart-sensor/Sensor_drivers/ros2_uart_serial/io_context -DCMAKE_BUILD_TYPE=Release -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/autoware/gokart_ws/src/gokart-sensor/install/io_context
+[0.066s] -- The C compiler identification is GNU 11.3.0
+[0.112s] -- The CXX compiler identification is GNU 11.3.0
+[0.120s] -- Detecting C compiler ABI info
+[0.181s] -- Detecting C compiler ABI info - done
+[0.187s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.187s] -- Detecting C compile features
+[0.188s] -- Detecting C compile features - done
+[0.190s] -- Detecting CXX compiler ABI info
+[0.254s] -- Detecting CXX compiler ABI info - done
+[0.261s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.261s] -- Detecting CXX compile features
+[0.261s] -- Detecting CXX compile features - done
+[0.264s] -- Found ament_cmake_auto: 1.3.4 (/opt/ros/humble/share/ament_cmake_auto/cmake)
+[0.442s] -- Found Python3: /usr/bin/python3.10 (found version "3.10.6") found components: Interpreter 
+[0.505s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.699s] -- Found rosidl_generator_c: 3.1.4 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.709s] -- Found rosidl_adapter: 3.1.4 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.724s] -- Found rosidl_generator_cpp: 3.1.4 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.748s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.782s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.902s] -- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.908s] -- Found rmw_cyclonedds_cpp: 1.3.4 (/opt/ros/humble/share/rmw_cyclonedds_cpp/cmake)
+[0.966s] -- Using RMW implementation 'rmw_cyclonedds_cpp' as default
+[0.982s] -- Looking for pthread.h
+[1.043s] -- Looking for pthread.h - found
+[1.043s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.105s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[1.105s] -- Found Threads: TRUE  
+[1.417s] -- Found ASIO: /usr/include  
+[1.422s] -- Found ament_lint_auto: 0.12.6 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.474s] -- Found gtest sources under '/opt/ros/humble/src/gtest_vendor': C++ tests using 'Google Test' will be built
+[1.493s] -- Added test 'copyright' to check source files copyright and LICENSE
+[1.496s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[1.496s] -- Configured cppcheck include dirs: /home/autoware/gokart_ws/src/gokart-sensor/Sensor_drivers/ros2_uart_serial/io_context/include
+[1.496s] -- Configured cppcheck exclude dirs and/or files: 
+[1.499s] -- Added test 'cpplint' to check C / C++ code against the Google style
+[1.499s] -- Configured cpplint exclude dirs and/or files: 
+[1.500s] -- Added test 'lint_cmake' to check CMake code style
+[1.503s] -- Added test 'uncrustify' to check C / C++ code style
+[1.503s] -- Configured uncrustify additional arguments: 
+[1.504s] -- Added test 'xmllint' to check XML markup files
+[1.510s] -- Configuring done
+[1.563s] -- Generating done
+[1.566s] -- Build files have been written to: /home/autoware/gokart_ws/src/gokart-sensor/build/io_context
+[1.580s] Invoked command in '/home/autoware/gokart_ws/src/gokart-sensor/build/io_context' returned '0': AMENT_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/asio_cmake_module:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/asio_cmake_module:/home/autoware/gokart_ws/install/serial_driver:/home/autoware/gokart_ws/install/septentrio_gnss_driver:/home/autoware/gokart_ws/install/pointcloud_to_laserscan:/home/autoware/gokart_ws/install/ouster_ros:/home/autoware/gokart_ws/install/ouster_srvs:/home/autoware/gokart_ws/install/ouster_msgs:/home/autoware/gokart_ws/install/io_context:/home/autoware/gokart_ws/install/data_aug_ros2:/home/autoware/gokart_ws/install/asio_cmake_module:/home/autoware/gokart_ws/install/ros_imu_bno055:/home/autoware/gokart_ws/install/pure_pursuit:/home/autoware/gokart_ws/install/gap_follow:/home/autoware/gokart_ws/install/kart_interface:/home/autoware/gokart_ws/install/gnss_to_local:/home/autoware/gokart_ws/install/ekf_gnss:/opt/ros/humble /usr/bin/cmake /home/autoware/gokart_ws/src/gokart-sensor/Sensor_drivers/ros2_uart_serial/io_context -DCMAKE_BUILD_TYPE=Release -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/autoware/gokart_ws/src/gokart-sensor/install/io_context
+[1.581s] Invoking command in '/home/autoware/gokart_ws/src/gokart-sensor/build/io_context': AMENT_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/asio_cmake_module:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/asio_cmake_module:/home/autoware/gokart_ws/install/serial_driver:/home/autoware/gokart_ws/install/septentrio_gnss_driver:/home/autoware/gokart_ws/install/pointcloud_to_laserscan:/home/autoware/gokart_ws/install/ouster_ros:/home/autoware/gokart_ws/install/ouster_srvs:/home/autoware/gokart_ws/install/ouster_msgs:/home/autoware/gokart_ws/install/io_context:/home/autoware/gokart_ws/install/data_aug_ros2:/home/autoware/gokart_ws/install/asio_cmake_module:/home/autoware/gokart_ws/install/ros_imu_bno055:/home/autoware/gokart_ws/install/pure_pursuit:/home/autoware/gokart_ws/install/gap_follow:/home/autoware/gokart_ws/install/kart_interface:/home/autoware/gokart_ws/install/gnss_to_local:/home/autoware/gokart_ws/install/ekf_gnss:/opt/ros/humble /usr/bin/cmake --build /home/autoware/gokart_ws/src/gokart-sensor/build/io_context -- -j20 -l20
+[1.657s] [ 11%] [32mBuilding CXX object gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o[0m
+[1.660s] [ 22%] [32mBuilding CXX object CMakeFiles/io_context.dir/src/io_context.cpp.o[0m
+[1.663s] [ 33%] [32mBuilding CXX object CMakeFiles/io_context.dir/src/msg_converters/std_msgs.cpp.o[0m
+[1.675s] [ 44%] [32mBuilding CXX object gtest/CMakeFiles/gtest.dir/src/gtest-all.cc.o[0m
+[2.730s] [ 55%] [32m[1mLinking CXX static library libgtest_main.a[0m
+[2.782s] [ 55%] Built target gtest_main
+[3.626s] [ 66%] [32m[1mLinking CXX shared library libio_context.so[0m
+[3.735s] [ 66%] Built target io_context
+[10.837s] [ 77%] [32m[1mLinking CXX static library libgtest.a[0m
+[11.078s] [ 77%] Built target gtest
+[11.226s] [ 88%] [32mBuilding CXX object CMakeFiles/test_io_context.dir/test/test_io_context.cpp.o[0m
+[17.820s] [100%] [32m[1mLinking CXX executable test_io_context[0m
+[18.381s] [100%] Built target test_io_context
+[18.465s] Invoked command in '/home/autoware/gokart_ws/src/gokart-sensor/build/io_context' returned '0': AMENT_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/asio_cmake_module:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/asio_cmake_module:/home/autoware/gokart_ws/install/serial_driver:/home/autoware/gokart_ws/install/septentrio_gnss_driver:/home/autoware/gokart_ws/install/pointcloud_to_laserscan:/home/autoware/gokart_ws/install/ouster_ros:/home/autoware/gokart_ws/install/ouster_srvs:/home/autoware/gokart_ws/install/ouster_msgs:/home/autoware/gokart_ws/install/io_context:/home/autoware/gokart_ws/install/data_aug_ros2:/home/autoware/gokart_ws/install/asio_cmake_module:/home/autoware/gokart_ws/install/ros_imu_bno055:/home/autoware/gokart_ws/install/pure_pursuit:/home/autoware/gokart_ws/install/gap_follow:/home/autoware/gokart_ws/install/kart_interface:/home/autoware/gokart_ws/install/gnss_to_local:/home/autoware/gokart_ws/install/ekf_gnss:/opt/ros/humble /usr/bin/cmake --build /home/autoware/gokart_ws/src/gokart-sensor/build/io_context -- -j20 -l20
+[18.973s] Invoking command in '/home/autoware/gokart_ws/src/gokart-sensor/build/io_context': AMENT_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/asio_cmake_module:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/asio_cmake_module:/home/autoware/gokart_ws/install/serial_driver:/home/autoware/gokart_ws/install/septentrio_gnss_driver:/home/autoware/gokart_ws/install/pointcloud_to_laserscan:/home/autoware/gokart_ws/install/ouster_ros:/home/autoware/gokart_ws/install/ouster_srvs:/home/autoware/gokart_ws/install/ouster_msgs:/home/autoware/gokart_ws/install/io_context:/home/autoware/gokart_ws/install/data_aug_ros2:/home/autoware/gokart_ws/install/asio_cmake_module:/home/autoware/gokart_ws/install/ros_imu_bno055:/home/autoware/gokart_ws/install/pure_pursuit:/home/autoware/gokart_ws/install/gap_follow:/home/autoware/gokart_ws/install/kart_interface:/home/autoware/gokart_ws/install/gnss_to_local:/home/autoware/gokart_ws/install/ekf_gnss:/opt/ros/humble /usr/bin/cmake --install /home/autoware/gokart_ws/src/gokart-sensor/build/io_context
+[18.995s] -- Install configuration: "Release"
+[18.995s] -- Execute custom install script
+[19.011s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/include/io_context/common.hpp
+[19.038s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/include/io_context/io_context.hpp
+[19.076s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/include/msg_converters/converters.hpp
+[19.103s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/include/msg_converters/std_msgs.hpp
+[19.124s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/include/msg_converters/udp_msgs.hpp
+[19.135s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/environment/library_path.sh
+[19.167s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/environment/library_path.dsv
+[19.201s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/lib/libio_context.so
+[19.237s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/ament_index/resource_index/package_run_dependencies/io_context
+[19.248s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/ament_index/resource_index/parent_prefix_path/io_context
+[19.270s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/environment/ament_prefix_path.sh
+[19.283s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/environment/ament_prefix_path.dsv
+[19.308s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/environment/path.sh
+[19.325s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/environment/path.dsv
+[19.347s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/local_setup.bash
+[19.385s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/local_setup.sh
+[19.421s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/local_setup.zsh
+[19.439s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/local_setup.dsv
+[19.476s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/package.dsv
+[19.530s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/ament_index/resource_index/packages/io_context
+[19.571s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/cmake/ament_cmake_export_dependencies-extras.cmake
+[19.615s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/cmake/ament_cmake_export_include_directories-extras.cmake
+[19.648s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/cmake/ament_cmake_export_libraries-extras.cmake
+[19.686s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/cmake/io_contextConfig.cmake
+[19.725s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/cmake/io_contextConfig-version.cmake
+[19.762s] -- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/io_context/share/io_context/package.xml
+[19.809s] Invoked command in '/home/autoware/gokart_ws/src/gokart-sensor/build/io_context' returned '0': AMENT_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/asio_cmake_module:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/autoware/gokart_ws/src/gokart-sensor/install/asio_cmake_module:/home/autoware/gokart_ws/install/serial_driver:/home/autoware/gokart_ws/install/septentrio_gnss_driver:/home/autoware/gokart_ws/install/pointcloud_to_laserscan:/home/autoware/gokart_ws/install/ouster_ros:/home/autoware/gokart_ws/install/ouster_srvs:/home/autoware/gokart_ws/install/ouster_msgs:/home/autoware/gokart_ws/install/io_context:/home/autoware/gokart_ws/install/data_aug_ros2:/home/autoware/gokart_ws/install/asio_cmake_module:/home/autoware/gokart_ws/install/ros_imu_bno055:/home/autoware/gokart_ws/install/pure_pursuit:/home/autoware/gokart_ws/install/gap_follow:/home/autoware/gokart_ws/install/kart_interface:/home/autoware/gokart_ws/install/gnss_to_local:/home/autoware/gokart_ws/install/ekf_gnss:/opt/ros/humble /usr/bin/cmake --install /home/autoware/gokart_ws/src/gokart-sensor/build/io_context

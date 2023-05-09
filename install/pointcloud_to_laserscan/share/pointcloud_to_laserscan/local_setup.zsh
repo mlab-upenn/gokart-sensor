@@ -1,0 +1,1 @@
+/home/autoware/gokart_ws/src/gokart-sensor/build/pointcloud_to_laserscan/ament_cmake_environment_hooks/local_setup.zsh

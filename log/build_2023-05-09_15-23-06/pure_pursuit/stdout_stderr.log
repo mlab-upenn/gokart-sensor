@@ -1,0 +1,33 @@
+running develop
+running egg_info
+creating pure_pursuit.egg-info
+writing pure_pursuit.egg-info/PKG-INFO
+writing dependency_links to pure_pursuit.egg-info/dependency_links.txt
+writing entry points to pure_pursuit.egg-info/entry_points.txt
+writing requirements to pure_pursuit.egg-info/requires.txt
+writing top-level names to pure_pursuit.egg-info/top_level.txt
+writing manifest file 'pure_pursuit.egg-info/SOURCES.txt'
+reading manifest file 'pure_pursuit.egg-info/SOURCES.txt'
+writing manifest file 'pure_pursuit.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/lib/python3.10/site-packages/pure-pursuit.egg-link (link to .)
+Installing purepursuit_node script to /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/lib/pure_pursuit
+Installing visualize_node script to /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/lib/pure_pursuit
+Installing wp_record_node script to /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/lib/pure_pursuit
+
+Installed /home/autoware/gokart_ws/src/gokart-sensor/build/pure_pursuit
+running install_data
+creating /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/ament_index
+creating /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/ament_index/resource_index
+creating /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/ament_index/resource_index/packages
+copying resource/pure_pursuit -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/ament_index/resource_index/packages
+copying package.xml -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit
+creating /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/launch
+copying launch/wp_collection.launch.py -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/launch
+copying launch/purepursuit.launch.py -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/launch
+creating /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/config
+copying config/wp.csv -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/config
+copying config/wp copy.csv -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/config
+copying config/config.yaml -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/config
+copying config/map.png -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/config
+copying config/map.yaml -> /home/autoware/gokart_ws/src/gokart-sensor/install/pure_pursuit/share/pure_pursuit/config

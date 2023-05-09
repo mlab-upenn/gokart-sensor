@@ -1,0 +1,25 @@
+running develop
+running egg_info
+creating ekf_gnss.egg-info
+writing ekf_gnss.egg-info/PKG-INFO
+writing dependency_links to ekf_gnss.egg-info/dependency_links.txt
+writing entry points to ekf_gnss.egg-info/entry_points.txt
+writing requirements to ekf_gnss.egg-info/requires.txt
+writing top-level names to ekf_gnss.egg-info/top_level.txt
+writing manifest file 'ekf_gnss.egg-info/SOURCES.txt'
+reading manifest file 'ekf_gnss.egg-info/SOURCES.txt'
+writing manifest file 'ekf_gnss.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/lib/python3.10/site-packages/ekf-gnss.egg-link (link to .)
+Installing ekf_gnss_node script to /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/lib/ekf_gnss
+
+Installed /home/autoware/gokart_ws/src/gokart-sensor/build/ekf_gnss
+running install_data
+creating /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ament_index
+creating /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ament_index/resource_index
+creating /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ament_index/resource_index/packages
+copying resource/ekf_gnss -> /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ament_index/resource_index/packages
+copying package.xml -> /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ekf_gnss
+creating /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ekf_gnss/launch
+copying launch/launch.py -> /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ekf_gnss/launch
+creating /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ekf_gnss/config

@@ -1,0 +1,27 @@
+[1.147s] Invoking command in '/home/autoware/gokart_ws/src/gokart-sensor/build/ekf_gnss': PYTHONPATH=/home/autoware/gokart_ws/src/gokart-sensor/build/ekf_gnss/prefix_override:/home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/autoware/gokart_ws/src/gokart-sensor/build/ekf_gnss/build --no-deps install_data
+[1.397s] running develop
+[1.544s] running egg_info
+[1.544s] creating ekf_gnss.egg-info
+[1.544s] writing ekf_gnss.egg-info/PKG-INFO
+[1.545s] writing dependency_links to ekf_gnss.egg-info/dependency_links.txt
+[1.545s] writing entry points to ekf_gnss.egg-info/entry_points.txt
+[1.545s] writing requirements to ekf_gnss.egg-info/requires.txt
+[1.545s] writing top-level names to ekf_gnss.egg-info/top_level.txt
+[1.545s] writing manifest file 'ekf_gnss.egg-info/SOURCES.txt'
+[1.546s] reading manifest file 'ekf_gnss.egg-info/SOURCES.txt'
+[1.546s] writing manifest file 'ekf_gnss.egg-info/SOURCES.txt'
+[1.548s] running build_ext
+[1.548s] Creating /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/lib/python3.10/site-packages/ekf-gnss.egg-link (link to .)
+[1.549s] Installing ekf_gnss_node script to /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/lib/ekf_gnss
+[1.549s] 
+[1.549s] Installed /home/autoware/gokart_ws/src/gokart-sensor/build/ekf_gnss
+[1.549s] running install_data
+[1.549s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ament_index
+[1.549s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ament_index/resource_index
+[1.549s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ament_index/resource_index/packages
+[1.550s] copying resource/ekf_gnss -> /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ament_index/resource_index/packages
+[1.550s] copying package.xml -> /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ekf_gnss
+[1.550s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ekf_gnss/launch
+[1.550s] copying launch/launch.py -> /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ekf_gnss/launch
+[1.550s] creating /home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/share/ekf_gnss/config
+[1.580s] Invoked command in '/home/autoware/gokart_ws/src/gokart-sensor/build/ekf_gnss' returned '0': PYTHONPATH=/home/autoware/gokart_ws/src/gokart-sensor/build/ekf_gnss/prefix_override:/home/autoware/gokart_ws/src/gokart-sensor/install/ekf_gnss/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/autoware/gokart_ws/src/gokart-sensor/build/ekf_gnss/build --no-deps install_data

@@ -1,0 +1,177 @@
+-- The C compiler identification is GNU 11.3.0
+-- The CXX compiler identification is GNU 11.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 1.3.4 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3.10 (found version "3.10.6") found components: Interpreter 
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found rclcpp: 16.0.4 (/opt/ros/humble/share/rclcpp/cmake)
+-- Found rosidl_generator_c: 3.1.4 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+-- Found rosidl_adapter: 3.1.4 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Found rosidl_generator_cpp: 3.1.4 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+-- Found rmw_cyclonedds_cpp: 1.3.4 (/opt/ros/humble/share/rmw_cyclonedds_cpp/cmake)
+-- Using RMW implementation 'rmw_cyclonedds_cpp' as default
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Found rclcpp_components: 16.0.4 (/opt/ros/humble/share/rclcpp_components/cmake)
+-- Found rclcpp_lifecycle: 16.0.4 (/opt/ros/humble/share/rclcpp_lifecycle/cmake)
+-- Found sensor_msgs: 4.2.3 (/opt/ros/humble/share/sensor_msgs/cmake)
+-- Found ouster_msgs: 0.1.0 (/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_msgs/share/ouster_msgs/cmake)
+-- Found ouster_srvs: 0.1.0 (/home/autoware/gokart_ws/src/gokart-sensor/install/ouster_srvs/share/ouster_srvs/cmake)
+-- Found std_srvs: 4.2.3 (/opt/ros/humble/share/std_srvs/cmake)
+-- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+-- Found Eigen3: /usr/share/eigen3/cmake/Eigen3Config.cmake (found version "3.4.0") 
+-- Checking for module 'eigen3'
+--   Found eigen3, version 3.4.0
+-- Found Eigen: /usr/include/eigen3 (Required is at least version "3.1") 
+-- Eigen found (include: /usr/include/eigen3, version: 3.4.0)
+-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found suitable version "1.74.0", minimum required is "1.65.0") found components: system filesystem date_time iostreams serialization 
+-- looking for PCL_COMMON
+-- Found PCL_COMMON: /usr/lib/x86_64-linux-gnu/libpcl_common.so  
+-- Found PCL: pcl_common;Boost::system;Boost::filesystem;Boost::date_time;Boost::iostreams;Boost::serialization  
+-- Found pcl_conversions: 2.4.0 (/opt/ros/humble/share/pcl_conversions/cmake)
+-- Found tf2_eigen: 0.25.2 (/opt/ros/humble/share/tf2_eigen/cmake)
+-- Found jsoncpp: /usr/lib/x86_64-linux-gnu/cmake/jsoncpp/jsoncppConfig.cmake (found version "1.9.5") 
+-- Found CURL: /usr/include/x86_64-linux-gnu (found version "7.81.0") 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/autoware/gokart_ws/src/gokart-sensor/build/ouster_ros
+[34m[1mGenerating build info header[0m
+[  2%] [32mBuilding CXX object CMakeFiles/os_replay.dir/rclcpp_components/node_main_os_replay.cpp.o[0m
+[  5%] [32mBuilding CXX object CMakeFiles/os_sensor.dir/rclcpp_components/node_main_os_sensor.cpp.o[0m
+[  8%] [32mBuilding CXX object CMakeFiles/os_cloud.dir/rclcpp_components/node_main_os_cloud.cpp.o[0m
+[  8%] Built target ouster_generate_header
+[ 11%] [32mBuilding CXX object CMakeFiles/os_image.dir/rclcpp_components/node_main_os_image.cpp.o[0m
+[ 14%] [32mBuilding CXX object ouster_example/ouster_client/CMakeFiles/ouster_client.dir/src/client.cpp.o[0m
+[ 17%] [32mBuilding CXX object ouster_example/ouster_client/CMakeFiles/ouster_client.dir/src/types.cpp.o[0m
+[ 20%] [32mBuilding CXX object ouster_example/ouster_client/CMakeFiles/ouster_client.dir/src/netcompat.cpp.o[0m
+[ 23%] [32mBuilding CXX object ouster_example/ouster_client/CMakeFiles/ouster_client.dir/src/lidar_scan.cpp.o[0m
+[ 26%] [32mBuilding CXX object ouster_example/ouster_client/CMakeFiles/ouster_client.dir/src/image_processing.cpp.o[0m
+[ 29%] [32mBuilding CXX object ouster_example/ouster_client/CMakeFiles/ouster_client.dir/src/buffered_udp_source.cpp.o[0m
+[ 32%] [32mBuilding CXX object ouster_example/ouster_client/CMakeFiles/ouster_client.dir/src/sensor_http.cpp.o[0m
+[ 35%] [32mBuilding CXX object ouster_example/ouster_client/CMakeFiles/ouster_client.dir/src/parsing.cpp.o[0m
+[ 38%] [32mBuilding CXX object ouster_example/ouster_client/CMakeFiles/ouster_client.dir/src/sensor_http_imp.cpp.o[0m
+[ 41%] [32mBuilding CXX object ouster_example/ouster_client/CMakeFiles/ouster_client.dir/src/logging.cpp.o[0m
+[ 44%] [32mBuilding CXX object ouster_example/ouster_client/CMakeFiles/ouster_client.dir/src/sensor_tcp_imp.cpp.o[0m
+[ 47%] [32m[1mLinking CXX executable os_replay[0m
+[ 47%] Built target os_replay
+[ 50%] [32m[1mLinking CXX executable os_image[0m
+[ 52%] [32m[1mLinking CXX executable os_sensor[0m
+[ 52%] Built target os_image
+[ 52%] Built target os_sensor
+[ 55%] [32m[1mLinking CXX executable os_cloud[0m
+[ 55%] Built target os_cloud
+[ 58%] [32m[1mLinking CXX static library libouster_client.a[0m
+[ 58%] Built target ouster_client
+[ 61%] [32mBuilding CXX object CMakeFiles/ouster_ros_library.dir/src/os_ros.cpp.o[0m
+[ 64%] [32m[1mLinking CXX shared library libouster_ros_library.so[0m
+[ 64%] Built target ouster_ros_library
+[ 88%] [32mBuilding CXX object CMakeFiles/os_image_component.dir/src/os_processing_node_base.cpp.o[0m
+[ 88%] [32mBuilding CXX object CMakeFiles/os_replay_component.dir/src/os_sensor_node_base.cpp.o[0m
+[ 88%] [32mBuilding CXX object CMakeFiles/os_sensor_component.dir/src/os_sensor_node_base.cpp.o[0m
+[ 88%] [32mBuilding CXX object CMakeFiles/os_replay_component.dir/src/os_replay_node.cpp.o[0m
+[ 88%] [32mBuilding CXX object CMakeFiles/os_image_component.dir/src/os_image_node.cpp.o[0m
+[ 88%] [32mBuilding CXX object CMakeFiles/os_sensor_component.dir/src/os_sensor_node.cpp.o[0m
+[ 88%] [32mBuilding CXX object CMakeFiles/os_cloud_component.dir/src/os_processing_node_base.cpp.o[0m
+[ 88%] [32mBuilding CXX object CMakeFiles/os_cloud_component.dir/src/os_cloud_node.cpp.o[0m
+[ 91%] [32m[1mLinking CXX shared library libos_replay_component.so[0m
+[ 91%] Built target os_replay_component
+[ 94%] [32m[1mLinking CXX shared library libos_sensor_component.so[0m
+[ 94%] Built target os_sensor_component
+[ 97%] [32m[1mLinking CXX shared library libos_image_component.so[0m
+[ 97%] Built target os_image_component
+[100%] [32m[1mLinking CXX shared library libos_cloud_component.so[0m
+[100%] Built target os_cloud_component
+-- Install configuration: "Release"
+-- Execute custom install script
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster/impl/build.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster/buffered_udp_source.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster/client.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster/image_processing.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster/impl/cartesian.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster/impl/lidar_scan_impl.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster/lidar_scan.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster/sensor_http.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster/types.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster/version.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/optional-lite/nonstd/optional.hpp
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/lib/cmake/OusterSDK/OusterSDKConfig.cmake
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/lib/cmake/OusterSDK/OusterSDKConfigVersion.cmake
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/LICENSE
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/LICENSE-bin
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/lib/ouster_ros/os_sensor
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/lib/ouster_ros/os_replay
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/lib/ouster_ros/os_cloud
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/lib/ouster_ros/os_image
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/lib/libouster_ros_library.so
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/lib/libos_sensor_component.so
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/lib/libos_replay_component.so
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/lib/libos_cloud_component.so
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/lib/libos_image_component.so
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster_ros/os_point.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster_ros/os_processing_node_base.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster_ros/os_ros.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster_ros/os_sensor_node_base.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster_ros/visibility_control.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/optional-lite/nonstd/optional.hpp
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster/buffered_udp_source.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster/client.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster/image_processing.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster/impl/cartesian.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster/impl/lidar_scan_impl.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster/lidar_scan.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster/sensor_http.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster/types.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/include/ouster/version.h
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/include/ouster_ros/optional-lite/nonstd/optional.hpp
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/LICENSE
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/launch/record.composite.launch.xml
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/launch/record.launch.xml
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/launch/replay.composite.launch.xml
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/launch/replay.launch.xml
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/launch/rviz.launch.py
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/launch/rviz.launch.xml
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/launch/sensor.composite.launch.py
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/launch/sensor.composite.launch.xml
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/launch/sensor.independent.launch.py
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/launch/sensor.independent.launch.xml
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/launch/sensor.launch.xml
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/launch/sensor_mtp.launch.xml
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/config/metadata-qos-override.yaml
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/config/parameters.yaml
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/config/viz.rviz
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/environment/library_path.sh
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/environment/library_path.dsv
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ament_index/resource_index/package_run_dependencies/ouster_ros
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ament_index/resource_index/parent_prefix_path/ouster_ros
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/environment/ament_prefix_path.sh
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/environment/ament_prefix_path.dsv
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/environment/path.sh
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/environment/path.dsv
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/local_setup.bash
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/local_setup.sh
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/local_setup.zsh
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/local_setup.dsv
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/package.dsv
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ament_index/resource_index/packages/ouster_ros
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ament_index/resource_index/rclcpp_components/ouster_ros
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/cmake/ament_cmake_export_libraries-extras.cmake
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/cmake/ouster_rosConfig.cmake
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/cmake/ouster_rosConfig-version.cmake
+-- Symlinking: /home/autoware/gokart_ws/src/gokart-sensor/install/ouster_ros/share/ouster_ros/package.xml

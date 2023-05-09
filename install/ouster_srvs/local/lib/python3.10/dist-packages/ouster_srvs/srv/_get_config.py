@@ -1,0 +1,1 @@
+/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_srvs/rosidl_generator_py/ouster_srvs/srv/_get_config.py

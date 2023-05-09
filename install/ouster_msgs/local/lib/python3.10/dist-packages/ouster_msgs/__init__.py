@@ -1,0 +1,1 @@
+/home/autoware/gokart_ws/src/gokart-sensor/build/ouster_msgs/rosidl_generator_py/ouster_msgs/__init__.py
