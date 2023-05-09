@@ -5,23 +5,12 @@
 
 OpponentPredictor::OpponentPredictor() : Node("opponent_predictor_node") {
     // ROS Params
-    this->declare_parameter("debug_img");
     this->declare_parameter("visualize");
     this->declare_parameter("visualize_grid");
     this->declare_parameter("visualize_obstacle");
     this->declare_parameter("visualize_opp");
     this->declare_parameter("visualize_opp_pose");
     this->declare_parameter("visualize_opp_bbox");
-
-    this->declare_parameter("real_test");
-    this->declare_parameter("map_name");
-    this->declare_parameter("map_img_ext");
-    this->declare_parameter("resolution");
-    this->declare_parameter("origin");
-
-    this->declare_parameter("track_file");
-    this->declare_parameter("inner_bound");
-    this->declare_parameter("outer_bound");
 
     this->declare_parameter("grid_xmin");
     this->declare_parameter("grid_xmax");
@@ -34,31 +23,10 @@ OpponentPredictor::OpponentPredictor() : Node("opponent_predictor_node") {
 
     this->declare_parameter("cluster_dist_tol");
     this->declare_parameter("cluster_size_tol");
-    this->declare_parameter("avoid_dist");
 
     // General Variables
-    real_test = this->get_parameter("real_test").as_bool();
-
-    if (real_test) {
-        pose_topic = "/pf/pose/odom";
-    } else {
-        pose_topic = "/ego_racecar/odom";
-    }
-
-    // Global Map Variables
-    string map_name = this->get_parameter("map_name").as_string();
-    string map_img_ext = this->get_parameter("map_img_ext").as_string();
-    read_map(map_name, map_img_ext);
-
-    string inner_bound_path = this->get_parameter("inner_bound").as_string();
-    inner_bound_path = "src/opponent_predictor/csv/" + map_name + "/" + inner_bound_path + ".csv";
-    inner_bound = read_bound(inner_bound_path);
-
-    string outer_bound_path = this->get_parameter("outer_bound").as_string();
-    outer_bound_path = "src/opponent_predictor/csv/" + map_name + "/" + outer_bound_path + ".csv";
-    outer_bound = read_bound(outer_bound_path);
-
-    cout << inner_bound.size() << '\t' << outer_bound.size() << endl;
+    pose_topic = "/gnss_ekf";
+    scan_topic = "/ouster/scan";
 
     // Timers
     timer_ = this->create_wall_timer(1s, std::bind(&OpponentPredictor::timer_callback, this));
@@ -195,45 +163,6 @@ void OpponentPredictor::pose_callback(const Odometry::ConstSharedPtr pose_msg) {
     frame_cnt++;
 }
 
-void OpponentPredictor::read_map(const string &map_name, const string &map_img_ext) {
-    string map_img_path = "src/opponent_predictor/maps/" + map_name + map_img_ext;
-    cv::Mat map_img = cv::imread(map_img_path);
-    img_h = map_img.rows;
-    img_w = map_img.cols;
-
-    map_resolution = this->get_parameter("resolution").as_double();
-    origin_x = this->get_parameter("origin").as_double_array()[0];
-    origin_y = this->get_parameter("origin").as_double_array()[1];
-}
-
-vector<cv::Point> OpponentPredictor::read_bound(const string &file) {
-    fstream fin;
-    fin.open(file, ios::in);
-    string line, word;
-
-    vector<cv::Point> bound;
-
-    while (getline(fin, line)) {
-        stringstream s(line);
-        vector<string> row;
-        while (getline(s, word, ',')) {
-            row.push_back(word);
-        }
-        bound.emplace_back(stoi(row[0]), stoi(row[1]));
-    }
-
-    return bound;
-}
-
-vector<cv::Point2f> OpponentPredictor::transform_coords_to_img(const vector<vector<double>> &path) const {
-    vector<cv::Point2f> new_path;
-    for (const auto &pt: path) {
-        double x = (pt[0] - origin_x) / map_resolution;
-        double y = img_h - (pt[1] - origin_y) / map_resolution;
-        new_path.emplace_back(x, y);
-    }
-    return new_path;
-}
 
 void OpponentPredictor::get_opponent() {
     // If laser scan not available yet, return
@@ -264,66 +193,8 @@ void OpponentPredictor::get_opponent() {
         }
     }
 
-    vector<cv::Point2f> grid_point_on_img = transform_coords_to_img(grid_point);
-
-    // Find obstacle that is on the track
-    vector<int> obstacle_idx;
-    for (int i = 0; i < (int) grid_point_on_img.size(); ++i) {
-        cv::Point2f curr_point = grid_point_on_img[i];
-        double inside_outer_bound = pointPolygonTest(outer_bound, curr_point, false);
-        if (inside_outer_bound != 1.0) {
-            continue;
-        }
-        double outside_inner_bound = pointPolygonTest(inner_bound, curr_point, false);
-        if (outside_inner_bound != -1.0) {
-            continue;
-        }
-        obstacle_idx.push_back(i);
-    }
-
-    // Enable debug_img to visualize
-    bool debug_img = this->get_parameter("debug_img").as_bool();
-    if (debug_img) {
-        cv::Mat dummy_img(img_w, img_h, CV_8UC3, cv::Scalar(255, 255, 255));
-        draw_bound(dummy_img, outer_bound);
-        draw_bound(dummy_img, inner_bound);
-        for (int i = 0; i < (int) grid_point_on_img.size(); ++i) {
-            auto itr = std::find(obstacle_idx.begin(), obstacle_idx.end(), i);
-            if (itr != obstacle_idx.cend()) {
-                cv::circle(dummy_img, grid_point_on_img[i], 1, cv::Scalar(0, 255, 0), 1);
-            } else {
-                cv::circle(dummy_img, grid_point_on_img[i], 1, cv::Scalar(255, 0, 0), 1);
-            }
-        }
-        show_result({dummy_img}, "debug");
-        exit(EXIT_FAILURE);
-    }
-
-    // If no opponent is found, return
-    if (obstacle_idx.empty()) {
-        PoseStamped opp_state;
-        opp_state.pose.position.x = INFINITY;
-        opp_state.pose.position.y = INFINITY;
-        opp_state.header.stamp.sec = scan_sec;
-        opp_state.header.stamp.nanosec = scan_nanosec;
-        opp_state_pub_->publish(opp_state);
-
-        PoseArray opp_bbox;
-        opp_bbox.header.frame_id = "/map";
-        opp_bbox.header.stamp.sec = scan_sec;
-        opp_bbox.header.stamp.nanosec = scan_nanosec;
-        for (const auto &pt: opponent) {
-            Pose pose;
-            pose.position.x = pt[0];
-            pose.position.y = pt[1];
-            opp_bbox.poses.push_back(pose);
-        }
-        opp_bbox_pub_->publish(opp_bbox);
-        return;
-    }
-
     // Find the largest cluster and large enough as opponent car
-    for (const auto i: obstacle_idx) {
+    for (int i=0; i<(int)grid_point.size(); i++) {
         obstacle.push_back(grid_point[i]);
     }
 
@@ -346,7 +217,6 @@ void OpponentPredictor::get_opponent() {
         opp_state.header.stamp.sec = scan_sec;
         opp_state.header.stamp.nanosec = scan_nanosec;
         opp_state_pub_->publish(opp_state);
-
         return;
     }
 
@@ -364,7 +234,6 @@ void OpponentPredictor::get_opponent() {
     mean_x /= double(opponent.size());
     mean_y /= double(opponent.size());
     cout << "opponent_size" << ": " << opponent.size() << endl;
-
     opp_global_pos = {mean_x, mean_y};
 
     // Publish result

@@ -159,35 +159,3 @@ void OpponentPredictor::visualize_opponent_bbox() {
     opp_viz_bbox_pub_->publish(marker_arr);
 }
 
-void OpponentPredictor::draw_bound(cv::Mat &image, const vector<cv::Point> &bound) {
-    int n_pts = (int) bound.size();
-    for (int i = 0; i < n_pts - 1; ++i) {
-        cv::line(image, bound[i], bound[i + 1], cv::Scalar(0, 0, 255), 1);
-    }
-    cv::line(image, bound[n_pts - 1], bound[0], cv::Scalar(0, 0, 255), 1);
-}
-
-void OpponentPredictor::show_result(const vector<cv::Mat> &images, const string &title) {
-    if (images.empty()) {
-        return;
-    }
-
-    int height = images[0].rows;
-    int width = images[0].cols;
-    int w_show = 800;
-    double scale_percent = double(w_show) / double(width);
-    int h_show = int(scale_percent * height);
-
-    vector<cv::Mat> images_resize;
-    for (const auto &image: images) {
-        cv::Mat image_resize;
-        cv::resize(image, image_resize, cv::Size(w_show, h_show));
-        images_resize.push_back(image_resize);
-    }
-
-    cv::Mat image_show;
-    cv::hconcat(images_resize, image_show);
-    cv::imshow(title, image_show);
-    cv::waitKey(0);
-    cv::destroyAllWindows();
-}

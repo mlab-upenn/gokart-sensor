@@ -9,6 +9,7 @@
 
   <depend>rclpy</depend>
   <exec_depend>pointcloud_to_laserscan</exec_depend>
+  <exec_depend>data_aug_ros2</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

@@ -12,24 +12,6 @@ MAX_STEER = 0.36  # (rad)
 
 def generate_launch_description():
     ld = LaunchDescription()
-    print(os.getcwd())
-    config = os.path.join(
-        'src',
-        'opponent_predictor',
-        'config',
-        'params.yaml'
-    )
-    config_dict = yaml.safe_load(open(config, 'r'))
-
-    map_name = config_dict['map_name']
-    map_cfg = os.path.join(
-        'src',
-        'opponent_predictor',
-        'maps',
-        map_name + ".yaml"
-    )
-    map_cfg_dict = yaml.safe_load(open(map_cfg, 'r'))
-
     opponent_predictor_node = Node(
         package="opponent_predictor",
         executable="opponent_predictor_node",
@@ -37,12 +19,7 @@ def generate_launch_description():
         output="screen",
         emulate_tty=True,
         parameters=[
-            # YAML Params
-            config_dict,
-            map_cfg_dict,
-
             # RVIZ Params
-            {"debug_img": False},
             {"visualize": True},
             {"visualize_grid": True},
             {"visualize_obstacle": False},
@@ -54,17 +31,16 @@ def generate_launch_description():
             {"grid_xmax": 5.0},
             {"grid_ymin": -2.5},
             {"grid_ymax": 2.5},
-            {"grid_resolution": 0.04},
-            {"plot_resolution": 0.02},
+            {"grid_resolution": 0.05},
+            {"plot_resolution": 0.05},
             {"grid_safe_dist": 0.1},
 
             # Wall Params
             {"wall_safe_dist": 0.2},
 
             # Obstacle Params
-            {"cluster_dist_tol": WIDTH + 2 * WHEEL_LENGTH},
-            {"cluster_size_tol": 15},
-            {'avoid_dist': 6.0} , # 0.4
+            {"cluster_dist_tol": WIDTH},
+            {"cluster_size_tol": 10},
         ]
     )
     ld.add_action(opponent_predictor_node)

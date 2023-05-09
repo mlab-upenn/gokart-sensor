@@ -30,11 +30,11 @@ def generate_launch_description():
                 'max_height': -0.4,
                 'angle_min': -1.5708,  # -M_PI/2
                 'angle_max': 1.5708,  # M_PI/2
-                'angle_increment': 0.00435, # 0.0087,  # M_PI/360.0
+                'angle_increment': 0.0087, # 0.0087,  # M_PI/360.0
                 'scan_time': 0.3333,
                 'range_min': 1.6,
-                'range_max': 7.0,
-                'use_inf': True,
+                'range_max': 8.0,
+                'use_inf': False,
                 'inf_epsilon': 1.0
             }],
             name='pointcloud_to_laserscan'

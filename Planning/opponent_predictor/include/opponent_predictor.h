@@ -11,9 +11,6 @@
 #include <visualization_msgs/msg/marker.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/imgproc.hpp>
-
 using namespace std;
 
 typedef std_msgs::msg::Int16 Int16;
@@ -32,16 +29,6 @@ public:
     OpponentPredictor();
 
 private:
-    // General Variables
-    bool real_test = true;
-
-    // Global Map Variables
-    int img_h = 0, img_w = 0;
-    double map_resolution = 1.0;
-    double origin_x = 0.0;
-    double origin_y = 0.0;
-
-    vector<cv::Point> inner_bound, outer_bound;
 
     // Local Map Variables
     vector<vector<vector<double>>> grid;
@@ -62,7 +49,7 @@ private:
 
     // Topics
     string pose_topic;
-    string scan_topic = "/scan";
+    string scan_topic;
 
     string fps_topic = "/fps";
 
@@ -99,12 +86,6 @@ private:
 
     void pose_callback(const Odometry::ConstSharedPtr pose_msg);
 
-    void read_map(const string &map_name, const string &map_img_ext);
-
-    static vector<cv::Point> read_bound(const string& file);
-
-    vector<cv::Point2f> transform_coords_to_img(const vector<vector<double>>& path) const;
-
     void get_opponent();
 
     vector<vector<int>> cluster(const vector<vector<double>> &points, double tol);
@@ -120,10 +101,6 @@ private:
     void visualize_opponent_pose();
 
     void visualize_opponent_bbox();
-
-    static void draw_bound(cv::Mat &image, const vector<cv::Point> &bound);
-
-    static void show_result(const vector<cv::Mat>& images, const string& title);
 };
 
 
