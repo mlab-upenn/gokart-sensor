@@ -106,7 +106,7 @@ Example structure:
 
 #### **Package & Launch Command**
 
-**Driver:** 
+**Driver** 
 
 - septentrio_gnss_driver
 
@@ -126,15 +126,11 @@ ros2 run serial_driver serial_bridge
 ros2 launch ros_imu_bno055 imu_launch.py
 ```
 
-**Application:**
+**Waypoint collection**
 
 ```
 ros2 launch pure_pursuit wp_collection.launch.py
 ```
-
-- ekf_gnss
-- gnss_to_local
-- wp_record
 
 #### **Note**
 
@@ -148,6 +144,12 @@ gnss_to_local_node:
 ```
 
 If `set_origin` is true,`gnss_to_local_node` will take the first GNSS msg published by `ekf_gnss` node and save it into map_ori_path. This waypoint will be used as the origin of the map. If `set_origin` is false, `gnss_to_local_node` will load the map origin from map_ori_path and use it as the origin of the map.
+
+**Purepursuit**
+
+```
+ros2 launch pure_pursuit purepursuit.launch.py
+```
 
 
 ### 2.(Optional) TUM global raceline optimization
