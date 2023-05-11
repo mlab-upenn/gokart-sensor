@@ -107,12 +107,16 @@ ros2 launch depthai_examples rgb_publisher.launch.py
 
 ### Udev Rules
 
+```
 # BNO055 IMU
-create the udev rule file
-```sudo gedit /etc/udev/rules.d/bno055.rules```
+# create the udev rule file
 
-Copy & paste the following rules, save and exit.
-```ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", MODE="0666", SYMLINK+="sensors/bno055"```
+sudo gedit /etc/udev/rules.d/bno055.rules
+
+# Copy & paste the following rules, save and exit.
+
+ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", MODE="0666", SYMLINK+="sensors/bno055"
+```
 
 ### Perception (yolov8)
 
