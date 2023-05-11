@@ -107,8 +107,9 @@ ros2 launch depthai_examples rgb_publisher.launch.py
 
 ### Udev Rules
 
+BNO055 IMU
 ```bash
-# BNO055 IMU: create the udev rule file
+create the udev rule file
 sudo gedit /etc/udev/rules.d/bno055.rules
 
 # Copy & paste the following rules, save and exit.
