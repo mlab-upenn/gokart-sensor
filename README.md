@@ -45,6 +45,9 @@ We use Lidarslam package ([link](https://github.com/rsasaki0109/lidarslam_ros2))
 Install dependency
 
 ```
+# general
+pip install transforms3d
+
 # for yolov8
 pip install ultralytics
 
