@@ -147,7 +147,7 @@ gnss_to_local_node:
     ...
 ```
 
-If `set_origin` is true, during waypoint recording, `gnss_to_local_node` will take the first GNSS msg published by `ekf_gnss` node and save it into map_ori_path. This waypoint will be used as the origin of the map. If `set_origin` is false, during waypoint recording, `gnss_to_local_node` will load the map origin from map_ori_path and use it as the origin of the map.
+If `set_origin` is true,`gnss_to_local_node` will take the first GNSS msg published by `ekf_gnss` node and save it into map_ori_path. This waypoint will be used as the origin of the map. If `set_origin` is false, `gnss_to_local_node` will load the map origin from map_ori_path and use it as the origin of the map.
 
 
 ### 2.(Optional) TUM global raceline optimization
