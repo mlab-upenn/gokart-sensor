@@ -9,6 +9,8 @@
 
   <depend>rclpy</depend>
   <depend>ackermann_msgs</depend>
+  <depend>vision_msgs</depend>
+
   <exec_depend>nav2_map_server</exec_depend>
   <exec_depend>nav2_lifecycle_manager</exec_depend>
   <exec_depend>gnss_to_local</exec_depend>
