@@ -46,7 +46,7 @@ Install dependency
 
 ```
 # general
-pip install transforms3d
+pip install transforms3d trajectory_planning_helpers
 
 # for yolov8
 pip install ultralytics
