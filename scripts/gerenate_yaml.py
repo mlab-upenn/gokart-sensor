@@ -29,10 +29,10 @@ DEBUG = True
 
 
 def generate_yaml(config_folder, global_cfg_path):
-    purepursuit_yaml_path = os.path.join(config_folder, 'template', PUREPURSUIT_YAML_NAME)
-    wpcollection_yaml_path = os.path.join(config_folder, 'template', WPCOLLECTION_YAML_NAME)
-    gapfollow_yaml_path = os.path.join(config_folder,'template', GAPFOLLOW_YAML_NAME)
-    purepursuit_yaml_optim_path = os.path.join(config_folder, 'template', PUREPURSUIT_YAML_OPTIM_NAME)
+    purepursuit_yaml_path = os.path.join(config_folder, 'pennovation', PUREPURSUIT_YAML_NAME)
+    wpcollection_yaml_path = os.path.join(config_folder, 'pennovation', WPCOLLECTION_YAML_NAME)
+    gapfollow_yaml_path = os.path.join(config_folder,'pennovation', GAPFOLLOW_YAML_NAME)
+    purepursuit_yaml_optim_path = os.path.join(config_folder, 'pennovation', PUREPURSUIT_YAML_OPTIM_NAME)
     
     with open(global_cfg_path, 'r') as f:
         global_cfg = yaml.load(f, Loader=yaml.FullLoader)
