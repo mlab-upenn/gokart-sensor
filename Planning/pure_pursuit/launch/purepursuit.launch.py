@@ -3,7 +3,6 @@ import os
 from launch import LaunchDescription
 from launch_ros.actions import Node
 import yaml
-# import yaml
 # from ament_index_python.packages import get_package_share_directory
 
 cwd = os.getcwd()
@@ -65,52 +64,6 @@ def generate_launch_description():
         output='screen',
         parameters=[config],
     )
-
-    # map_path = os.path.join(
-    #     get_package_share_directory('pure_pursuit'),
-    #     'config',
-    #     'map.yaml'
-    # )
-
-    # map_server_node = Node(
-    #     package='nav2_map_server',
-    #     executable='map_server',
-    #     parameters=[{'yaml_filename': map_path},
-    #                 {'topic': '/map'},
-    #                 {'frame_id': '/map'},
-    #                 {'output': 'screen'},
-    #                 {'use_sim_time': True}]
-    # )
-
-    # nav_lifecycle_node = Node(
-    #     package='nav2_lifecycle_manager',
-    #     executable='lifecycle_manager',
-    #     name='lifecycle_manager_localization',
-    #     output='screen',
-    #     parameters=[{'use_sim_time': True},
-    #                 {'autostart': True},
-    #                 {'node_names': ['map_server']}]
-    # )
-
-    # tf_node = Node(
-    #         package='tf2_ros', 
-    #         executable='static_transform_publisher',
-    #         name='base_transform',
-	#         output='screen',
-    #         parameters = ["0.0", "0.0", "0.0", "0", "0", "0", "map","world"]
-    #        ),
-    
-    # rviz_node = Node(
-    #     package='rviz2',
-    #     executable='rviz2',
-    #     name='rviz',
-    #     # arguments=['-d', os.path.join(get_package_share_directory('f1tenth_gym_ros'), 'launch', 'gym_bridge.rviz')]
-    # )
-
-    # ld.add_action(nav_lifecycle_node)
-    # ld.add_action(map_server_node)
-    # ld.add_action(rviz_node)
-    # ld.add_action(tf_node)
 
     ld.add_action(ekf_gnss_node)
     ld.add_action(gnss_local)
