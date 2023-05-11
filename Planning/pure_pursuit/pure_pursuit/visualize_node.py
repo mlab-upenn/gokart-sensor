@@ -35,17 +35,17 @@ class LaneVisualize(Node):
             namespace='',
             parameters=[
                 # wp
-                ('wp_track_width', None),
-                ('wp_centerline_filename', None),
-                ('wp_filename', None),
-                ('wp_delim', None),
-                ('wp_skiprows', None),
-                ('config_path', None),
-                ('wp_overtake_filename', None),
-                ('wp_corner_filename', None),
-                ('wp_x_idx', None),
-                ('wp_y_idx', None),
-                ('wp_v_idx', None),
+                ('wp_track_width', 3.6),
+                ('wp_centerline_filename', "wp.csv"),
+                ('wp_filename', "wp.csv"),
+                ('wp_delim', ','),
+                ('wp_skiprows', 1),
+                ('config_path', "/home/autoware/gokart_ws/src/gokart-sensor/configs/pennovation"),
+                ('wp_overtake_filename', "overtake_wp_idx.npy"),
+                ('wp_corner_filename', "corner_wp_idx.npy"),
+                ('wp_x_idx', 0),
+                ('wp_y_idx', 1),
+                ('wp_v_idx', 2),
             ])
 
         # load wp
@@ -137,7 +137,6 @@ class LaneVisualize(Node):
                 this_color.g = 0.0
                 this_color.b = 1.0
             else:
-                speed_ratio = (self.traj_v[i % self.num_traj_pts] - self.v_min) / (self.v_max - self.v_min)
                 this_color.a = 1.0
                 this_color.r = 1.0
                 this_color.g = 0.0

@@ -17,7 +17,7 @@ purepursuit_node:
     maxL_corner: 4.0
     maxP: 4.0
     maxP_corner: 4.0
-    max_steer: 0.87
+    max_steer: 0.95
     minL: 4.0
     minL_corner: 4.0
     minP: 4.0

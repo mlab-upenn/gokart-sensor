@@ -26,7 +26,7 @@ class Python_node(Node):
                 ('projection_lon_span', 0.0016),
                 ('debug_mode', False),
                 ('set_origin', False),
-                ('map_ori_path', None)
+                ('map_ori_path', "/home/autoware/gokart_ws/src/gokart-sensor/configs/pennovation/map_ori.csv")
             ])
 
         # subscribe and publish
