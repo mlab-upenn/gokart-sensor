@@ -71,7 +71,7 @@ So, we need to do the calibration in NDOF mode for different location.
 ros2 launch ros_imu_bno055 imu_calibration_launch.py
 ```
 
-The calibration steps are listed here([link](https://github.com/RoboticArts/ros_imu_bno055)).
+The calibration steps are listed [here](https://github.com/RoboticArts/ros_imu_bno055).
 
 After calibration, the IMU calibration binary file will be stored under the same config folder we created by `generate_yaml.py`
 
