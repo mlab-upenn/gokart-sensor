@@ -108,19 +108,19 @@ Example structure:
 
 **Driver** 
 
-- septentrio_gnss_driver
+septentrio_gnss_driver
 
 ```
 ros2 launch septentrio_gnss_driver rover.py
 ```
 
-- ros2_uart_serial
+ros2_uart_serial
 
 ```
 ros2 run serial_driver serial_bridge
 ```
 
-- ros_imu_bno055
+ros_imu_bno055
 
 ```
 ros2 launch ros_imu_bno055 imu_launch.py
