@@ -1,7 +1,7 @@
 /**:
   ros__parameters:
     # If permission denined, run sudo chmod 666 /dev/ttyUSB0 (or your device number)
-    device_name: /dev/ttyUSB1
+    device_name: /dev/sensors/usb_uart
 
     # Please do don't adjust this baud rate, it must be the same as the Nucleo side
     baud_rate: 115200

@@ -15,7 +15,7 @@ config_folder = os.path.join(cwd, "src", "gokart-sensor", "configs", LOCATION)
 ###### get config folder path from global config file #####
 
 
-serial_port = "/dev/ttyUSB0"
+serial_port = "/dev/sensors/bno055"
 frame_id = "imu_link"
 operation_mode = "NDOF"
 oscillator = "EXTERNAL"
