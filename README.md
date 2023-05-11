@@ -116,6 +116,26 @@ sudo gedit /etc/udev/rules.d/bno055.rules
 ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", MODE="0666", SYMLINK+="sensors/bno055"
 ```
 
+Nucleo Main Board
+```bash
+create the udev rule file
+sudo gedit /etc/udev/rules.d/usb_uart.rules
+
+# Copy & paste the following rules, save and exit.
+ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", MODE="0666", SYMLINK+="sensors/usb_uart"
+```
+
+Reload and trigger the rules
+```bash
+sudo udevadm control --reload-rules
+sudo udevadm trigger --action=change
+```
+
+Unplug and replug in the devices. and you should find the devices by running
+```bash
+ls /dev/sensors
+```
+
 ### Perception (yolov8)
 
 Run the following commands in three different terminals.
