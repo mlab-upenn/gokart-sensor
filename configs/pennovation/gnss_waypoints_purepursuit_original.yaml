@@ -18,11 +18,11 @@ purepursuit_node:
     maxP: 4.0
     maxP_corner: 4.0
     max_steer: 0.95
-    minL: 4.0
-    minL_corner: 4.0
+    minL: 2.0
+    minL_corner: 2.0
     minP: 4.0
     minP_corner: 4.0
-    vel_scale: 0.8
+    vel_scale: 1.0
     wp_corner_filename: corner_wp_idx.npy
     wp_delim: ','
     wp_filename: wp.csv

@@ -15,10 +15,6 @@ from math import cos, asin, sqrt, pi
 """
 Constant Definition
 """
-WIDTH = 0.2032  # (m)
-WHEEL_LENGTH = 0.0381  # (m)
-MAX_STEER = 0.36  # (rad)
-
 
 class PurePursuit_node(Node):
     def __init__(self):
@@ -40,7 +36,7 @@ class PurePursuit_node(Node):
                 ('maxP_corner', 4.0),
                 ('max_steer', 0.95),
                 ('D', 1.0),
-                ('vel_scale', 0.8),
+                ('vel_scale', 1.0),
 
                 # wp
                 ('wp_filename', "wp.csv"),
@@ -103,14 +99,16 @@ class PurePursuit_node(Node):
                                waypoints[:, self.get_parameter("wp_y_idx").get_parameter_value().integer_value], 
                                waypoints[:, self.get_parameter("wp_v_idx").get_parameter_value().integer_value])).T
         max_v = np.max(waypoints[:, 2]) * self.vel_scale
+
+        # temporary number
+        max_v = 4.0
+
         self.Pscale = max_v
         self.Lscale = max_v
-        self.Pscale_corner = max_v * 0.8
-        self.Lscale_corner = max_v * 0.8
+        self.Pscale_corner = max_v
+        self.Lscale_corner = max_v
         self.get_logger().info("max_v: {}".format(max_v))
         self.lane = np.expand_dims(waypoints, axis=0)
-
-        # print(self.lane.shape)
 
     def pose_cb(self, pose_msg: PoseWithCovarianceStamped):
         cur_speed = self.curr_vel
@@ -123,14 +121,15 @@ class PurePursuit_node(Node):
 
         curr_pos_idx = np.argmin(np.linalg.norm(self.lane[0][:, :2] - curr_pos, axis=1))
         curr_lane_nearest_idx = np.argmin(np.linalg.norm(self.lane[self.last_lane][:, :2] - curr_pos, axis=1))
-        traj_distances = np.linalg.norm(self.lane[self.last_lane][:, :2] - self.lane[self.last_lane][curr_lane_nearest_idx, :2], axis=1)
-        segment_end = np.argmin(traj_distances)
-        num_lane_pts = len(self.lane[self.last_lane])
 
-        if (segment_end in self.corner_idx):
+        if (curr_pos_idx in self.corner_idx):
             L = self.get_L_w_speed(cur_speed, corner=True)
         else:
             L = self.get_L_w_speed(cur_speed, corner=False)
+
+        num_lane_pts = len(self.lane[self.last_lane])
+        segment_end = curr_pos_idx
+        traj_distances = np.linalg.norm(self.lane[self.last_lane][:, :2] - self.lane[self.last_lane][curr_lane_nearest_idx, :2], axis=1)
 
         while traj_distances[segment_end] <= L:
             segment_end = (segment_end + 1) % num_lane_pts
@@ -200,7 +199,7 @@ class PurePursuit_node(Node):
             steer = cur_P * error
         else:
             steer = cur_P * error + self.kd * d_error
-        # print(f'cur_p_item:{cur_P * error},  cur_d_item:{kd * d_error}')
+
         new_steer = np.clip(steer, -self.max_steer, self.max_steer)
         return new_steer
 

@@ -132,6 +132,16 @@ ros2 launch ros_imu_bno055 imu_launch.py
 ros2 launch pure_pursuit wp_collection.launch.py
 ```
 
+#### Visualize the recorded centerline
+After the waypoints are recorded, it can be visualize using the `visualize_centerline.py` script. This script will also generate the corner and overtake index numpy file. As seen on the figure, the manually recorded waypoints is not very smooth.
+
+```
+python3 src/gokart-sensor/scripts/visualize_centerline.py
+```
+
+![image-20230503164301012](./figures/centerline_pennovation.png)
+
+
 #### **Note**
 
 ```
@@ -154,6 +164,11 @@ ros2 launch pure_pursuit purepursuit.launch.py
 
 ### 2.(Optional) TUM global raceline optimization
 
+
+#### Overview
+we use the [TUMFTM global_racetrajectory_optimization](https://github.com/TUMFTM/global_racetrajectory_optimization). All the related codes are under `/scripts/trajectory_generator`. It is a simplified version only contains the code related to min-curvature optimizaiton.
+
+
 #### Dependencies
 
 TUM global raceline optimization requires numpy==1.18.1 and scipy==1.3.3 which are both outdated. However, installing them does not cause trouble for other scripts yet, so we will just keep those versions.
@@ -162,19 +177,17 @@ TUM global raceline optimization requires numpy==1.18.1 and scipy==1.3.3 which a
 pip3 install -r src/gokart-sensor/scripts/trajectory_generator/requirements.txt
 ```
 
+
 #### Visualize the recorded centerline
 
-We assume the waypoints collected in the first step are the centerline of the track, which can be scattered and discontinuous. To further optimize the waypoints, we use the [TUMFTM global_racetrajectory_optimization(https://github.com/TUMFTM/global_racetrajectory_optimization). All the related codes are under `/scripts/trajectory_generator`. It is a simplified version only contains the code related to min-curvature optimizaiton.
+We assume the waypoints collected in the first step are the centerline of the track, which can be scattered and discontinuous. To further optimize the waypoints. run the same command as in previous section, and the script will generate a file named `<location>_wp_w_width.csv` under `/scripts/trajectory_generator/outputs`, for the global trajectory optimization. The width of the track should be defined and read from `global_config.yaml`.
 
-After the waypoints are recorded, it can be visualize using the `visualize_centerline.py` script:
 
 ```
 python3 src/gokart-sensor/scripts/visualize_centerline.py
 ```
 
-![image-20230503164301012](./figures/centerline_pennovation.png)
 
-As you can see from the figure, the manually record trajectory is not very smooth. The script will also generate a file named `<location>_wp_w_width.csv` under `/scripts/trajectory_generator/outputs`, for the global trajectory optimization. The width of the track should be defined and read from `global_config.yaml`.
 
 #### Run trajectory optimization
 
