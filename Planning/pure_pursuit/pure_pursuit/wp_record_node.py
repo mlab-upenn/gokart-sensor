@@ -21,7 +21,7 @@ class Wp_record_node(Node):
             parameters=[
                 ('frequency', 2),
                 ('pose_topic', '/gnss_ekf'),
-                ('wp_filename', "wp.csv"),
+                ('wp_path', "wp.csv"),
                 ('velocity', 2.0)
             ])
         self.freq = self.get_parameter('frequency').get_parameter_value().integer_value
@@ -36,7 +36,7 @@ class Wp_record_node(Node):
 
         self.x = 0.0
         self.y = 0.0
-        with open(self.get_parameter('wp_filename').get_parameter_value().string_value, 'w') as f:
+        with open(self.get_parameter('wp_path').get_parameter_value().string_value, 'w') as f:
             f.write(str(self.x) + ',' + str(self.y) + ',' + str(self.v) + '\n')
                                                
     def pose_cb(self, pose_msg: PoseWithCovarianceStamped):
@@ -44,7 +44,7 @@ class Wp_record_node(Node):
         self.y = pose_msg.pose.pose.position.y
 
     def record_wp(self):
-        with open(self.get_parameter('wp_filename').get_parameter_value().string_value, 'a') as f:
+        with open(self.get_parameter('wp_path').get_parameter_value().string_value, 'a') as f:
             f.write(str(self.x) + ',' + str(self.y) + ',' + str(self.v) + '\n')
 
 

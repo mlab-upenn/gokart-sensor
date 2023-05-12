@@ -15,4 +15,4 @@ wp_record_node:
     frequency: 2
     pose_topic: /gnss_ekf
     velocity: 1.0
-    wp_filename: wp.csv
+    wp_path: /home/autoware/gokart_ws/src/gokart-sensor/configs/pennovation/wp.csv

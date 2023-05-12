@@ -41,8 +41,8 @@ def generate_launch_description():
     )
 
     data_aug = Node(
-        package="data_aug_ros2",
-        executable="imu_listener",
+        package="data_augment",
+        executable="localization_filter",
         output='screen',
         parameters=[config],
     )

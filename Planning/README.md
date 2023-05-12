@@ -117,7 +117,7 @@ ros2 launch septentrio_gnss_driver rover.py
 ros2_uart_serial
 
 ```
-ros2 run serial_driver serial_bridge
+ros2 launch serial_driver serial_drive_bridge_node.launch.py
 ```
 
 ros_imu_bno055
