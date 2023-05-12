@@ -1,16 +1,16 @@
+import os
+import math
 import rclpy
+import numpy as np
+
 from rclpy.node import Node
-from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Point
 from vision_msgs.msg import Detection2DArray
+from ackermann_msgs.msg import AckermannDriveStamped
 from geometry_msgs.msg import PoseWithCovarianceStamped, PoseStamped, Pose
 from math import cos, asin, sqrt, pi
-import math
-from collections import namedtuple
-import numpy as np
-from ackermann_msgs.msg import AckermannDriveStamped
-import os
+
 
 """
 Constant Definition
@@ -64,11 +64,9 @@ class PurePursuit_node(Node):
         self.drive_pub = self.create_publisher(AckermannDriveStamped, self.get_parameter('drive_topic').get_parameter_value().string_value, 10)
         self.target_pub = self.create_publisher(Point, '/pp_target', 10)
         self.pose_sub = self.create_subscription(PoseWithCovarianceStamped, self.get_parameter('pose_topic').get_parameter_value().string_value, 
-                                                  self.pose_cb,
-                                                 10)
+                                                  self.pose_cb, 10)
         self.odom_sub = self.create_subscription(AckermannDriveStamped, self.get_parameter('odom_topic').get_parameter_value().string_value, 
-                                                 self.odom_cb,
-                                                 10)
+                                                 self.odom_cb, 10)
         
         self.lane = None
         self.last_lane = 0
@@ -79,18 +77,14 @@ class PurePursuit_node(Node):
         # control parameters
         self.maxL = self.get_parameter('maxL').get_parameter_value().double_value
         self.minL = self.get_parameter('minL').get_parameter_value().double_value
-        # self.Lscale = self.get_parameter('Lscale').get_parameter_value().double_value
         self.maxL_corner = self.get_parameter('maxL_corner').get_parameter_value().double_value
         self.minL_corner = self.get_parameter('minL_corner').get_parameter_value().double_value
-        # self.Lscale_corner = self.get_parameter('Lscale_corner').get_parameter_value().double_value
         self.interpScale = self.get_parameter('interpScale').get_parameter_value().integer_value
 
         self.maxP = self.get_parameter('maxP').get_parameter_value().double_value
         self.minP = self.get_parameter('minP').get_parameter_value().double_value
-        # self.Pscale = self.get_parameter('Pscale').get_parameter_value().double_value
         self.maxP_corner = self.get_parameter('maxP_corner').get_parameter_value().double_value
         self.minP_corner = self.get_parameter('minP_corner').get_parameter_value().double_value
-        # self.Pscale_corner = self.get_parameter('Pscale_corner').get_parameter_value().double_value
         self.max_steer = self.get_parameter('max_steer').get_parameter_value().double_value
         self.kd = self.get_parameter('D').get_parameter_value().double_value
         self.vel_scale = self.get_parameter('vel_scale').get_parameter_value().double_value
@@ -100,10 +94,6 @@ class PurePursuit_node(Node):
                      skiprow=self.get_parameter('wp_skiprows').get_parameter_value().integer_value)
         self.corner_idx = np.load(self.get_parameter('config_path').get_parameter_value().string_value + '/' + self.get_parameter('wp_corner_filename').get_parameter_value().string_value)
         self.corner_idx = set(self.corner_idx)
-        # self.get_logger().info("corner idx: {}".format(self.corner_idx))
-        # self.overtake_idx = np.load(self.get_parameter('config_path').get_parameter_value().string_value + '/' + self.get_parameter('overtake_wp_name').get_parameter_value().string_value)
-        # self.overtake_idx = set(self.overtake_idx)
-        # self.get_logger().info("overtake idx: {}".format(self.overtake_idx))
 
     def load_wp(self, wp_path:str, delim:str, skiprow:int):
         self.get_logger().info("Loading waypoints from {}".format(wp_path))
@@ -120,8 +110,9 @@ class PurePursuit_node(Node):
         self.get_logger().info("max_v: {}".format(max_v))
         self.lane = np.expand_dims(waypoints, axis=0)
 
+        # print(self.lane.shape)
+
     def pose_cb(self, pose_msg: PoseWithCovarianceStamped):
-        
         cur_speed = self.curr_vel
         curr_x = pose_msg.pose.pose.position.x
         curr_y = pose_msg.pose.pose.position.y
@@ -129,18 +120,21 @@ class PurePursuit_node(Node):
         curr_quat = pose_msg.pose.pose.orientation
         curr_yaw = math.atan2(2 * (curr_quat.w * curr_quat.z + curr_quat.x * curr_quat.y),
                               1 - 2 * (curr_quat.y ** 2 + curr_quat.z ** 2))
-        # self.get_logger().info(f'curr_yaw: {curr_yaw * 180/pi}')
+
         curr_pos_idx = np.argmin(np.linalg.norm(self.lane[0][:, :2] - curr_pos, axis=1))
         curr_lane_nearest_idx = np.argmin(np.linalg.norm(self.lane[self.last_lane][:, :2] - curr_pos, axis=1))
         traj_distances = np.linalg.norm(self.lane[self.last_lane][:, :2] - self.lane[self.last_lane][curr_lane_nearest_idx, :2], axis=1)
         segment_end = np.argmin(traj_distances)
         num_lane_pts = len(self.lane[self.last_lane])
+
         if (segment_end in self.corner_idx):
             L = self.get_L_w_speed(cur_speed, corner=True)
         else:
-            L = self.get_L_w_speed(cur_speed, False)
+            L = self.get_L_w_speed(cur_speed, corner=False)
+
         while traj_distances[segment_end] <= L:
             segment_end = (segment_end + 1) % num_lane_pts
+            
         segment_begin = (segment_end - 1 + num_lane_pts) % num_lane_pts
         x_array = np.linspace(self.lane[self.last_lane][segment_begin][0], self.lane[self.last_lane][segment_end][0], self.interpScale)
         y_array = np.linspace(self.lane[self.last_lane][segment_begin][1], self.lane[self.last_lane][segment_end][1], self.interpScale)
@@ -172,7 +166,7 @@ class PurePursuit_node(Node):
         message = AckermannDriveStamped()
         message.drive.speed = speed
         message.drive.steering_angle = steer
-        # self.get_logger().info(f'speed: {speed}, steer: {steer}')
+
         self.drive_pub.publish(message)
 
     def odom_cb(self, odom: AckermannDriveStamped):

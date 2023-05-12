@@ -28,9 +28,9 @@ purepursuit_node:
     wp_filename: wp.csv
     wp_overtake_filename: overtake_wp_idx.npy
     wp_skiprows: 1
-    wp_v_idx: 2
     wp_x_idx: 0
     wp_y_idx: 1
+    wp_v_idx: 2
 visualize_node:
   ros__parameters:
     config_path: /home/autoware/gokart_ws/src/gokart-sensor/configs/pennovation
@@ -41,6 +41,6 @@ visualize_node:
     wp_overtake_filename: overtake_wp_idx.npy
     wp_skiprows: 1
     wp_track_width: 3.6
-    wp_v_idx: 2
     wp_x_idx: 0
     wp_y_idx: 1
+    wp_v_idx: 2
