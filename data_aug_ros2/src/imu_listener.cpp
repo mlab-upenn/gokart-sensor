@@ -25,7 +25,7 @@ class MinimalPublisher : public rclcpp::Node
       gps_publisher_ = this->create_publisher<sensor_msgs::msg::NavSatFix>("/navsatfix/use", 10);
       timer_ = this->create_wall_timer(1ms, std::bind(&MinimalPublisher::timer_callback, this));
       subscription_ = this->create_subscription<sensor_msgs::msg::Imu>(
-        "/imu/data", 10, std::bind(&MinimalPublisher::topic_callback, this, _1));
+        "/imu/data", 10, std::bind(&MinimalPublisher::imu_callback, this, _1));
       gps_subscription_ = this->create_subscription<sensor_msgs::msg::NavSatFix>(
         "/navsatfix", 10, std::bind(&MinimalPublisher::gps_callback, this, _1));
       // filter_subscription_ = this->create_subscription<nav_msgs::msg::Odometry>(
@@ -49,7 +49,7 @@ class MinimalPublisher : public rclcpp::Node
     // }
 
 
-    void topic_callback(const sensor_msgs::msg::Imu::SharedPtr msg)
+    void imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg)
     {
         sensor_msgs::msg::Imu message = *msg;
         std::array<double, 9> covar = msg->orientation_covariance;
