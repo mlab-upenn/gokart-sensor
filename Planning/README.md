@@ -132,16 +132,6 @@ ros2 launch ros_imu_bno055 imu_launch.py
 ros2 launch pure_pursuit wp_collection.launch.py
 ```
 
-#### Visualize the recorded centerline
-After the waypoints are recorded, it can be visualize using the `visualize_centerline.py` script. This script will also generate the corner and overtake index numpy file. As seen on the figure, the manually recorded waypoints is not very smooth.
-
-```
-python3 src/gokart-sensor/scripts/visualize_centerline.py
-```
-
-![image-20230503164301012](./figures/centerline_pennovation.png)
-
-
 #### **Note**
 
 ```
@@ -154,6 +144,18 @@ gnss_to_local_node:
 ```
 
 If `set_origin` is true,`gnss_to_local_node` will take the first GNSS msg published by `ekf_gnss` node and save it into map_ori_path. This waypoint will be used as the origin of the map. If `set_origin` is false, `gnss_to_local_node` will load the map origin from map_ori_path and use it as the origin of the map.
+
+
+#### Visualize the recorded centerline
+After the waypoints are recorded, it can be visualize using the `visualize_centerline.py` script. This script will also generate the corner and overtake index numpy file. As seen on the figure, the manually recorded waypoints is not very smooth.
+
+```
+python3 src/gokart-sensor/scripts/visualize_centerline.py
+```
+
+![image-20230503164301012](./figures/centerline_pennovation.png)
+
+
 
 **Purepursuit**
 
