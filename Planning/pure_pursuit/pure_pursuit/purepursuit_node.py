@@ -134,7 +134,7 @@ class PurePursuit_node(Node):
 
         while traj_distances[segment_end] <= L:
             segment_end = (segment_end + 1) % num_lane_pts
-            
+
         segment_begin = (segment_end - 1 + num_lane_pts) % num_lane_pts
         x_array = np.linspace(self.lane[self.last_lane][segment_begin][0], self.lane[self.last_lane][segment_end][0], self.interpScale)
         y_array = np.linspace(self.lane[self.last_lane][segment_begin][1], self.lane[self.last_lane][segment_end][1], self.interpScale)
