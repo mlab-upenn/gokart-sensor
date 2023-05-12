@@ -154,7 +154,7 @@ ros2 launch pure_pursuit purepursuit.launch.py
 
 ### 2.(Optional) TUM global raceline optimization
 
-#### Prepare: install requirement
+#### Dependencies
 
 TUM global raceline optimization requires numpy==1.18.1 and scipy==1.3.3 which are both outdated. However, installing them does not cause trouble for other scripts yet, so we will just keep those versions.
 
@@ -164,7 +164,7 @@ pip3 install -r src/gokart-sensor/scripts/trajectory_generator/requirements.txt
 
 #### Visualize the recorded centerline
 
-We assume the waypoints collected in the first step are the centerline of the track, which can be scattered and discontinuous. To further optimize the waypoints, we use the global raceline optimization from TUM(link). All the related codes are under `/scripts/trajectory_generator`. It is a simplified version only contains the code related to min-curvature optimizaiton.
+We assume the waypoints collected in the first step are the centerline of the track, which can be scattered and discontinuous. To further optimize the waypoints, we use the [TUMFTM global_racetrajectory_optimization(https://github.com/TUMFTM/global_racetrajectory_optimization). All the related codes are under `/scripts/trajectory_generator`. It is a simplified version only contains the code related to min-curvature optimizaiton.
 
 After the waypoints are recorded, it can be visualize using the `visualize_centerline.py` script:
 
@@ -201,9 +201,6 @@ And you should see the following figures of the optimized trajectory with veloci
 ```
 python3 src/gokart-sensor/scripts/visualize_optim_raceline.py
 ```
-
-![image-20230503175424713](/home/zzjun/ros2Project/gokart_ws/src/gokart-sensor/Planning/figures/optim_traj_pennovation3.png)
-
 
 
 ### 3.(Optional) Lane generation for lane-switcher based obstacle avoidance
