@@ -6,6 +6,7 @@
 #include "std_msgs/msg/string.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "sensor_msgs/msg/imu.hpp"
+#include "sensor_msgs/msg/point_cloud2.hpp"
 #include "sensor_msgs/msg/nav_sat_fix.hpp"
 #include "geometry_msgs/msg/quaternion.hpp"
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
@@ -24,30 +25,30 @@ class MinimalPublisher : public rclcpp::Node
     {
       publisher_ = this->create_publisher<sensor_msgs::msg::Imu>("/imu/use", 10);
       gps_publisher_ = this->create_publisher<sensor_msgs::msg::NavSatFix>("/navsatfix/use", 10);
-      timer_ = this->create_wall_timer(500ms, std::bind(&MinimalPublisher::timer_callback, this));
+      timer_ = this->create_wall_timer(1ms, std::bind(&MinimalPublisher::timer_callback, this));
       subscription_ = this->create_subscription<sensor_msgs::msg::Imu>(
         "/imu/data", 10, std::bind(&MinimalPublisher::topic_callback, this, _1));
       gps_subscription_ = this->create_subscription<sensor_msgs::msg::NavSatFix>(
         "/navsatfix", 10, std::bind(&MinimalPublisher::gps_callback, this, _1));
-      filter_subscription_ = this->create_subscription<nav_msgs::msg::Odometry>(
-        "/odometry/filtered", 10, std::bind(&MinimalPublisher::filter_callback, this, _1));
+      // filter_subscription_ = this->create_subscription<nav_msgs::msg::Odometry>(
+      //   "/odometry/filtered", 10, std::bind(&MinimalPublisher::filter_callback, this, _1));
     }
 
   private:
 
-    void filter_callback(const nav_msgs::msg::Odometry::SharedPtr msg) const
-    {
-      // geometry_msgs::msg::Quaternion msg_quat; = msg->pose.pose.orientation;
-      tf2::Quaternion q(
-          msg->pose.pose.orientation.x,
-          msg->pose.pose.orientation.y,
-          msg->pose.pose.orientation.z,
-          msg->pose.pose.orientation.w);
-      tf2::Matrix3x3 m(q);
-      double roll, pitch, yaw;
-      m.getRPY(roll, pitch, yaw);
-      // cout << "filter yaw" << yaw << endl;
-    }
+    // void filter_callback(const nav_msgs::msg::Odometry::SharedPtr msg) const
+    // {
+    //   // geometry_msgs::msg::Quaternion msg_quat; = msg->pose.pose.orientation;
+    //   tf2::Quaternion q(
+    //       msg->pose.pose.orientation.x,
+    //       msg->pose.pose.orientation.y,
+    //       msg->pose.pose.orientation.z,
+    //       msg->pose.pose.orientation.w);
+    //   tf2::Matrix3x3 m(q);
+    //   double roll, pitch, yaw;
+    //   m.getRPY(roll, pitch, yaw);
+    //   // cout << "filter yaw" << yaw << endl;
+    // }
 
 
     void topic_callback(const sensor_msgs::msg::Imu::SharedPtr msg)
@@ -82,6 +83,7 @@ class MinimalPublisher : public rclcpp::Node
     void gps_callback(const sensor_msgs::msg::NavSatFix::SharedPtr msg)
     {
         auto message = *msg;
+        switch_ = true;
         std::array<double, 9> gps_covar = msg->position_covariance;
         double lat = msg->latitude;
         double lon = msg->longitude;
@@ -112,9 +114,9 @@ class MinimalPublisher : public rclcpp::Node
         {
             lat_old_ = lat;
             lon_old_ = lon;
-            gps_covar[0] = 1e-9;
-            gps_covar[4] = 1e-9;
-            gps_covar[8] = 1e-9;
+            // gps_covar[0] = 1e-9;
+            // gps_covar[4] = 1e-9;
+            // gps_covar[8] = 1e-9;
             // jump_ = false;
             // std::array<double, 9> gps_covar_new;
             // if(gps_covar[0] < 0.1)
@@ -127,20 +129,20 @@ class MinimalPublisher : public rclcpp::Node
         message.latitude = lat;
         message.longitude = lon;
         message.position_covariance = gps_covar;
-        gps_publisher_->publish(message);
+        publish_navsat_ = message;
+        gps_publisher_->publish(publish_navsat_);
+
     }
 
     void timer_callback()
     {
-    //   auto message = sensor_msgs::msg::Imu();
-    //   message.data = "Hello, world! " + std::to_string(count_++);
-    //   RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
-    //   publisher_->publish(message);
+      // if(switch_) gps_publisher_->publish(publish_navsat_);
     }
     rclcpp::TimerBase::SharedPtr timer_;
+    sensor_msgs::msg::NavSatFix publish_navsat_;
     rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr publisher_;
     rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr gps_publisher_;
-    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr filter_subscription_;
+    // rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr filter_subscription_;
     rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr subscription_;
     rclcpp::Subscription<sensor_msgs::msg::NavSatFix>::SharedPtr gps_subscription_;
     double lat_old_, lon_old_;
