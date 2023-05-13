@@ -101,7 +101,7 @@ class PurePursuit_node(Node):
         max_v = np.max(waypoints[:, 2]) * self.vel_scale
 
         # temporary number
-        max_v = 4.0
+        max_v = 5.0
 
         self.Pscale = max_v
         self.Lscale = max_v
@@ -152,6 +152,9 @@ class PurePursuit_node(Node):
 
         R = np.array([[np.cos(curr_yaw), np.sin(curr_yaw)],
                       [-np.sin(curr_yaw), np.cos(curr_yaw)]])
+
+        # print("yaw", curr_yaw)
+
         target_local_x, target_local_y = R @ np.array([self.target_point[0] - curr_x,
                                            self.target_point[1] - curr_y])
         L = np.linalg.norm(curr_pos - target_global)
@@ -193,12 +196,18 @@ class PurePursuit_node(Node):
         cur_P = maxP - speed * interp_P_scale
 
         d_error = error - self.prev_steer_error
+
+        # print("error", error)
+        # print("error_d", d_error)
+        # print()
+
         self.prev_ditem = d_error
         self.prev_steer_error = error
         if corner:
             steer = cur_P * error
         else:
-            steer = cur_P * error + self.kd * d_error
+            # steer = cur_P * error + self.kd * d_error
+            steer = cur_P * error
 
         new_steer = np.clip(steer, -self.max_steer, self.max_steer)
         return new_steer
