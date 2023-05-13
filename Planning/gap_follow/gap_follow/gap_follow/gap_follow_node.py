@@ -1,13 +1,12 @@
-import rclpy
-from rclpy.node import Node
+import numpy as np
 from math import pi, atan2, cos, sin
 from queue import PriorityQueue
 import copy
 
-import numpy as np
+import rclpy
+from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
 from ackermann_msgs.msg import AckermannDriveStamped, AckermannDrive
-from queue import PriorityQueue
 from rclpy.qos import qos_profile_sensor_data
 
 
@@ -42,7 +41,6 @@ def sliding_window_minimum(sequence, window_size):
     return result
 
 
-
 class Gap_follow_node(Node):
     def __init__(self):
         # here, super().__init__(<node_name>), while the node_name should be the same as provided in yaml file
@@ -68,6 +66,7 @@ class Gap_follow_node(Node):
         self.scan_subscriber = self.create_subscription(LaserScan, self.get_parameter("scan_topic").get_parameter_value().string_value, self.scan_cb, qos_profile=qos_profile_sensor_data)
         self.scan_pub_debug = self.create_publisher(LaserScan, '/scan_debug', qos_profile_sensor_data)
         self.drive_pub = self.create_publisher(AckermannDriveStamped, self.get_parameter('drive_topic').get_parameter_value().string_value, 10)
+        
         self.safe_thres = self.get_parameter('safe_thres').get_parameter_value().double_value
         self.max_gap = self.get_parameter('max_gap').get_parameter_value().integer_value
         self.min_gap = self.get_parameter('min_gap').get_parameter_value().integer_value
@@ -83,13 +82,13 @@ class Gap_follow_node(Node):
         proc_ranges = sliding_window_maximum(proc_ranges, self.window_size)
         return proc_ranges
         
-
     def find_best_point(self, start_idx, end_idx, ranges):
         safe_range = PriorityQueue()
         safe_range_debug = PriorityQueue()
         safe_p_left = start_idx
         safe_p_right = end_idx
         p = start_idx
+        
         while p < end_idx:
             if ranges[p] >= self.safe_thres:
                 safe_p_left = p
@@ -98,12 +97,13 @@ class Gap_follow_node(Node):
                     p += 1
                 # while ranges[p] >= self.safe_thres or (max(ranges[p-2:p+1] >= self.safe_thres and ranges[p+1] >= self.safe_radius):
                     # p += 1
-                safe_p_right = p-1
+                safe_p_right = p - 1
                 if abs(safe_p_right-safe_p_left) >= self.min_gap:
                     safe_range.put((-(safe_p_right-safe_p_left), (safe_p_left, safe_p_right)))
                     safe_range_debug.put((-(safe_p_right-safe_p_left), (safe_p_left, safe_p_right)))
             else:
                 p += 1
+        
         target = np.argmax(ranges)
         if safe_range.empty():
             # self.get_logger().info('no safe range, return farmost point')
@@ -117,15 +117,17 @@ class Gap_follow_node(Node):
             # self.get_logger().info('best point not in boundary, return farmost point')
             return target, safe_range_debug
 
-
     def scan_cb(self, scan_msg):
         angle_increment = scan_msg.angle_increment
-        angle_min = scan_msg.angle_min        
+        angle_min = scan_msg.angle_min
         ranges = scan_msg.ranges
+        
         n = len(ranges)
         proc_ranges = np.array(ranges)
         # self.get_logger().info(f"len(ranges):{n}")
+
         target_idx, safe_range_debug = self.find_best_point(self.min_boundary, self.max_boundary, proc_ranges)
+        
         # debug
         scan_debug = copy.deepcopy(scan_msg)
         debug_ranges = [0.0] * n
@@ -137,10 +139,12 @@ class Gap_follow_node(Node):
         scan_debug.ranges = debug_ranges
         self.scan_pub_debug.publish(scan_debug)
         # debug
+
         steer = angle_min + target_idx * angle_increment
         steer = np.clip(steer, -self.steer_speed_scale, self.steer_speed_scale)
-        speed = self.max_speed - (self.max_speed - self.min_speed) * abs(steer)/ self.steer_speed_scale
+        speed = self.max_speed - (self.max_speed - self.min_speed) * abs(steer) / self.steer_speed_scale
         # self.get_logger().info('target_idx:{}, steer:{}, speed:{}'.format(target_idx, steer, speed))
+        
         ackerman_msg = AckermannDriveStamped()
         ackerman_msg.header.stamp = self.get_clock().now().to_msg()
         ackerman_msg.drive.steering_angle = steer
@@ -157,8 +161,3 @@ def main(args=None):
 
 if __name__ == "__main__":
     main()
-
-
-"""
-
-"""
