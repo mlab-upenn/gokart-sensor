@@ -10,6 +10,7 @@ from ekf_gnss.ekf import EKF
 import numpy as np
 import threading
 import transforms3d
+import os
 
 
 class Wp_record_node(Node):
@@ -20,9 +21,10 @@ class Wp_record_node(Node):
             namespace='',
             parameters=[
                 ('frequency', 2),
-                ('pose_topic', '/gnss_ekf'),
-                ('wp_path', "wp.csv"),
-                ('velocity', 2.0)
+                ('pose_topic', '/gnss_ekfs'),
+                ('wp_filename', "wp.csv"),
+                ('config_path', "path"),
+                ('velocity', 1.0),
             ])
         self.freq = self.get_parameter('frequency').get_parameter_value().integer_value
         self.dt = 1/self.freq
@@ -33,10 +35,12 @@ class Wp_record_node(Node):
                                                  self.pose_cb,
                                                  10)
         self.timer = self.create_timer(self.dt, self.record_wp)
+        self.wp_path = os.path.join(self.get_parameter('config_path').value, self.get_parameter('wp_filename').value)
+        self.get_logger().info("wp_record_node save wp to {}".format(self.wp_path))
 
         self.x = 0.0
         self.y = 0.0
-        with open(self.get_parameter('wp_path').get_parameter_value().string_value, 'w') as f:
+        with open(self.wp_path, 'w') as f:
             f.write(str(self.x) + ',' + str(self.y) + ',' + str(self.v) + '\n')
                                                
     def pose_cb(self, pose_msg: PoseWithCovarianceStamped):
@@ -44,7 +48,7 @@ class Wp_record_node(Node):
         self.y = pose_msg.pose.pose.position.y
 
     def record_wp(self):
-        with open(self.get_parameter('wp_path').get_parameter_value().string_value, 'a') as f:
+        with open(self.wp_path, 'a') as f:
             f.write(str(self.x) + ',' + str(self.y) + ',' + str(self.v) + '\n')
 
 

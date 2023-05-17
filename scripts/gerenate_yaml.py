@@ -74,6 +74,8 @@ def generate_yaml(config_folder, global_cfg_path):
     wpcollection_yaml['gnss_to_local_node']['ros__parameters']['debug_mode'] = DEBUG
     wpcollection_yaml['gnss_to_local_node']['ros__parameters']['projection_center_latitude'] = projection_center_latitude
     wpcollection_yaml['gnss_to_local_node']['ros__parameters']['projection_center_longitude'] = projection_center_longitude
+    wpcollection_yaml['wp_record_node']['ros__parameters']['config_path'] = os.path.join(config_folder, location)
+    wpcollection_yaml['wp_record_node']['ros__parameters']['wp_filename'] = "wp.csv"
 
 
     with open(os.path.join(config_folder, location, PUREPURSUIT_YAML_NAME), 'w') as file:

@@ -2,13 +2,26 @@ gap_follow_node:
   ros__parameters:
     danger_thres: 1.0
     drive_topic: /automous_command_to_nucleo
-    max_boundary: 330
-    max_gap: 90
+    max_boundary: 300
+    max_gap: 130
     max_speed: 3.0
-    min_boundary: 30
-    min_gap: 10
+    min_boundary: 60
+    min_gap: 30
     min_speed: 2.0
-    safe_radius: 4
-    safe_thres: 2.0
+    safe_radius: 6
+    safe_thres: 6.0
     scan_topic: /ouster/scan
     steer_speed_scale: 0.87
+    window_size: 4
+pointcloud_to_laserscan:
+  ros__parameters:
+    angle_increment: 0.0087
+    angle_max: 1.5708
+    angle_min: -1.5708
+    inf_epsilon: 1.0
+    max_height: -0.4
+    min_height: -1.0
+    range_max: 8.0
+    range_min: 1.6
+    scan_time: 0.3333
+    use_inf: false
