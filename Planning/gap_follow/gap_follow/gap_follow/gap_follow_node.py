@@ -145,6 +145,7 @@ class Gap_follow_node(Node):
         ackerman_msg.header.stamp = self.get_clock().now().to_msg()
         ackerman_msg.drive.steering_angle = steer
         ackerman_msg.drive.speed = speed
+        self.drive_pub.publish(ackerman_msg)
     
 
 def main(args=None):

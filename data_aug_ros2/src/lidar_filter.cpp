@@ -70,36 +70,37 @@ class LidarFilter : public rclcpp::Node
 
         //translate point cloud in z direction
 
-        float translation_z = 0.0;
-        // Create the transformation matrix
-        Eigen::Affine3f transform_z = Eigen::Affine3f::Identity();
-        transform_z.translation() << 0.0, 0.0, translation_z;
-        // Apply the translation
-        pcl::PointCloud<pcl::PointXYZ>::Ptr transformed_cloud(new pcl::PointCloud<pcl::PointXYZ>);
-        pcl::transformPointCloud(*cloud_rotated, *transformed_cloud, transform_z);
+        // float translation_z = 0.0;
+        // // Create the transformation matrix
+        // Eigen::Affine3f transform_z = Eigen::Affine3f::Identity();
+        // transform_z.translation() << 0.0, 0.0, translation_z;
+        // // Apply the translation
+        // pcl::PointCloud<pcl::PointXYZ>::Ptr transformed_cloud(new pcl::PointCloud<pcl::PointXYZ>);
+        // pcl::transformPointCloud(*cloud_rotated, *transformed_cloud, transform_z);
 
 
 
         // Create the Voxel Grid filter object
-        pcl::VoxelGrid<pcl::PointXYZ> voxel_filter;
-        voxel_filter.setInputCloud (transformed_cloud);
-        voxel_filter.setLeafSize (0.05f, 0.05f, 0.05f); // set the voxel size
-        pcl::PointCloud<pcl::PointXYZ>::Ptr voxel_cloud (new pcl::PointCloud<pcl::PointXYZ>);
-        voxel_filter.filter (*voxel_cloud);  // apply the filter and save the output to the original point cloud object
+        // pcl::VoxelGrid<pcl::PointXYZ> voxel_filter;
+        // voxel_filter.setInputCloud (transformed_cloud);
+        // voxel_filter.setLeafSize (0.05f, 0.05f, 0.05f); // set the voxel size
+        // pcl::PointCloud<pcl::PointXYZ>::Ptr voxel_cloud (new pcl::PointCloud<pcl::PointXYZ>);
+        // voxel_filter.filter (*voxel_cloud);  // apply the filter and save the output to the original point cloud object
 
         /// Pass through filters
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered_x(new pcl::PointCloud<pcl::PointXYZ>);
         pcl::PassThrough<pcl::PointXYZ> pass_x;
-        pass_x.setInputCloud(voxel_cloud);
+        pass_x.setInputCloud(cloud_rotated);
         pass_x.setFilterFieldName("x");
-        pass_x.setFilterLimits(1.5, 6);
+        pass_x.setFilterLimits(2, 6);
         pass_x.filter(*cloud_filtered_x);
 
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered_z(new pcl::PointCloud<pcl::PointXYZ>);
         pcl::PassThrough<pcl::PointXYZ> pass_z;
         pass_z.setInputCloud(cloud_filtered_x);
         pass_z.setFilterFieldName("z");
-        pass_z.setFilterLimits(-3+translation_z, 1.0 +translation_z);
+        pass_z.setFilterLimits(-2.0, 1.0);
+        // pass_z.setFilterLimits(-3+translation_z, 1.0 +translation_z);
         pass_z.filter(*cloud_filtered_z);
 
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered_y(new pcl::PointCloud<pcl::PointXYZ>);
@@ -141,97 +142,106 @@ class LidarFilter : public rclcpp::Node
         extract.filter(*remaining);
 
         // Euclidean cluster extraction
+        std::vector<pcl::PointIndices> cluster_indices;
+        pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
+        tree->setInputCloud(remaining);
+        pcl::EuclideanClusterExtraction<pcl::PointXYZ> ec;
+        ec.setClusterTolerance(0.2);
+        ec.setMinClusterSize(30);
+        ec.setMaxClusterSize(1000);
+        ec.setSearchMethod(tree);
+        ec.setInputCloud(remaining);
         // std::vector<pcl::PointIndices> cluster_indices;
-        // pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
-        // tree->setInputCloud(remaining);
-        // pcl::EuclideanClusterExtraction<pcl::PointXYZ> ec;
-        // ec.setClusterTolerance(0.02);
-        // ec.setMinClusterSize(1);
-        // ec.setMaxClusterSize(10);
-        // ec.setSearchMethod(tree);
-        // ec.setInputCloud(remaining);
-        // ec.extract(cluster_indices);
+        ec.extract(cluster_indices);
         // // std::cout << cluster_indices.size() << std::endl; 
-
-        // pcl::PointCloud<pcl::PointXYZ>::Ptr cluster_cloud (new pcl::PointCloud<pcl::PointXYZ>);
-
-        // for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin (); it != cluster_indices.end (); ++it)
-        // {
-        //   for (std::vector<int>::const_iterator pit = it->indices.begin (); pit != it->indices.end (); ++pit)
-        //     cluster_cloud->points.push_back (remaining->points[*pit]);
-        // }
-
-        pcl::search::Search<pcl::PointXYZ>::Ptr tree = boost::shared_ptr<pcl::search::Search<pcl::PointXYZ>> (new pcl::search::KdTree<pcl::PointXYZ>);
-        pcl::PointCloud <pcl::Normal>::Ptr normals (new pcl::PointCloud <pcl::Normal>);
-        pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimator;
-        normal_estimator.setSearchMethod (tree);
-        normal_estimator.setInputCloud (remaining);
-        normal_estimator.setKSearch (50);
-        normal_estimator.compute (*normals);
-
-        pcl::RegionGrowing<pcl::PointXYZ, pcl::Normal> reg;
-        reg.setMinClusterSize (10);
-        reg.setMaxClusterSize (150);
-        reg.setSearchMethod (tree);
-        reg.setNumberOfNeighbours (30);
-        reg.setInputCloud (remaining);
-        reg.setInputNormals (normals);
-        reg.setSmoothnessThreshold (5.0 / 180.0 * M_PI);
-        reg.setCurvatureThreshold (1.0);
-
-        std::vector<pcl::PointIndices> clusters;
-        reg.extract (clusters);
-        // std::cout << clusters.size() << std::endl; 
-        if(clusters.size()==0) return;
-
-
 
         pcl::PointCloud<pcl::PointXYZ>::Ptr cluster_cloud (new pcl::PointCloud<pcl::PointXYZ>);
 
-        for (std::vector<pcl::PointIndices>::const_iterator it = clusters.begin (); it != clusters.end (); ++it)
+        for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin (); it != cluster_indices.end (); ++it)
         {
           for (std::vector<int>::const_iterator pit = it->indices.begin (); pit != it->indices.end (); ++pit)
             cluster_cloud->points.push_back (remaining->points[*pit]);
-
-          Eigen::Vector4f centroid;
-          const std::vector<int>& indices = it->indices;
-          pcl::compute3DCentroid(*remaining, indices, centroid);
-          // std::cout << "x" <<std::endl;
-          // std::cout << centroid[0] <<std::endl;
-          // std::cout << "y" <<std::endl;
-          // std::cout << centroid[1] <<std::endl;
-          // std::cout << "z" <<std::endl;
-          // std::cout << centroid[2] <<std::endl;
-          double x = centroid[0];
-          double y = centroid[1];
-          // double z = centroid[2];
-          ct_+=1;
-          if(abs(y)< 0.8 && x<3) 
-          {
-            std::cout << "TERRAIN, TERRAIN, PULLUP!!!" <<  ct_ << "x" << x << "y" << y <<std::endl;
-          }
         }
 
+        // pcl::search::Search<pcl::PointXYZ>::Ptr tree = boost::shared_ptr<pcl::search::Search<pcl::PointXYZ>> (new pcl::search::KdTree<pcl::PointXYZ>);
+        // pcl::PointCloud <pcl::Normal>::Ptr normals (new pcl::PointCloud <pcl::Normal>);
+        // pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimator;
+        // normal_estimator.setSearchMethod (tree);
+        // normal_estimator.setInputCloud (remaining);
+        // normal_estimator.setKSearch (50);
+        // normal_estimator.compute (*normals);
 
-        sensor_msgs::msg::PointCloud2 out_cloud_filter_x;
-        pcl::toROSMsg(*cluster_cloud, out_cloud_filter_x);
-        out_cloud_filter_x.header = (*msg).header;
-        publisher_->publish(out_cloud_filter_x);
+        // pcl::RegionGrowing<pcl::PointXYZ, pcl::Normal> reg;
+        // reg.setMinClusterSize (40);
+        // reg.setMaxClusterSize (150);
+        // reg.setSearchMethod (tree);
+        // reg.setNumberOfNeighbours (40);
+        // reg.setInputCloud (remaining);
+        // reg.setInputNormals (normals);
+        // reg.setSmoothnessThreshold (5.0 / 180.0 * M_PI);
+        // reg.setCurvatureThreshold (1.0);
+
+        // std::vector<pcl::PointIndices> clusters;
+        // reg.extract (clusters);
+        // // std::cout << clusters.size() << std::endl; 
+        // if(clusters.size()==0) return;
+
+
+
+        // pcl::PointCloud<pcl::PointXYZ>::Ptr cluster_cloud (new pcl::PointCloud<pcl::PointXYZ>);
+
+        // for (std::vector<pcl::PointIndices>::const_iterator it = clusters.begin (); it != clusters.end (); ++it)
+        // {
+        //   for (std::vector<int>::const_iterator pit = it->indices.begin (); pit != it->indices.end (); ++pit)
+        //     cluster_cloud->points.push_back (remaining->points[*pit]);
+        //   // Eigen::Vector4f centroid;
+        //   // const std::vector<int>& indices = it->indices;
+        //   // pcl::compute3DCentroid(*remaining, indices, centroid);
+        //   // double x = centroid[0];
+        //   // double y = centroid[1];
+        //   // ct_+=1;
+        //   // if(abs(y)< 0.8 && x<3) 
+        //   // {
+        //   //   std::cout << "TERRAIN, TERRAIN, PULLUP!!!" <<  ct_ << "x" << x << "y" << y <<std::endl;
+        //   // }
+        // }
+
+
+        // // sensor_msgs::msg::PointCloud2 out_cloud_filter_x;
+        // // pcl::toROSMsg(*cluster_cloud, out_cloud_filter_x);
+        // // out_cloud_filter_x.header = (*msg).header;
+        // // publisher_->publish(out_cloud_filter_x);
 
 
 
 
         // // Create the Euclidean Cluster Extraction object
         // pcl::EuclideanClusterExtraction<pcl::PointXYZ> cluster_extractor;
-        // cluster_extractor.setInputCloud (cloud_filtered_z);
+        // cluster_extractor.setInputCloud (cluster_cloud);
         // cluster_extractor.setClusterTolerance (0.1); // set the cluster tolerance to 0.1 meters
         // cluster_extractor.setMinClusterSize (50);   // set the minimum cluster size to 50 points
         // cluster_extractor.setMaxClusterSize (1000); // set the maximum cluster size to 10000 points
         // std::vector<pcl::PointIndices> cluster_indices;
         // cluster_extractor.extract (cluster_indices); // perform clustering and save the output to a vector of point indices
 
-        // // Create a new point cloud for each cluster and save to a PCD file
-        // // int i = 0;
+        // // Create a new point cloud to store the clustered points
+        // pcl::PointCloud<pcl::PointXYZ>::Ptr clustered_cloud(new pcl::PointCloud<pcl::PointXYZ>);
+        
+        // // Iterate through each cluster
+        // for (const auto& indices : cluster_indices)
+        // {
+        //   // Extract cluster points
+        //   pcl::PointCloud<pcl::PointXYZ>::Ptr cluster(new pcl::PointCloud<pcl::PointXYZ>);
+        //   pcl::copyPointCloud(*cluster_cloud, indices.indices, *cluster);
+
+        //   // Add cluster points to the clustered point cloud
+        //   *clustered_cloud += *cluster;
+        // }
+
+        sensor_msgs::msg::PointCloud2 out_cloud_filter_x;
+        pcl::toROSMsg(*cluster_cloud, out_cloud_filter_x);
+        out_cloud_filter_x.header = (*msg).header;
+        publisher_->publish(out_cloud_filter_x);
 
         // cluster_cloud->width = cluster_cloud->points.size ();
         // cluster_cloud->height = 1;

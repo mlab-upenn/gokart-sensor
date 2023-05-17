@@ -9,7 +9,7 @@ gap_follow_node:
     min_gap: 30
     min_speed: 2.0
     safe_radius: 6
-    safe_thres: 6.0
+    safe_thres: 4.0
     scan_topic: /ouster/scan
     steer_speed_scale: 0.87
     window_size: 4
@@ -20,7 +20,7 @@ pointcloud_to_laserscan:
     angle_min: -1.5708
     inf_epsilon: 1.0
     max_height: -0.4
-    min_height: -1.0
+    min_height: -3.0
     range_max: 8.0
     range_min: 1.6
     scan_time: 0.3333
