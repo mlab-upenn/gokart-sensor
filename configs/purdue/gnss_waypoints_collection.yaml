@@ -4,7 +4,7 @@ ekf_gnss_node:
 gnss_to_local_node:
   ros__parameters:
     debug_mode: true
-    map_ori_path: /home/zzjun/ros2Project/tmp_ws/src/gokart-sensor/configs/purdue/map_ori.csv
+    map_ori_path: /home/autoware/gokart_ws/src/gokart-sensor/configs/purdue/map_ori.csv
     projection_center_latitude: 39.9416
     projection_center_longitude: -75.1993
     projection_lat_span: 0.001
@@ -12,9 +12,9 @@ gnss_to_local_node:
     set_origin: true
 wp_record_node:
   ros__parameters:
-    config_path: /home/zzjun/ros2Project/tmp_ws/src/gokart-sensor/configs/purdue
+    config_path: /home/autoware/gokart_ws/src/gokart-sensor/configs/purdue
     frequency: 2
     pose_topic: /gnss_ekf
     velocity: 1.0
     wp_filename: wp.csv
-    wp_path: /home/autoware/gokart_ws/src/gokart-sensor/configs/pennovation/wp.csv
+    wp_path: /home/autoware/gokart_ws/src/gokart-sensor/configs/purdue/wp.csv
