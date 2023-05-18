@@ -138,6 +138,8 @@ class Gap_follow_node(Node):
         self.scan_pub_debug.publish(scan_debug)
         # debug
         steer = angle_min + target_idx * angle_increment
+        steer*= 1.35
+        # print(steer)
         steer = np.clip(steer, -self.steer_speed_scale, self.steer_speed_scale)
         speed = self.max_speed - (self.max_speed - self.min_speed) * abs(steer)/ self.steer_speed_scale
         # self.get_logger().info('target_idx:{}, steer:{}, speed:{}'.format(target_idx, steer, speed))

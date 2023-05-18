@@ -33,9 +33,10 @@ def generate_launch_description():
         parameters=[config]
     )
 
-    lidar_filter_node = Node(
-        package="data_aug_ros2",
-        executable="lidar_filter",
+    cam_lidar_node = Node(
+        package="cam_to_lidar",
+        executable="cam_to_lidar",
+        name='cam_to_lidar',
         output='screen',
     )
 
@@ -46,13 +47,13 @@ def generate_launch_description():
         arguments=['0', '0', '0', '0', '0', '0', '1', 'map', 'os_sensor']
     )
 
-    pointcloud_to_scan_node = Node(
-        package='pointcloud_to_laserscan', executable='pointcloud_to_laserscan_node',
-        remappings=[('cloud_in', '/filtered_lidar'),
-                    ('scan', 'ouster/scan')],
-        parameters=[config],
-        name='pointcloud_to_laserscan'
-    )
+    # pointcloud_to_scan_node = Node(
+    #     package='pointcloud_to_laserscan', executable='pointcloud_to_laserscan_node',
+    #     remappings=[('cloud_in', '/filtered_lidar'),
+    #                 ('scan', 'ouster/scan')],
+    #     parameters=[config],
+    #     name='pointcloud_to_laserscan'
+    # )
 
     # obstacle_detection_launch = IncludeLaunchDescription(
     #     PythonLaunchDescriptionSource(
@@ -63,9 +64,9 @@ def generate_launch_description():
 
     # ld.add_action(obstacle_detection_launch)
     # ld.add_action(pointcloud_to_scan_launch)
-    ld.add_action(pointcloud_to_scan_node)
+    # ld.add_action(pointcloud_to_scan_node)
     ld.add_action(tf_node)
-    ld.add_action(lidar_filter_node)
+    ld.add_action(cam_lidar_node)
     ld.add_action(gap_follow_node)
 
     return ld

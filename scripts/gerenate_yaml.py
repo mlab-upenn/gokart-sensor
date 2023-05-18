@@ -18,9 +18,9 @@ You still need to change the control parameters such as lookahead_distance and t
 """
 
 ############ fixed settings of config yaml name ###########
-PUREPURSUIT_YAML_NAME = 'gnss_waypoints_purepursuit.yaml'
-WPCOLLECTION_YAML_NAME = 'gnss_waypoints_collection.yaml'
-GAPFOLLOW_YAML_NAME = 'ouster_2d_gap_follow.yaml'
+PUREPURSUIT_YAML_NAME = 'template/gnss_waypoints_purepursuit.yaml'
+WPCOLLECTION_YAML_NAME = 'template/gnss_waypoints_collection.yaml'
+GAPFOLLOW_YAML_NAME = 'template/ouster_2d_gap_follow.yaml'
 WP_FILE_NAME = 'wp.csv'
 MAP_ORI_FILE_NAME = 'map_ori.csv'
 DEBUG = True
@@ -28,9 +28,9 @@ DEBUG = True
 
 
 def generate_yaml(config_folder, global_cfg_path):
-    purepursuit_yaml_path = os.path.join(config_folder, 'template', PUREPURSUIT_YAML_NAME)
-    wpcollection_yaml_path = os.path.join(config_folder, 'template',WPCOLLECTION_YAML_NAME)
-    gapfollow_yaml_path = os.path.join(config_folder, 'template',GAPFOLLOW_YAML_NAME)
+    purepursuit_yaml_path = os.path.join(config_folder, PUREPURSUIT_YAML_NAME)
+    wpcollection_yaml_path = os.path.join(config_folder, WPCOLLECTION_YAML_NAME)
+    gapfollow_yaml_path = os.path.join(config_folder, GAPFOLLOW_YAML_NAME)
     
     with open(global_cfg_path, 'r') as f:
         global_cfg = yaml.load(f, Loader=yaml.FullLoader)
