@@ -27,7 +27,7 @@ git clone https://github.com/mlab-upenn/gokart-sensor.git
 
 Switch to the pure pursuit branch
 ```
-git checkout ros2_foxy_purepursuit
+git checkout ros2_humble_purepursuit
 ```
 
 Install dependencies using `rosdep` from your top-level workspace directory:
